@@ -10,8 +10,13 @@ public class FindexScoreServiceAdapter implements CustomerFindexScoreService {
 	FindeksScoreService findeksScoreService = new FindeksScoreService();
 	
 	@Override
-	public Integer getIndivicualFindeksScore() {
-		return findeksScoreService.getIndivicualFindeksScore();
+	public Integer getIndividualFindeksScore() {
+		return findeksScoreService.getIndividualFindeksScore();
+	}
+
+	@Override
+	public Integer getCorporateFindeksScore() {
+		return findeksScoreService.getCorporateFindeksScore();
 	}
 
 }

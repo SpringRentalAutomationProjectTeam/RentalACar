@@ -7,10 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCorporateCustomerRequest {
+public class RegisterCorporateCustomerRequest {
+
 	@NotNull
 	private String companyName;
 	@NotNull
@@ -20,8 +22,4 @@ public class CreateCorporateCustomerRequest {
 	@NotNull
 	private String password;
 
-	@NotNull
-	private int findeksScore;
-
-	
 }

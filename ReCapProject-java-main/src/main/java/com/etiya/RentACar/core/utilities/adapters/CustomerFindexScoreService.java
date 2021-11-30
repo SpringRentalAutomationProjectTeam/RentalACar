@@ -2,6 +2,7 @@ package com.etiya.RentACar.core.utilities.adapters;
 
 public interface CustomerFindexScoreService {
 	
-	public Integer getIndivicualFindeksScore();
+	public Integer getIndividualFindeksScore();
+	public Integer getCorporateFindeksScore();
 	
 }
