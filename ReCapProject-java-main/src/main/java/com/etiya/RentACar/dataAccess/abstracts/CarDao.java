@@ -29,11 +29,22 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByColor_ColorId(int colorId);
 	List<Car> getByBrand_BrandId(int brandId);
 	
-	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto"
-			+ "(c.carId, c.modelYear, c.dailyPrice, c.description, c.minFindeksScore)"
-			+ "From Car c Inner Join c.maintenances m Where m.car.carId=c.id and m.returnDate is null "
-			)
+//	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto"
+//			+ "(c.carId, c.modelYear, c.dailyPrice, c.description, c.minFindeksScore)"
+//			+ "From Car c Inner Join c.maintenances m Where m.car.carId=c.id and m.returnDate is null "
+//			)
+//	List<CarSearchListDto> getCarsMaintenanceReturnDateIsNull();
+	
+//	select * from cars c left join   (select * from maintenance m  where m.return_date is null) a
+//	on c.id=a.car_id where a.id  is null
+
+	
+	@Query(value="select c.carId, c.modelYear, c.dailyPrice, c.description, c.minFindeksScore "
+			+ "from cars c left join "
+			+ "(select * from maintenance m  where m.return_date is null) a "
+			+ "on c.id=a.car_id where a.id  is null ",nativeQuery = true)
 	List<CarSearchListDto> getCarsMaintenanceReturnDateIsNull();
+	
 	
 	
 }

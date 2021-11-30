@@ -73,7 +73,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getAllAvailableCars() {
-		List<CarSearchListDto> allCars = getAll().getData();
+		List<CarSearchListDto> allCars = carDao.getCarsMaintenanceReturnDateIsNull();
 
 		return new SuccessDataResult<List<CarSearchListDto>>(allCars, "Bakımda olmayan arabalar listelendi");
 	}
