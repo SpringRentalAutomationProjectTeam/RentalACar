@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RentalDetail {
 	private int id;
-	//private int carId;
-	private LocalDate rentDate;
+	
 	private LocalDate returnDate;
 }

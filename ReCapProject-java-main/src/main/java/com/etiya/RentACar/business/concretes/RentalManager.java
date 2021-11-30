@@ -97,7 +97,7 @@ public class RentalManager implements RentalService {
 		}
 		
 		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
-		RentalDetail result = this.rentalDao.getRentalDetails(updateRentalRequest.getRentalId());
+		RentalSearchListDto result = this.rentalDao.getRentalDetails(updateRentalRequest.getRentalId());
 		rental.setRentDate(result.getRentDate());
 		this.rentalDao.save(rental);
 		return new SuccessResult("Updated");
@@ -105,7 +105,7 @@ public class RentalManager implements RentalService {
 	}
 
 	public Result checkCarIsReturned(int carId) {// burayı kontrol et updete etmıoyor 
-		RentalSearchListDto rental = this.rentalDao.getByCarIdWhereReturnDateIsNull(carId);
+		RentalDetail rental = this.rentalDao.getByCarIdWhereReturnDateIsNull(carId);
 		if (rental != null) {
 			return new ErrorResult("Araç şuan da müsait değil.");
 		}
@@ -148,6 +148,13 @@ public class RentalManager implements RentalService {
 			return new ErrorResult("araç bulunamadı");
 		}
 		return new SuccessResult();
+	}
+
+	@Override
+	public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
+		Rental rental =   this.rentalDao.getById(rentalId);
+		RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);		
+		return new SuccessDataResult<RentalSearchListDto>(result);
 	}
 
 }

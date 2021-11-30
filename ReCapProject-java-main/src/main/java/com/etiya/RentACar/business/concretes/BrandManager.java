@@ -38,7 +38,7 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public DataResult<List<Brand>> getAll() {
-		this.brandDao.findAll();
+		
 		return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), "Markalar listelendi");
 	}
 

@@ -1,6 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
-import java.io.File;
+import java.io.File; 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -16,10 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.etiya.RentACar.business.abstracts.CarImageService;
 import com.etiya.RentACar.business.abstracts.CarService;
 import com.etiya.RentACar.business.constants.FilePathConfiguration;
-import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CarImagesDto;
 import com.etiya.RentACar.business.dtos.CarImagesSearchListDto;
-import com.etiya.RentACar.business.dtos.CarSearchListDto;
 import com.etiya.RentACar.business.requests.carImages.CreateCarImageRequest;
 import com.etiya.RentACar.business.requests.carImages.DeleteCarImagesRequest;
 import com.etiya.RentACar.business.requests.carImages.UpdateCarImageRequest;
@@ -33,7 +31,6 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.core.utilities.results.SuccessDataResult;
 import com.etiya.RentACar.core.utilities.results.SuccessResult;
 import com.etiya.RentACar.dataAccess.abstracts.CarImageDao;
-import com.etiya.RentACar.entites.Car;
 import com.etiya.RentACar.entites.CarImage;
 
 @Service
