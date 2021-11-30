@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="credit_card")
+@Table(name="credit_cards")
 public class CreditCard {
 
 	@Id

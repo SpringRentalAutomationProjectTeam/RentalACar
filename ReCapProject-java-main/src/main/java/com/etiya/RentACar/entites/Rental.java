@@ -39,8 +39,8 @@ public class Rental {
 	private Car car;
 
 	@ManyToOne
-	@JoinColumn(name = "individual_customer_id")
-	private IndividualCustomer individualCustomer;
+	@JoinColumn(name = "user_id")
+	private User user;
 	
 
 }

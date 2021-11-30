@@ -20,7 +20,7 @@ public class CreateRentalRequest {
 	
 	private int carId;
 	
-	private int individualCustomerId;
+	private int userId;
 	
 	
 	private LocalDate rentDate;

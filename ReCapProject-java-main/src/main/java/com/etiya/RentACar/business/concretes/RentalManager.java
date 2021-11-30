@@ -62,8 +62,8 @@ public class RentalManager implements RentalService {
 	public Result add(CreateRentalRequest createRentalRequest) {
 		Result result = BusinessRules.run(checkCarExists(createRentalRequest.getCarId()),
 				checkCarIsReturned(createRentalRequest.getCarId()),
-				checkUserExists(createRentalRequest.getIndividualCustomerId()),
-				checkCompareUserAndCarFindeksScore(createRentalRequest.getIndividualCustomerId(),
+				checkUserExists(createRentalRequest.getUserId()),
+				checkCompareUserAndCarFindeksScore(createRentalRequest.getUserId(),
 						createRentalRequest.getCarId()),
 				checkCarIsMaintenance(createRentalRequest.getCarId()));
 		if (result != null) {
@@ -89,7 +89,7 @@ public class RentalManager implements RentalService {
 	public Result update(UpdateRentalRequest updateRentalRequest) {
 		Result resultCheck = BusinessRules.run(checkCarExists(updateRentalRequest.getCarId()),
 				checkRentalExists(updateRentalRequest.getRentalId()),
-				checkUserExists(updateRentalRequest.getIndividualCustomerId()),
+				checkUserExists(updateRentalRequest.getUserId()),
 				checkCarIsMaintenance(updateRentalRequest.getCarId()));
 		
 		if (resultCheck != null) {

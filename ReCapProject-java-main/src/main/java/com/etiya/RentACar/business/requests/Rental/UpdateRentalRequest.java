@@ -21,7 +21,7 @@ public class UpdateRentalRequest {
 	@NotNull
 	private int carId;
 	@NotNull
-	private int individualCustomerId;
+	private int userId;
 	@NotNull
 	private LocalDate returnDate;
 }

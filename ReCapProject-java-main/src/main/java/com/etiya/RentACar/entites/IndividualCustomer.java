@@ -34,8 +34,5 @@ public class IndividualCustomer extends User {
 	private LocalDate birthday;
 	
 	
-	@OneToMany(mappedBy = "individualCustomer")
-	private List<Rental> rentals;
-	
 	
 }	
