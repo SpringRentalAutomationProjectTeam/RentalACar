@@ -21,6 +21,7 @@ import com.etiya.RentACar.business.requests.car.DeleteCarRequest;
 import com.etiya.RentACar.business.requests.car.UpdateCarRequest;
 import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
+import com.etiya.RentACar.entites.Car;
 import com.etiya.RentACar.entites.ComplexTypes.CarDetail;
 
 @RestController
