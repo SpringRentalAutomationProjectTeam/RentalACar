@@ -1,5 +1,7 @@
 package com.etiya.RentACar.business.abstracts;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import com.etiya.RentACar.business.dtos.InvoiceSearchListDto;
@@ -15,6 +17,6 @@ public interface InvoiceService {
 	Result add(CreateInvoiceRequest createInvoiceRequest);
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
 	DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId);
-	DataResult<List<InvoiceSearchListDto>> getInvoiceByDate(CreateInvoiceDateRequest createInvoiceDateRequest);
+	DataResult<List<InvoiceSearchListDto>> getByCreateDateBetweenBeginDateAndEndDate(LocalDate beginDate, LocalDate endDate);
 	
 }

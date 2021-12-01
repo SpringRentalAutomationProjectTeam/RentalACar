@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -38,13 +40,11 @@ public class InvoicesController {
     }
     @GetMapping("getInvoiceByDate")
     public DataResult<List<InvoiceSearchListDto>> getInvoiceDateBetween(
-            @RequestParam("minDate") LocalDate minDate,
-            @RequestParam("maxDate") LocalDate maxDate) throws ParseException {
-
-        CreateInvoiceDateRequest createInvoiceDateRequest = new CreateInvoiceDateRequest();
-        createInvoiceDateRequest.setMinDate(minDate);
-        createInvoiceDateRequest.setMaxDate(maxDate);
-        return invoiceService.getInvoiceByDate(createInvoiceDateRequest);
+            @RequestParam String  beginDate, @RequestParam String endDate){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate bDate = LocalDate.parse(beginDate,dateTimeFormatter);
+        LocalDate eDate = LocalDate.parse(endDate,dateTimeFormatter);
+        return this.invoiceService.getByCreateDateBetweenBeginDateAndEndDate(bDate, eDate);
     }
 
 

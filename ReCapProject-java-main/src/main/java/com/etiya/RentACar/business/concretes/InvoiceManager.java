@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,10 +52,9 @@ public class InvoiceManager implements InvoiceService {
 
     @Override
     public DataResult<List<InvoiceSearchListDto>> getAll() {
-        List<Invoice> invoices=this.invoiceDao.findAll();
-        List<InvoiceSearchListDto> response=invoices.stream()
-                .map(invoice->modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response);
+       List<Invoice> result = this.invoiceDao.findAll();
+       List<InvoiceSearchListDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice,InvoiceSearchListDto.class)).collect(Collectors.toList());
+       return new SuccessDataResult<List<InvoiceSearchListDto>>(response,"Veriler Listelendi");
     }
 
     @Override
@@ -64,6 +64,7 @@ public class InvoiceManager implements InvoiceService {
         if(result!=null){
             return  result;
         }
+
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
@@ -114,18 +115,12 @@ public class InvoiceManager implements InvoiceService {
         }
         return new  SuccessResult();
     }
-
     @Override
-    public DataResult<List<InvoiceSearchListDto>> getInvoiceByDate(CreateInvoiceDateRequest createInvoiceDateRequest) {
-        List<Invoice> invoices = this.invoiceDao.getByCreationDateBetween(createInvoiceDateRequest.getMinDate(),
-                createInvoiceDateRequest.getMaxDate());
-
-        List<Invoice> result = this.invoiceDao.getByCreationDateBetween(createInvoiceDateRequest.getMinDate(), createInvoiceDateRequest.getMaxDate());
-        List<InvoiceSearchListDto> response = result.stream()
-                .map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class))
-                .collect(Collectors.toList());
-
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response);
+    public DataResult<List<InvoiceSearchListDto>> getByCreateDateBetweenBeginDateAndEndDate(LocalDate beginDate, LocalDate endDate) {
+        List<Invoice> invoices = this.invoiceDao.findByInvoiceDateBetween(beginDate, endDate);
+        List<InvoiceSearchListDto> invoiceSearchListDtos = invoices.stream()
+                .map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos);
     }
 
 }

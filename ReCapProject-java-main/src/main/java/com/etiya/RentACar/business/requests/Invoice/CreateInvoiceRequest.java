@@ -21,8 +21,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateInvoiceRequest {
 
-	private String invoiceNumber;
+	@JsonIgnore
+	private int invoiceId;
 
 	private int rentalId;
 
+	private String invoiceNumber;
+
+	@JsonIgnore
+	private LocalDate invoiceDate;
+
+	@JsonIgnore
+	private int totalRentalDay;
+
+	@JsonIgnore
+	private double totalAmount;
 }
