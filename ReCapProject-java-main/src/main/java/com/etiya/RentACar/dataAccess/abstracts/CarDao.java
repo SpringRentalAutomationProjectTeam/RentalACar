@@ -40,15 +40,17 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	 */
 
 
-	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto" + "(c.carId,c.modelYear,c.dailyPrice,c.description,c.minFindeksScore) "
-			+ "From Car c Left Join  c.maintenances cm WHERE (cm.maintenanceDate is not null AND cm.returnDate is not null) or (cm.maintenanceDate is null AND cm.returnDate is null)")
+	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto"
+			+ "(c.carId,c.modelYear,c.dailyPrice,c.description,c.minFindeksScore) "
+			+ "From Car c Left Join  c.maintenances cm WHERE " +
+			"(cm.maintenanceDate is not null AND cm.returnDate is not null) or (cm.maintenanceDate is null AND cm.returnDate is null)")
 	List<CarSearchListDto> getAllWithoutMaintenanceOfCar();
 
-	//ben yapıyorum
+/*
 	@Query(value = "select c.id,c.daily_price,c.description,c.min_findeks_score,c.model_year,c.brand_id,c.color_id "
 			+ "from cars c left join maintenances cm "
 			+ "on c.id=cm.car_id  "
 			+ "where cm.return_date  is null", nativeQuery = true)
 	List<Car> getCarWithoutCarMaintenance();
-
+*/
 }

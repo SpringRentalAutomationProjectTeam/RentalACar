@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import com.etiya.RentACar.entites.Rental;
 import com.etiya.RentACar.entites.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,14 +20,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateInvoiceRequest {
-	
-   private int invoiceId;
-	
-	private int invoiceNumber;
-	
-	private int userId;
-	
-	
-	
+
+	private String invoiceNumber;
+
+	private int rentalId;
 
 }

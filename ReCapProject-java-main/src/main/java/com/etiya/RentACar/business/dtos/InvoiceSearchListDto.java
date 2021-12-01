@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import com.etiya.RentACar.entites.Rental;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,16 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InvoiceSearchListDto {
 
-	private int invoiceId;
-	
-	private int invoiceNumber;
+
+	private String invoiceNumber;
 	
 	private LocalDate invoiceDate;
-	
+
 	private int totalRentalDay;
 	
 	private double totalAmount;
 
-	private int rentalId;
-	
 }

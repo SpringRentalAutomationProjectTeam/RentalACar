@@ -3,13 +3,12 @@ package com.etiya.RentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.abstracts.*;
+import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.etiya.RentACar.business.abstracts.CarService;
-import com.etiya.RentACar.business.abstracts.MaintenanceService;
-import com.etiya.RentACar.business.abstracts.RentalService;
-import com.etiya.RentACar.business.abstracts.UserService;
 import com.etiya.RentACar.business.dtos.CarSearchListDto;
 import com.etiya.RentACar.business.dtos.MaintenanceDto;
 import com.etiya.RentACar.business.dtos.RentalSearchListDto;
@@ -70,6 +69,7 @@ public class RentalManager implements RentalService {
 			return result;
 		}
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
+
 		rentalDao.save(rental);
 		return new SuccessResult("Araba kiralandı");
 	}
@@ -99,10 +99,20 @@ public class RentalManager implements RentalService {
 		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		RentalSearchListDto result = this.rentalDao.getRentalDetails(updateRentalRequest.getRentalId());
 		rental.setRentDate(result.getRentDate());
+
 		this.rentalDao.save(rental);
 		return new SuccessResult("Updated");
 
 	}
+
+	@Override
+	public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
+		Rental rental =   this.rentalDao.getById(rentalId);
+		RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);
+		return new SuccessDataResult<RentalSearchListDto>(result);
+	}
+
+
 
 	public Result checkCarIsReturned(int carId) {// burayı kontrol et updete etmıoyor 
 		RentalDetail rental = this.rentalDao.getByCarIdWhereReturnDateIsNull(carId);
@@ -150,11 +160,6 @@ public class RentalManager implements RentalService {
 		return new SuccessResult();
 	}
 
-	@Override
-	public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
-		Rental rental =   this.rentalDao.getById(rentalId);
-		RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);		
-		return new SuccessDataResult<RentalSearchListDto>(result);
-	}
+
 
 }

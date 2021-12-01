@@ -110,6 +110,8 @@ public class CarImageManager implements CarImageService {
 
 		String imagePathGuid = java.util.UUID.randomUUID().toString(); // yeni bir guid oluşturduk. ve değişkene atadık.
 
+
+
 		File imageFile = new File(FilePathConfiguration.mainPath + imagePathGuid + "."
 				+ file.getContentType().substring(file.getContentType().indexOf("/") + 1));
 

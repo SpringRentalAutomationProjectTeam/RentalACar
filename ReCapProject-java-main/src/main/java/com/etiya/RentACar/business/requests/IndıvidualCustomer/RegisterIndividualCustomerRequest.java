@@ -3,10 +3,8 @@ package com.etiya.RentACar.business.requests.IndıvidualCustomer;
 import java.time.LocalDate;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
