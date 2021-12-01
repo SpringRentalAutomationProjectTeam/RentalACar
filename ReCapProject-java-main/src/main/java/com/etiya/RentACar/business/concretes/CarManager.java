@@ -73,9 +73,10 @@ public class CarManager implements CarService {
 
 	@Override
 	public DataResult<List<CarSearchListDto>> getAllAvailableCars() {
-		List<CarSearchListDto> allCars = carDao.getCarsMaintenanceReturnDateIsNull();
+		List<CarSearchListDto> result = this.carDao.getAllWithoutMaintenanceOfCar();
 
-		return new SuccessDataResult<List<CarSearchListDto>>(allCars, "Bakımda olmayan arabalar listelendi");
+        return new SuccessDataResult<List<CarSearchListDto>>(result);
+       
 	}
 
 	@Override
