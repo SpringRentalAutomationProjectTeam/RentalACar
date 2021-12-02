@@ -21,8 +21,9 @@ public interface RentalDao extends JpaRepository<Rental, Integer>{
 
 	
 	@Query("Select new com.etiya.RentACar.business.dtos.RentalSearchListDto"
-			+"(r.rentalId,r.rentDate,r.returnDate, c.carId,u.id) "
-			+"From Rental r Inner Join r.car c Inner Join r.user u Where r.rentalId=:rentalId")
+			+"(r.rentalId,r.rentDate,r.returnDate, c.carId,u.id,rct.cityName,rntc.cityName) "
+			+"From Rental r Inner Join r.car c Inner Join r.user u Inner join r.rentCity rct Inner join r.returnCity rntc " +
+			"Where r.rentalId=:rentalId and r.rentCity.cityId =  rct.cityId  and   r.returnCity.cityId =rntc.cityId")
 	RentalSearchListDto getRentalDetails(int rentalId);
 	
 	

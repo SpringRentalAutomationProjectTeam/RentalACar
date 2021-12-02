@@ -68,18 +68,32 @@ public class InvoiceManager implements InvoiceService {
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
-        LocalDate returnDateCount = rental.getReturnDate();
-        LocalDate rentDateCount = rental.getRentDate();
-        Period period = Period.between( rentDateCount,returnDateCount);
-        double totalAmount = car.getDailyPrice() * period.getDays();
+        int days = totalRentDays(rental);
+        double totalAmount = car.getDailyPrice() * days;
 
         Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest,Invoice.class);
-        invoice.setTotalRentalDay(period.getDays());
+        invoice.setTotalRentalDay(days);
         invoice.setInvoiceDate(LocalDate.now());
         invoice.setTotalAmount(totalAmount);
+        invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
         this.invoiceDao.save(invoice);
         return new SuccessResult();
 
+    }
+    private DataResult<String> createInvoiceNumber(int rentalId){
+
+        LocalDate now=LocalDate.now();
+        String currentYear=String.valueOf(now.getYear());
+        String currentMonth = String.valueOf(now.getMonthValue());
+        String rentalIdS = String.valueOf(rentalId);
+        String invoiceNumber = currentYear + currentMonth + "-" + rentalIdS;
+        return new SuccessDataResult<>(invoiceNumber);
+    }
+    private int  totalRentDays(RentalSearchListDto rental){
+        LocalDate returnDateCount = rental.getReturnDate();
+        LocalDate rentDateCount = rental.getRentDate();
+        Period period = Period.between( rentDateCount,returnDateCount);
+        return period.getDays();
     }
 
     @Override
@@ -121,6 +135,11 @@ public class InvoiceManager implements InvoiceService {
         List<InvoiceSearchListDto> invoiceSearchListDtos = invoices.stream()
                 .map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
         return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos);
+    }
+    @Override
+    public void updateInvoiceIfReturnDateIsNotNull(int rentalId){
+        CreateInvoiceRequest createInvoiceRequest = new CreateInvoiceRequest(rentalId);
+        add(createInvoiceRequest);
     }
 
 }

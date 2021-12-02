@@ -20,4 +20,6 @@ public class UpdateCarRequest {
 	private int dailyPrice;
 
 	private String description;
+
+	private int cityId;
 }

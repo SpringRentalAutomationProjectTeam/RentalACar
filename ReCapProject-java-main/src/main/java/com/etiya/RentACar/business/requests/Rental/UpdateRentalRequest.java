@@ -24,4 +24,8 @@ public class UpdateRentalRequest {
 	private int userId;
 	@NotNull
 	private LocalDate returnDate;
+
+	private int rentCityId;
+
+	private int returnCityId;
 }

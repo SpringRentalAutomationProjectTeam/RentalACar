@@ -26,7 +26,8 @@ public class Rental {
 	
 	@Column(name ="return_date")
 	private LocalDate returnDate;
-	
+
+
 	@ManyToOne
 	@JoinColumn(name = "car_id")
 	private Car car;
@@ -37,6 +38,14 @@ public class Rental {
 
 	@OneToOne(mappedBy = "rental")
 	private Invoice invoice;
+
+	@ManyToOne
+	@JoinColumn(name = "rent_city_id")
+	private City rentCity;
+
+	@ManyToOne
+	@JoinColumn(name = "return_city_id")
+	private City returnCity;
 
 
 }

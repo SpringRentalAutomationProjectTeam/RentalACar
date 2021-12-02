@@ -29,12 +29,13 @@ public interface CarService {
 	
 	DataResult<List<CarDetail>> getCarByBrandId(int brandId);
 	DataResult<List<CarDetail>> getCarByColorId(int colorId);
-	
+	DataResult<List<CarSearchListDto>> getCarByCityId(int cityId);
+
 	DataResult<CarSearchListDto> getById(int id);
 	DataResult<List<CarDetailDto>> getByCarAllDetail(int carId);
 	Result checkCarExists(int carId);
 	
 	Result checkIfExistsColorIdInCar(int colorId);
 	Result checkIfExistsBrandIdInCar(int brandId);
-	
+	void updateCarCity(int carId,int cityId);
 }

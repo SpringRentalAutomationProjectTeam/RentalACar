@@ -22,5 +22,8 @@ public class RentalSearchListDto {
 	private int carId;
 
 	private int userId;
+
+	private String rentCity;
+	private String returnCity;
 	
 }

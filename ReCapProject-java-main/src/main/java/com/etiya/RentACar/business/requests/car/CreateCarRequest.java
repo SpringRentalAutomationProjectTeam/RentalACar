@@ -29,6 +29,10 @@ public class CreateCarRequest {
 
 	@NotNull
 	private int brandId;
+
+	@NotNull
+	private int cityId;
+
 	
 
 	

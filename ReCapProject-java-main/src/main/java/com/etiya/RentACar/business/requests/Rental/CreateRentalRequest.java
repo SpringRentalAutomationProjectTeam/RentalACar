@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +26,10 @@ public class CreateRentalRequest {
 	
 	
 	private LocalDate rentDate;
-	
-	
-	private LocalDate returnDate;
-	
+
+
+	@NotNull
+	private int rentCityId;
+
+
 }

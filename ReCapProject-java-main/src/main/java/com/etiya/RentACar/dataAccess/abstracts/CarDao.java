@@ -24,6 +24,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByColor_ColorId(int colorId);
 
 	List<Car> getByBrand_BrandId(int brandId);
+	List<Car> getByCity_CityId(int cityId);
 
 	/*
 	 * @Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto " +
@@ -41,7 +42,7 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 
 
 	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto"
-			+ "(c.carId,c.modelYear,c.dailyPrice,c.description,c.minFindeksScore) "
+			+ "(c.carId,c.modelYear,c.dailyPrice,c.description,c.minFindeksScore,c.city.cityName) "
 			+ "From Car c Left Join  c.maintenances cm WHERE " +
 			"(cm.maintenanceDate is not null AND cm.returnDate is not null) or (cm.maintenanceDate is null AND cm.returnDate is null)")
 	List<CarSearchListDto> getAllWithoutMaintenanceOfCar();

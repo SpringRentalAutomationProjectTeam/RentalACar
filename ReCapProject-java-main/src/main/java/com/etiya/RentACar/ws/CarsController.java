@@ -50,6 +50,10 @@ public class CarsController {
 	public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails() {
 		return carService.getCarsWithBrandAndColorDetails();
 	}
+	@GetMapping("getCityId")
+	public DataResult<List<CarSearchListDto>> getCarByCityId(int cityId){
+		return carService.getCarByCityId(cityId);
+	}
 
 	@GetMapping("getBrandDetail")
 	public DataResult<List<CarDetail>> getCarsWithBrandId(int brandId) {

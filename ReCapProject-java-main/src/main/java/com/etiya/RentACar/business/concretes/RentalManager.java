@@ -36,15 +36,17 @@ public class RentalManager implements RentalService {
 	private ModelMapperService modelMapperService;
 	private CarService carService;
 	private UserService userService;
+	private InvoiceService invoiceService;
 
 	@Autowired
 	private RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, CarService carService,
-			UserService userService) {
+			UserService userService,@Lazy InvoiceService invoiceService) {
 		super();
 		this.rentalDao = rentalDao;
 		this.modelMapperService = modelMapperService;
 		this.carService = carService;
 		this.userService = userService;
+		this.invoiceService=invoiceService;
 	}
 
 	@Override
@@ -69,7 +71,6 @@ public class RentalManager implements RentalService {
 			return result;
 		}
 		Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-
 		rentalDao.save(rental);
 		return new SuccessResult("Araba kiralandı");
 	}
@@ -99,8 +100,10 @@ public class RentalManager implements RentalService {
 		Rental rental = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
 		RentalSearchListDto result = this.rentalDao.getRentalDetails(updateRentalRequest.getRentalId());
 		rental.setRentDate(result.getRentDate());
-
+		updateCityNameIfReturnCityIsDifferent(rental);
 		this.rentalDao.save(rental);
+		updateInvoiceIfReturnDateIsNotNull(rental);
+
 		return new SuccessResult("Updated");
 
 	}
@@ -112,6 +115,18 @@ public class RentalManager implements RentalService {
 		return new SuccessDataResult<RentalSearchListDto>(result);
 	}
 
+
+	private void updateInvoiceIfReturnDateIsNotNull(Rental rental){
+		if(rental.getReturnDate()!=null){
+			this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental.getRentalId());
+		}
+	}
+
+	private void updateCityNameIfReturnCityIsDifferent(Rental rental){
+		if((rental.getRentCity().getCityId())!=(rental.getReturnCity().getCityId())) {
+			this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
+		}
+	}
 
 
 	public Result checkCarIsReturned(int carId) {// burayı kontrol et updete etmıoyor 

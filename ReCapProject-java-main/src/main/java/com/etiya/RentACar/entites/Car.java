@@ -48,7 +48,10 @@ public class Car {
 	
 	@Column(name="min_findeks_score")
 	private int minFindeksScore;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "city_id")
+	private City city;
 	
 	@OneToMany(mappedBy = "car")
 	private List<Rental> rentals;

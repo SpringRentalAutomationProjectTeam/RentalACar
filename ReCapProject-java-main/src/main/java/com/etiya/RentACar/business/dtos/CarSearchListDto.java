@@ -22,6 +22,7 @@ public class CarSearchListDto {
     private String description;
     
     private int minFindeksScore;
-    
+
+    private String  cityName;
 
 }
