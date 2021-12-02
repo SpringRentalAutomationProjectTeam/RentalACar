@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InvoiceSearchListDto {
 
-	//private int rentalId;
+	private int rentalRentalId;
 
 	private String invoiceNumber;
 	
