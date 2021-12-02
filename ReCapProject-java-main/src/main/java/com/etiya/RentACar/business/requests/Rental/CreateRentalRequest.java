@@ -16,20 +16,20 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateRentalRequest {
-	
-	@JsonIgnore
-	private int id;
-	
-	private int carId;
-	
-	private int userId;
-	
-	
-	private LocalDate rentDate;
 
+    @JsonIgnore
+    private int id;
+    @NotNull
+    private int carId;
+    @NotNull
+    private int userId;
+    @NotNull
+    private LocalDate rentDate;
+    @NotNull
+    private String startKm;
 
-	@NotNull
-	private int rentCityId;
+    @NotNull
+    private int rentCityId;
 
 
 }

@@ -38,4 +38,5 @@ public interface CarService {
 	Result checkIfExistsColorIdInCar(int colorId);
 	Result checkIfExistsBrandIdInCar(int brandId);
 	void updateCarCity(int carId,int cityId);
+	Result updateCarKm(int carId,String kilometer);
 }

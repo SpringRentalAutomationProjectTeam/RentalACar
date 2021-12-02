@@ -49,6 +49,9 @@ public class Car {
 	@Column(name="min_findeks_score")
 	private int minFindeksScore;
 
+	@Column(name = "kilometer")
+	private String kilometer;
+
 	@ManyToOne
 	@JoinColumn(name = "city_id")
 	private City city;
@@ -61,4 +64,7 @@ public class Car {
 	
 	@OneToMany(mappedBy = "car")
 	private List<CarImage> carImages;
+
+	@OneToMany(mappedBy = "car")
+	private  List<CarDamage> carDamages;
 }

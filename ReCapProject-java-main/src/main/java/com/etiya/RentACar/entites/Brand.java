@@ -34,7 +34,7 @@ public class Brand {
 	@Column(name = "brand_name")
 	private String brandName;
 	
-	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "brand")
 	 private List<Car> cars;
 	
 }

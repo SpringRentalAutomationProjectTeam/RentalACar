@@ -27,6 +27,11 @@ public class Rental {
 	@Column(name ="return_date")
 	private LocalDate returnDate;
 
+	@Column(name = "start_km")
+	private String startKm;
+
+	@Column(name = "end_Km")
+	private String endKm;
 
 	@ManyToOne
 	@JoinColumn(name = "car_id")
@@ -46,6 +51,8 @@ public class Rental {
 	@ManyToOne
 	@JoinColumn(name = "return_city_id")
 	private City returnCity;
+
+
 
 
 }

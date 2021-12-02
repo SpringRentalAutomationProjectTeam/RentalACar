@@ -16,4 +16,5 @@ public interface RentalService {
 	Result update(UpdateRentalRequest updateRentalRequest);
 	Result checkCarIsReturned(int carId);
 	DataResult<RentalSearchListDto> getByRentalId(int rentalId);
+
 }

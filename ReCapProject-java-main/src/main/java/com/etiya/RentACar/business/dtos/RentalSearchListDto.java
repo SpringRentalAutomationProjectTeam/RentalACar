@@ -23,6 +23,10 @@ public class RentalSearchListDto {
 
 	private int userId;
 
+	private String startKm;
+
+	private String endKm;
+
 	private String rentCity;
 	private String returnCity;
 	

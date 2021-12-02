@@ -34,6 +34,6 @@ public class Color {
 	@Column(name = "colorName")
 	private String colorName;
 
-	@OneToMany(mappedBy = "color", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "color")
 	private List<Car> cars;
 }

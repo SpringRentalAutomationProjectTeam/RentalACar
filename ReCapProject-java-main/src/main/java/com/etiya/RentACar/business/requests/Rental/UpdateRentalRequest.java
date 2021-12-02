@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,18 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateRentalRequest {
-	
-	@NotNull
+
 	private int rentalId;
-	
-	@NotNull
-	private int carId;
-	@NotNull
-	private int userId;
-	@NotNull
+
+
 	private LocalDate returnDate;
 
-	private int rentCityId;
-
 	private int returnCityId;
+
+	private String endKm;
 }
