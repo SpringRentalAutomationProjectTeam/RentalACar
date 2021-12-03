@@ -58,7 +58,6 @@ public class RentalManager implements RentalService {
     }
 
 
-
     @Override
     public Result add(CreateRentalRequest createRentalRequest) {
         Result result = BusinessRules.run(checkCarExists(createRentalRequest.getCarId()),
@@ -77,17 +76,6 @@ public class RentalManager implements RentalService {
     }
 
     @Override
-    public Result delete(DeleteRentalRequest deleteRentalRequest) {
-        Result result = BusinessRules.run(checkRentalExists(deleteRentalRequest.getRentalId()));
-        if (result != null) {
-            return result;
-        }
-        Rental rental = modelMapperService.forRequest().map(deleteRentalRequest, Rental.class);
-        rentalDao.delete(rental);
-        return new SuccessResult("Araba silindi");
-    }
-
-    @Override
     public Result update(UpdateRentalRequest updateRentalRequest) {
         Result resultCheck = BusinessRules.run(
                 checkRentalExists(updateRentalRequest.getRentalId()),
@@ -96,12 +84,9 @@ public class RentalManager implements RentalService {
         if (resultCheck != null) {
             return resultCheck;
         }
-        //rental ıd ve returndate ve returncıty - ıcınde 5 tane olmayan verı
 
-        //
         Rental result = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
-        //ıcınde olmayan verıler returndate returncıty- 5 tane olan verı var
-        //
+
         Rental response = this.rentalDao.getById(updateRentalRequest.getRentalId());
 
         response.setReturnDate(result.getReturnDate());
@@ -116,6 +101,19 @@ public class RentalManager implements RentalService {
         return new SuccessResult("Updated");
 
     }
+
+
+    @Override
+    public Result delete(DeleteRentalRequest deleteRentalRequest) {
+        Result result = BusinessRules.run(checkRentalExists(deleteRentalRequest.getRentalId()));
+        if (result != null) {
+            return result;
+        }
+        Rental rental = modelMapperService.forRequest().map(deleteRentalRequest, Rental.class);
+        rentalDao.delete(rental);
+        return new SuccessResult("Araba silindi");
+    }
+
 
     @Override
     public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
@@ -135,17 +133,6 @@ public class RentalManager implements RentalService {
     private void updateInvoiceIfReturnDateIsNotNull(Rental rental) {
         if (rental.getReturnDate() != null) {
             this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental.getRentalId());
-        }
-    }
-
-
-    private void updateCarKm(Rental rental){
-        this.carService.updateCarKm(rental.getCar().getCarId(),rental.getEndKm());
-    }
-
-    private void updateCityNameIfReturnCityIsDifferent(Rental rental) {
-        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
-            this.carService.updateCarCity(rental.getCar().getCarId() , rental.getReturnCity().getCityId());
         }
     }
 
@@ -194,6 +181,16 @@ public class RentalManager implements RentalService {
             return new ErrorResult("araç bulunamadı");
         }
         return new SuccessResult();
+    }
+
+    private void updateCarKm(Rental rental) {
+        this.carService.updateCarKm(rental.getCar().getCarId(), rental.getEndKm());
+    }
+
+    private void updateCityNameIfReturnCityIsDifferent(Rental rental) {
+        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
+            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
+        }
     }
 
 

@@ -26,20 +26,6 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 	List<Car> getByBrand_BrandId(int brandId);
 	List<Car> getByCity_CityId(int cityId);
 
-	/*
-	 * @Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto " +
-	 * "(c.carId , c.modelYear , c.dailyPrice , c.description , c.minFindeksScore) "
-	 * +"from Car c Left Join Maintenance m on"
-	 * +"m.car.carId=c.carId where m.returnDate is null and m.rentDate is null")
-	 * List<CarSearchListDto> getCarsMaintenanceReturnDateIsNull();
-	 */
-	/*
-	 * query toolda calısan sorgu select c.id ,
-	 * c.model_year,c.daily_price,c.description,c.min_findeks_score from cars c left
-	 * join maintenances m on m.car_id=c.id where m.return_date is null and
-	 * rent_date is null
-	 */
-
 
 	@Query("Select new com.etiya.RentACar.business.dtos.CarSearchListDto"
 			+ "(c.carId,c.modelYear,c.dailyPrice,c.description,c.minFindeksScore,c.city.cityName) "
@@ -47,11 +33,4 @@ public interface CarDao extends JpaRepository<Car, Integer> {
 			"(cm.maintenanceDate is not null AND cm.returnDate is not null) or (cm.maintenanceDate is null AND cm.returnDate is null)")
 	List<CarSearchListDto> getAllWithoutMaintenanceOfCar();
 
-/*
-	@Query(value = "select c.id,c.daily_price,c.description,c.min_findeks_score,c.model_year,c.brand_id,c.color_id "
-			+ "from cars c left join maintenances cm "
-			+ "on c.id=cm.car_id  "
-			+ "where cm.return_date  is null", nativeQuery = true)
-	List<Car> getCarWithoutCarMaintenance();
-*/
 }

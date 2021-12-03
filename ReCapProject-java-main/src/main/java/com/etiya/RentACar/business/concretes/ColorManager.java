@@ -46,6 +46,11 @@ public class ColorManager implements ColorService {
 
 	@Override
 	public Result add(CreateColorRequest createColorRequest) {
+		Result result = BusinessRules.run(existsByColorName(createColorRequest.getColorName()));
+
+		if (result != null) {
+			return result;
+		}
 		Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
 		this.colorDao.save(color);
 		return new SuccessResult();
@@ -90,6 +95,12 @@ public class ColorManager implements ColorService {
 	public Result existsByColor_Id(int colorId) {
 		if (!this.colorDao.existsById(colorId)) {
 			return new ErrorResult("color bulunamadı");
+		}
+		return new SuccessResult();
+	}
+	private Result existsByColorName(String colorName){
+		if(this.colorDao.existsByColorName(colorName)){
+			return new ErrorResult("bu renk mevcut");
 		}
 		return new SuccessResult();
 	}

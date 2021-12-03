@@ -1,6 +1,7 @@
 package com.etiya.RentACar.dataAccess.abstracts;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +25,7 @@ public interface RentalDao extends JpaRepository<Rental, Integer>{
 			+"(r.rentalId,r.rentDate,r.returnDate, c.carId,u.id,r.startKm,r.endKm,rct.cityName,rntc.cityName) "
 			+"From Rental r Inner Join r.car c Inner Join r.user u Inner join r.rentCity rct Inner join r.returnCity rntc " +
 			"Where r.rentalId=:rentalId and r.rentCity.cityId =  rct.cityId  and   r.returnCity.cityId =rntc.cityId")
-	RentalSearchListDto getRentalDetails(int rentalId);
+	List<RentalSearchListDto> getRentalDetails(int rentalId);
 
 	
 
