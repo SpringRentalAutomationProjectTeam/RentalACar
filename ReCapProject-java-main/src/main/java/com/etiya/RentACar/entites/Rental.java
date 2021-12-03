@@ -1,6 +1,7 @@
 package com.etiya.RentACar.entites;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -51,6 +52,12 @@ public class Rental {
 	@ManyToOne
 	@JoinColumn(name = "return_city_id")
 	private City returnCity;
+    //car 1 brand rental bırden hızmetı
+	@ManyToMany()
+	@JoinTable(name = "rental_additionals",
+			joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "service_id"))
+	private List<AdditionalService> additionalServices;
 
 
 

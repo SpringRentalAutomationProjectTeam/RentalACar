@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 public class CreateInvoiceRequest {
 
 
-@NotNull
+    @NotNull
 	private int rentalId;
 
 

@@ -137,10 +137,22 @@ public class InvoiceManager implements InvoiceService {
         return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos);
     }
     @Override
-    public void updateInvoiceIfReturnDateIsNotNull(int rentalId){
-        CreateInvoiceRequest createInvoiceRequest = new CreateInvoiceRequest();
-        createInvoiceRequest.setRentalId(rentalId);
-        add(createInvoiceRequest);
+    public void updateInvoiceIfReturnDateIsNotNull(int rentalId,int ekstra){
+
+        RentalSearchListDto rental = rentalService.getByRentalId(rentalId).getData();
+
+        CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
+
+        int days = totalRentDays(rental);
+        double totalAmount = car.getDailyPrice() * days + ekstra;
+
+        Invoice invoice = modelMapperService.forRequest().map(rentalId,Invoice.class);
+        invoice.setTotalRentalDay(days);
+        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setTotalAmount(totalAmount+ekstra);
+        invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
+        this.invoiceDao.save(invoice);
     }
+
 
 }

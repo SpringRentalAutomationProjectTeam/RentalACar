@@ -38,11 +38,12 @@ public class RentalManager implements RentalService {
     private UserService userService;
     private InvoiceService invoiceService;
     private CityService cityService;
-    private  PaymentByFakePosService paymentByFakePosService;
+    private PaymentByFakePosService paymentByFakePosService;
+
     @Autowired
     private RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, CarService carService,
                           UserService userService, @Lazy InvoiceService invoiceService, @Lazy CityService cityService
-            ,PaymentByFakePosServiceAdapter paymentByFakePosService) {
+            , PaymentByFakePosServiceAdapter paymentByFakePosService) {
         super();
         this.rentalDao = rentalDao;
         this.modelMapperService = modelMapperService;
@@ -50,7 +51,7 @@ public class RentalManager implements RentalService {
         this.userService = userService;
         this.invoiceService = invoiceService;
         this.cityService = cityService;
-        this.paymentByFakePosService=paymentByFakePosService;
+        this.paymentByFakePosService = paymentByFakePosService;
     }
 
     @Override
@@ -78,12 +79,13 @@ public class RentalManager implements RentalService {
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
         rentalDao.save(rental);
         return new SuccessResult("Araba kiralandı");
+
     }
 
     @Override
     public Result update(UpdateRentalRequest updateRentalRequest) {
         Result resultCheck = BusinessRules.run(
-                checkIfIsLimitEnough( updateRentalRequest.getRentalId(),updateRentalRequest.getReturnDate(),
+                checkIfIsLimitEnough(updateRentalRequest.getRentalId(), updateRentalRequest.getReturnDate(),
                         updateRentalRequest.getCreditCard()),
                 checkRentalExists(updateRentalRequest.getRentalId()),
                 checkCityExists(updateRentalRequest.getReturnCityId()));
@@ -91,45 +93,48 @@ public class RentalManager implements RentalService {
         if (resultCheck != null) {
             return resultCheck;
         }
-                                                            //createcreditcartrequest
-        Rental result =  modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
+        //createcreditcartrequest
+        Rental result = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
         Rental response = this.rentalDao.getById(updateRentalRequest.getRentalId());
         response.setReturnDate(result.getReturnDate());
         response.setReturnCity(result.getReturnCity());
         response.setStartKm(response.getStartKm());
         response.setEndKm(updateRentalRequest.getEndKm());
-        updateCityNameIfReturnCityIsDifferent(response.getCar().getCarId(),response.getRentCity().getCityId(),response.getReturnCity().getCityId());
-        updateInvoiceIfReturnDateIsNotNull(response);
 
 
+
+
+        createInvoice(response);
         updateCarKm(response);
 
         this.rentalDao.save(response);
         return new SuccessResult("Updated");
 
     }
-    private Result checkIfIsLimitEnough(int rentalId,LocalDate returnDate,CreditCardRentalDto creditCard){
+
+    private Result checkIfIsLimitEnough(int rentalId, LocalDate returnDate, CreditCardRentalDto creditCard) {
 
         Rental rental = this.rentalDao.getById(rentalId);
 
         CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
 
-       double totalAmount = (car.getDailyPrice() *totalRentDays(rental.getRentDate(),returnDate));
+        double totalAmount = (car.getDailyPrice() * totalRentDays(rental.getRentDate(), returnDate));
 
-       PosServiceRequest posServiceRequest = new PosServiceRequest();
-       posServiceRequest.setTotalAmount(totalAmount);
-       posServiceRequest.setCvv(creditCard.getCvv());
-       posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
+        PosServiceRequest posServiceRequest = new PosServiceRequest();
+        posServiceRequest.setTotalAmount(totalAmount);
+        posServiceRequest.setCvv(creditCard.getCvv());
+        posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
 
-        if (!this.paymentByFakePosService.withdraw(posServiceRequest)){
+        if (!this.paymentByFakePosService.withdraw(posServiceRequest)) {
             return new ErrorResult("Yetersiz bakiye");
         }
 
         return new SuccessResult();
     }
-    private int  totalRentDays(LocalDate rentDate , LocalDate returnDate){
 
-        Period period = Period.between( rentDate,returnDate);
+    private int totalRentDays(LocalDate rentDate, LocalDate returnDate) {
+
+        Period period = Period.between(rentDate, returnDate);
         return period.getDays();
     }
 
@@ -160,8 +165,8 @@ public class RentalManager implements RentalService {
     }
 
 
-    private void updateInvoiceIfReturnDateIsNotNull(Rental rental) {
-            this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental.getRentalId());
+    private void updateInvoice(Rental rental , int ekstra) {
+        this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental.getRentalId(),ekstra);
 
     }
 
@@ -215,10 +220,21 @@ public class RentalManager implements RentalService {
     private void updateCarKm(Rental rental) {
         this.carService.updateCarKm(rental.getCar().getCarId(), rental.getEndKm());
     }
+/*
+    private void updateCityNameIfReturnCityIsNotDifferent(Rental rental){
+        if ((rental.getRentCity().getCityId()) == (rental.getReturnCity().getCityId())) {
+            updateInvoiceIfReturnDateIsNotNull(rental);
+            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
+        }
+    }*/
+    private void createInvoice(Rental rental) {
+        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
 
-    private void updateCityNameIfReturnCityIsDifferent(int carId, int rentCityId, int returnCityId) {
-        if ((rentCityId != returnCityId)) {
-            this.carService.updateCarCity(carId, returnCityId);
+            updateInvoice(rental,500);
+            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
+        }else{
+            updateInvoice(rental,0);
+            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
         }
     }
 
