@@ -1,7 +1,5 @@
 package com.etiya.RentACar.business.concretes;
 
-import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +12,13 @@ import com.etiya.RentACar.business.requests.IndıvidualCustomer.CreateIndividual
 import com.etiya.RentACar.business.requests.IndıvidualCustomer.RegisterIndividualCustomerRequest;
 import com.etiya.RentACar.business.requests.corporateCustomers.CreateCorporateCustomerRequest;
 import com.etiya.RentACar.business.requests.corporateCustomers.RegisterCorporateCustomerRequest;
-import com.etiya.RentACar.core.utilities.adapters.CustomerFindexScoreService;
+import com.etiya.RentACar.core.utilities.adapters.findex.CustomerFindexScoreService;
 import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.RentACar.core.utilities.results.ErrorResult;
 import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.core.utilities.results.SuccessResult;
-import com.etiya.RentACar.entites.IndividualCustomer;
+
 @Service
 public class AuthManager implements AuthService {
 	

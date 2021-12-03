@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.dtos;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarDamageSearchListDto {
+public class CreditCardRentalDto {
 
-    private int carDamageId;
-    private int carCarId;
-    private String damageDescription;
+
+    private String cardNumber;
+
+    private String cvv;
+
 }

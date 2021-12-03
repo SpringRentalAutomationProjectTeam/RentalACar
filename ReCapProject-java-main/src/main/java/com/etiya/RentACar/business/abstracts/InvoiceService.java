@@ -19,5 +19,6 @@ public interface InvoiceService {
 	DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId);
 	DataResult<List<InvoiceSearchListDto>> getByCreateDateBetweenBeginDateAndEndDate(LocalDate beginDate, LocalDate endDate);
 	void updateInvoiceIfReturnDateIsNotNull(int rentalId);
+
 	
 }

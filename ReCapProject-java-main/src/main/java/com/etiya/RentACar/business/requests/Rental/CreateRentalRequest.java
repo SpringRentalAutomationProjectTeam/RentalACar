@@ -2,6 +2,8 @@ package com.etiya.RentACar.business.requests.Rental;
 
 import java.time.LocalDate;
 
+import com.etiya.RentACar.business.requests.creditCard.CreateCreditCardRequest;
+import com.etiya.RentACar.entites.CreditCard;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateRentalRequest {
+public class CreateRentalRequest  {
 
     @JsonIgnore
     private int id;

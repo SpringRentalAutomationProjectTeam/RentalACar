@@ -79,6 +79,11 @@ public class CityManager implements CityService {
         return new SuccessResult();
     }
 
+    @Override
+    public DataResult<City> getByCity(int cityId) {
+        return new SuccessDataResult<City>( this.cityDao.getById(cityId));
+    }
+
     private Result existsByCityName(String cityName) {
         if (this.cityDao.existsByCityName(cityName)) {
             return new ErrorResult("City ismi bulundu başka city giriniz");

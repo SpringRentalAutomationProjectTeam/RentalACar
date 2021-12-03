@@ -1,4 +1,4 @@
-package com.etiya.RentACar.core.utilities.adapters;
+package com.etiya.RentACar.core.utilities.adapters.findex;
 
 import org.springframework.stereotype.Service;
 

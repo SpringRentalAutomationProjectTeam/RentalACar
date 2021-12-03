@@ -138,7 +138,8 @@ public class InvoiceManager implements InvoiceService {
     }
     @Override
     public void updateInvoiceIfReturnDateIsNotNull(int rentalId){
-        CreateInvoiceRequest createInvoiceRequest = new CreateInvoiceRequest(rentalId);
+        CreateInvoiceRequest createInvoiceRequest = new CreateInvoiceRequest();
+        createInvoiceRequest.setRentalId(rentalId);
         add(createInvoiceRequest);
     }
 

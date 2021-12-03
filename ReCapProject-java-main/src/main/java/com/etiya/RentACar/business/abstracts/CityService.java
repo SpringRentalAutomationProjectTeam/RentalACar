@@ -6,6 +6,7 @@ import com.etiya.RentACar.business.requests.city.DeleteCityRequest;
 import com.etiya.RentACar.business.requests.city.UpdateCityRequest;
 import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
+import com.etiya.RentACar.entites.City;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface CityService {
     Result update(UpdateCityRequest updateCityRequest);
     Result delete(DeleteCityRequest deleteCityRequest);
     Result existsByCityId(int cityId);
+    DataResult<City> getByCity(int cityId);
 }

@@ -6,16 +6,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.abstracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import com.etiya.RentACar.business.abstracts.BrandService;
-import com.etiya.RentACar.business.abstracts.CarImageService;
-import com.etiya.RentACar.business.abstracts.CarService;
-import com.etiya.RentACar.business.abstracts.ColorService;
-import com.etiya.RentACar.business.abstracts.MaintenanceService;
-import com.etiya.RentACar.business.abstracts.RentalService;
 import com.etiya.RentACar.business.constants.FilePathConfiguration;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CarDetailDto;
@@ -46,10 +41,12 @@ public class CarManager implements CarService {
     private ColorService colorService;
     private RentalService rentalService;
     private MaintenanceService maintenanceService;
+    private CityService cityService;
 
     @Autowired
     private CarManager(CarDao carDao, ModelMapperService modelMapperService, @Lazy CarImageService carImageService,
-                       @Lazy BrandService brandService, ColorService colorService, @Lazy RentalService rentalService, @Lazy MaintenanceService maintenanceService) {
+                       @Lazy BrandService brandService, ColorService colorService, @Lazy RentalService rentalService,
+                       @Lazy MaintenanceService maintenanceService, CityService cityService) {
         super();
         this.carDao = carDao;
         this.modelMapperService = modelMapperService;
@@ -57,6 +54,7 @@ public class CarManager implements CarService {
         this.brandService = brandService;
         this.colorService = colorService;
         this.rentalService = rentalService;
+        this.cityService=cityService;
         this.maintenanceService = maintenanceService;
 
 
@@ -222,19 +220,16 @@ public class CarManager implements CarService {
 
     public void updateCarCity(int carId, int cityId) {
         Car request = this.carDao.getById(carId);
-        UpdateCarRequest updateCarRequest = modelMapperService.forRequest().map(request, UpdateCarRequest.class);
-        updateCarRequest.setCityId(cityId);
-        Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
-        car.setMinFindeksScore(request.getMinFindeksScore());
-        this.carDao.save(car);
+        request.setCity(this.cityService.getByCity(cityId).getData());
+        this.carDao.save(request);
     }
 
     @Override
-    public Result updateCarKm(int carId, String kilometer) {
+    public Result updateCarKm(int carId, String kilometer) {//dao dan model mapper sevıse maplemıyor
         //miin findeks scora sahip
        Car car = this.carDao.getById(carId);
        car.setKilometer(kilometer);
-       car.setMinFindeksScore(this.carDao.getById(carId).getMinFindeksScore());
+       // car.setMinFindeksScore(this.carDao.getById(carId).getMinFindeksScore());
        this.carDao.save(car);
        return new SuccessResult();
     }
