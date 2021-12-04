@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.requests.Rental;
 import java.time.LocalDate;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 import com.etiya.RentACar.business.dtos.CreditCardDto;
@@ -23,6 +24,7 @@ public class UpdateRentalRequest  {
 	private int rentalId;
 
 	@NotNull
+	@Pattern(regexp = "yyyy-MM-dd",message = "yyyy-MM-dd formatında girmelisiniz.")
 	private LocalDate returnDate;
 
 	private int returnCityId;

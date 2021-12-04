@@ -17,9 +17,5 @@ public interface MaintenanceService {
 	Result update(UpdateMaintenanceRequest updateMaintenanceRequest);
 	Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest);
 	DataResult<MaintenanceSearchListDto> getById(int maintenanceId);
-	Result checkCarIsMaintenance(int carId);
-	
-	//Result checkCarIsMaintenance(int carId);
-	
-	
+	Result checkIfCarIsMaintenance(int carId);
 }

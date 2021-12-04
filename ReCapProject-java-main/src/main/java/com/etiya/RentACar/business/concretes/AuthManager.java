@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
+import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,87 +22,77 @@ import com.etiya.RentACar.core.utilities.results.SuccessResult;
 
 @Service
 public class AuthManager implements AuthService {
-	
-	private IndividualCustomerService individualCustomerService;
-	private CorporateCustomerService corporateCustomerService;
-	private UserService userService;
-	private ModelMapperService modelMapperService;
-	private CustomerFindexScoreService customerFindexScoreService;
-	
-	@Autowired
-	public AuthManager(IndividualCustomerService individualCustomerService, UserService userService,
-			ModelMapperService modelMapperService, CustomerFindexScoreService customerFindexScoreService
-			,CorporateCustomerService corporateCustomerService) {
-		super();
-		this.individualCustomerService = individualCustomerService;
-		this.userService = userService;
-		this.modelMapperService = modelMapperService;
-		this.customerFindexScoreService = customerFindexScoreService;
-		this.corporateCustomerService = corporateCustomerService;
-	}
-	
-	
-	@Override
-	public Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest) {
-		
-		
-		CreateIndividualCustomerRequest result = modelMapperService.forRequest()
-				.map(registerIndividualCustomerRequest, CreateIndividualCustomerRequest.class);
-		
-		result.setFindeksScore(customerFindexScoreService.getIndividualFindeksScore());
-		this.individualCustomerService.add(result);
-		return new SuccessResult("Customer added");
-		
-	}
 
-	@Override
-	public Result login(LoginRequest loginRequest) {
-		Result result = BusinessRules.run(this.checkCustomerEmailByEmailIsMatched(loginRequest),
-				this.checkCustomerPasswordByPasswordIsMatched(loginRequest));
+    private IndividualCustomerService individualCustomerService;
+    private CorporateCustomerService corporateCustomerService;
+    private UserService userService;
+    private ModelMapperService modelMapperService;
+    private CustomerFindexScoreService customerFindexScoreService;
 
-		if (result != null) {
-			return result;
-		}
+    @Autowired
+    public AuthManager(IndividualCustomerService individualCustomerService, UserService userService,
+                       ModelMapperService modelMapperService, CustomerFindexScoreService customerFindexScoreService
+            , CorporateCustomerService corporateCustomerService) {
+        super();
+        this.individualCustomerService = individualCustomerService;
+        this.userService = userService;
+        this.modelMapperService = modelMapperService;
+        this.customerFindexScoreService = customerFindexScoreService;
+        this.corporateCustomerService = corporateCustomerService;
+    }
 
-		return new SuccessResult("Successfuly login");
-	}
-	
-	private Result checkCustomerEmailByEmailIsMatched(LoginRequest loginRequest) {
+    @Override
+    public Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest) {
 
-		if (this.userService.existsByEmail(loginRequest.getEmail()).isSuccess()) {
-			return new ErrorResult("Email hatalı");
-		}
-		return new SuccessResult();
-	}
-	
-	private Result checkCustomerPasswordByPasswordIsMatched(LoginRequest loginRequest) {
+        CreateIndividualCustomerRequest result = modelMapperService.forRequest()
+                .map(registerIndividualCustomerRequest, CreateIndividualCustomerRequest.class);
 
-		if (checkCustomerEmailByEmailIsMatched(loginRequest).isSuccess()) {
+        result.setFindeksScore(customerFindexScoreService.getIndividualFindeksScore());
+        this.individualCustomerService.add(result);
+        return new SuccessResult(Messages.CUSTOMERADD);
 
-			if (!this.userService.getByEmail(loginRequest.getEmail()).getData().getPassword()
-					.equals(loginRequest.getPassword())) {
-				return new ErrorResult("Password hatalı");
-			}
-		}
-		return new SuccessResult();
-	}
-	
-	private Result checkUserExists(int userId) {
-		if(!this.userService.existsById(userId).isSuccess()) {
-			return new ErrorResult("kullanıcı bulunamadı");
-		}
-		return new SuccessResult();
-	}
+    }
 
+    @Override
+    public Result corporateCustomerRegister(RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
+        CreateCorporateCustomerRequest result = modelMapperService.forRequest()
+                .map(registerCorporateCustomerRequest, CreateCorporateCustomerRequest.class);
 
-	@Override
-	public Result corporateCustomerRegister(RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
-		CreateCorporateCustomerRequest result = modelMapperService.forRequest()
-				.map(registerCorporateCustomerRequest, CreateCorporateCustomerRequest.class);
-		
-		result.setFindeksScore(customerFindexScoreService.getCorporateFindeksScore());
-		this.corporateCustomerService.add(result);
-		return new SuccessResult("Customer added");
-	}
+        result.setFindeksScore(customerFindexScoreService.getCorporateFindeksScore());
+        this.corporateCustomerService.add(result);
+        return new SuccessResult(Messages.CUSTOMERADD);
+    }
+
+    @Override
+    public Result login(LoginRequest loginRequest) {
+        Result result = BusinessRules.run(this.checkCustomerEmailByEmailIsMatched(loginRequest),
+                this.checkCustomerPasswordByPasswordIsMatched(loginRequest));
+
+        if (result != null) {
+            return result;
+        }
+
+        return new SuccessResult(Messages.LOGINSUCCESS);
+    }
+
+    private Result checkCustomerEmailByEmailIsMatched(LoginRequest loginRequest) {
+
+        if (this.userService.checkIfEmailExists(loginRequest.getEmail()).isSuccess()) {
+            return new ErrorResult(Messages.EMAILERROR);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkCustomerPasswordByPasswordIsMatched(LoginRequest loginRequest) {
+
+        if (checkCustomerEmailByEmailIsMatched(loginRequest).isSuccess()) {
+
+            if (!this.userService.getByEmail(loginRequest.getEmail()).getData().getPassword()
+                    .equals(loginRequest.getPassword())) {
+                return new ErrorResult(Messages.LOGINPASSWORDERROR);
+            }
+        }
+        return new SuccessResult();
+    }
 
 }

@@ -8,6 +8,5 @@ public interface UserDao extends JpaRepository<User, Integer>{
 
 	User getByEmail(String email);
 	boolean existsByEmail(String email);
-
 	boolean existsById(int userId);
 }

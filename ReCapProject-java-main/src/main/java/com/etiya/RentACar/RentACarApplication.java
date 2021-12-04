@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.etiya.RentACar.business.constants.Messages;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -61,7 +62,7 @@ public class RentACarApplication {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleNoSuchElementException(NoSuchElementException exception){
 	
-		ErrorResult error = new ErrorResult( "Kayıt Bulunamadı.");
+		ErrorResult error = new ErrorResult(Messages.RECORDNOTFOUND);
 		return error;
 	}
 	

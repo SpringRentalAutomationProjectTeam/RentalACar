@@ -7,12 +7,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.etiya.RentACar.business.abstracts.*;
+import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.*;
 import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceRequest;
 import com.etiya.RentACar.business.requests.PosServiceRequest;
 import com.etiya.RentACar.core.utilities.adapters.fakePos.PaymentByFakePosService;
 import com.etiya.RentACar.core.utilities.adapters.fakePos.PaymentByFakePosServiceAdapter;
 import com.etiya.RentACar.entites.*;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -64,32 +66,36 @@ public class RentalManager implements RentalService {
         List<RentalSearchListDto> response = result.stream()
                 .map(rental -> modelMapperService.forDto().map(rental, RentalSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<RentalSearchListDto>>(response, "Rental liste");
+        return new SuccessDataResult<List<RentalSearchListDto>>(response, Messages.RENTALLIST);
     }
 
+    @Override
+    public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
+        Rental rental = this.rentalDao.getById(rentalId);
+        RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);
+        return new SuccessDataResult<RentalSearchListDto>(result, Messages.RENTALGET);
+    }
 
-
-    //rent data ve return date dırek ıs yazarak kontrol edicez 
     @Override
     public Result add(CreateRentalRequest createRentalRequest) {
-        Result result = BusinessRules.run(checkCarExists(createRentalRequest.getCarId()),
-                checkCarIsReturned(createRentalRequest.getCarId()),
-                checkUserExists(createRentalRequest.getUserId()),
-                checkCompareUserAndCarFindeksScore(createRentalRequest.getUserId(),
+        Result result = BusinessRules.run(checkIfCarExists(createRentalRequest.getCarId()),
+                checkIfCarIsReturned(createRentalRequest.getCarId()),
+                checkIfUserExists(createRentalRequest.getUserId()),
+                checkIfCompareUserAndCarFindexScore(createRentalRequest.getUserId(),
                         createRentalRequest.getCarId()),
-                checkCarIsMaintenance(createRentalRequest.getCarId())
-                , checkCityExists(createRentalRequest.getRentCityId()));
+                checkIfCarIsMaintenance(createRentalRequest.getCarId())
+                , checkIfCityExists(createRentalRequest.getRentCityId()));
         if (result != null) {
             return result;
         }
+
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 
-       List<AdditionalService> rentalAdditionalServices = getRentalAdditionals(createRentalRequest.getAdditionalServicesId()).getData();
-       rental.setAdditionalServices(rentalAdditionalServices);
+        List<AdditionalService> rentalAdditionalServices = getRentalAdditionals(createRentalRequest.getAdditionalServicesId()).getData();
+        rental.setAdditionalServices(rentalAdditionalServices);
 
-               rentalDao.save(rental);
-        return new SuccessResult("Araba kiralandı");
-
+        rentalDao.save(rental);
+        return new SuccessResult(Messages.RENTALADD);
     }
 
     @Override
@@ -97,13 +103,12 @@ public class RentalManager implements RentalService {
         Result resultCheck = BusinessRules.run(
                 checkIfIsLimitEnough(updateRentalRequest.getRentalId(), updateRentalRequest.getReturnDate(),
                         updateRentalRequest.getCreditCard()),
-                checkRentalExists(updateRentalRequest.getRentalId()),
-                checkCityExists(updateRentalRequest.getReturnCityId()));
-
+                checkIfRentalExists(updateRentalRequest.getRentalId()),
+                checkIfCityExists(updateRentalRequest.getReturnCityId()));
         if (resultCheck != null) {
             return resultCheck;
         }
-        //createcreditcartrequest
+
         Rental result = modelMapperService.forRequest().map(updateRentalRequest, Rental.class);
         Rental response = this.rentalDao.getById(updateRentalRequest.getRentalId());
         response.setReturnDate(result.getReturnDate());
@@ -111,144 +116,52 @@ public class RentalManager implements RentalService {
         response.setStartKm(response.getStartKm());
         response.setEndKm(updateRentalRequest.getEndKm());
 
-
         createInvoice(response);
         updateCarKm(response);
 
         this.rentalDao.save(response);
-        return new SuccessResult("Updated");
-
-    }
-
-    private Result checkIfIsLimitEnough(int rentalId, LocalDate returnDate, CreditCardRentalDto creditCard) {
-
-        Rental rental = this.rentalDao.getById(rentalId);
-
-        CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
-
-        double totalAmount = (car.getDailyPrice() * totalRentDays(rental.getRentDate(), returnDate));
-
-        PosServiceRequest posServiceRequest = new PosServiceRequest();
-        posServiceRequest.setTotalAmount(totalAmount);
-        posServiceRequest.setCvv(creditCard.getCvv());
-        posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
-
-        if (!this.paymentByFakePosService.withdraw(posServiceRequest)) {
-            return new ErrorResult("Yetersiz bakiye");
-        }
-
-        return new SuccessResult();
-    }
-
-    private int totalRentDays(LocalDate rentDate, LocalDate returnDate) {
-
-        Period period = Period.between(rentDate, returnDate);
-        return period.getDays();
+        return new SuccessResult(Messages.RENTALUPDATE);
     }
 
     @Override
     public Result delete(DeleteRentalRequest deleteRentalRequest) {
-        Result result = BusinessRules.run(checkRentalExists(deleteRentalRequest.getRentalId()));
+        Result result = BusinessRules.run(checkIfRentalExists(deleteRentalRequest.getRentalId()));
         if (result != null) {
             return result;
         }
+
         Rental rental = modelMapperService.forRequest().map(deleteRentalRequest, Rental.class);
         rentalDao.delete(rental);
-        return new SuccessResult("Araba silindi");
+        return new SuccessResult(Messages.RENTALDELETE);
     }
-
 
     @Override
-    public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
-        Rental rental = this.rentalDao.getById(rentalId);
-        RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);
-        return new SuccessDataResult<RentalSearchListDto>(result);
-    }
-
-    private Result checkCityExists(int cityId) {
-        if (!this.cityService.existsByCityId(cityId).isSuccess()) {
-            return new ErrorResult("city bulunamadı");
-        }
-        return new SuccessResult();
-    }
-
-
-    private void updateInvoice(Rental rental , int ekstra , int additionalTotalPrice) {
-        this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental,ekstra,additionalTotalPrice);
-
-    }
-
-
-    public Result checkCarIsReturned(int carId) {// burayı kontrol et updete etmıoyor
+    public Result checkIfCarIsReturned(int carId) {
         RentalDetail rental = this.rentalDao.getByCarIdWhereReturnDateIsNull(carId);
         if (rental != null) {
-            return new ErrorResult("Araç şuan da müsait değil.");
+            return new ErrorResult(Messages.RENTALDATEERROR);
         }
-        return new SuccessResult();
+        return new SuccessResult(Messages.RENTALDATESUCCESS);
     }
 
-    private Result checkCarIsMaintenance(int carId) {
-        MaintenanceDto maintenanceDto = this.rentalDao.getByCarIdWhereMaintenanceReturnDateIsNull(carId);
-        if (maintenanceDto != null) {
-            return new ErrorResult("Araç şuan bakımda ve müsait değil");
-        }
-        return new SuccessResult();
-    }
-
-    private Result checkCompareUserAndCarFindeksScore(int userId, int carId) {
-        DataResult<CarSearchListDto> car = this.carService.getById(carId);
-        int user = this.userService.getById(userId).getData().getFindeksScore();
-        if (car.getData().getMinFindeksScore() >= user) {
-            return new ErrorResult("findeksScore not insufficient ");
-        }
-        return new SuccessResult();
-    }
-
-    private Result checkUserExists(int userId) {
-        if (!this.userService.existsById(userId).isSuccess()) {
-            return new ErrorResult("user bulunamadı");
-        }
-        return new SuccessResult();
-    }
-
-    private Result checkRentalExists(int rentalId) {
-        if (!this.rentalDao.existsById(rentalId)) {
-            return new ErrorResult("rental bulunamadı");
-        }
-        return new SuccessResult();
-    }
-
-    private Result checkCarExists(int carId) {
-        if (!this.carService.checkCarExists(carId).isSuccess()) {
-            return new ErrorResult("araç bulunamadı");
-        }
-        return new SuccessResult();
+    private int totalRentDays(LocalDate rentDate, LocalDate returnDate) {
+        Period period = Period.between(rentDate, returnDate);
+        return period.getDays();
     }
 
     private void updateCarKm(Rental rental) {
         this.carService.updateCarKm(rental.getCar().getCarId(), rental.getEndKm());
     }
-/*
-    private void updateCityNameIfReturnCityIsNotDifferent(Rental rental){
-        if ((rental.getRentCity().getCityId()) == (rental.getReturnCity().getCityId())) {
-            updateInvoiceIfReturnDateIsNotNull(rental);
-            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
-        }
-    }*/
+
     private void createInvoice(Rental rental) {
-
-
-
-        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())){
-
-            updateInvoice(rental,500, getRentalDailyTotalPrice(rental).getData());
+        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
+            updateInvoice(rental, 500, getRentalDailyTotalPrice(rental).getData());
             this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
-        }else{
-            updateInvoice(rental,0, getRentalDailyTotalPrice(rental).getData());
+        } else {
+            updateInvoice(rental, 0, getRentalDailyTotalPrice(rental).getData());
             this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
         }
     }
-
 
     private DataResult<List<AdditionalService>> getRentalAdditionals(List<Integer> rentalAdditionalIds) {
 
@@ -265,12 +178,7 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<List<AdditionalService>>(rentalAdditionals);
     }
 
-
-
-
-
-
-      public DataResult<Integer> getRentalAdditionalDailyPrice(AdditionalService rentalAdditionalId) {
+    private DataResult<Integer> getRentalAdditionalDailyPrice(AdditionalService rentalAdditionalId) {
 
         AdditionalService rentalAdditional = this.rentalAdditionalService.getById(rentalAdditionalId.getServiceId()).getData();
         int rentalAdditionalDailyPrice = rentalAdditional.getServiceDailyPrice();
@@ -278,8 +186,7 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<Integer>(rentalAdditionalDailyPrice);
     }
 
-
-    public DataResult<Integer> getRentalDailyTotalPrice(Rental rental) {
+    private DataResult<Integer> getRentalDailyTotalPrice(Rental rental) {
         int additionalDailyTotalPrice = 0;
         for (AdditionalService rentalAdditionalId : rental.getAdditionalServices()) {
             additionalDailyTotalPrice += this.getRentalAdditionalDailyPrice(rentalAdditionalId).getData();
@@ -287,5 +194,74 @@ public class RentalManager implements RentalService {
         return new SuccessDataResult<Integer>(additionalDailyTotalPrice);
     }
 
+    private Result checkIfIsLimitEnough(int rentalId, LocalDate returnDate, CreditCardRentalDto creditCard) {
+        Rental rental = this.rentalDao.getById(rentalId);
+
+        CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
+
+        double totalAmount = (car.getDailyPrice() * totalRentDays(rental.getRentDate(), returnDate));
+
+        PosServiceRequest posServiceRequest = new PosServiceRequest();
+        posServiceRequest.setTotalAmount(totalAmount);
+        posServiceRequest.setCvv(creditCard.getCvv());
+        posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
+
+        if (!this.paymentByFakePosService.withdraw(posServiceRequest)) {
+            return new ErrorResult(Messages.INSUFFICIENTBALANCE);
+        }
+        return new SuccessResult(Messages.SUFFICIENTBALANCE);
+    }
+
+
+    private Result checkIfCarIsMaintenance(int carId) {
+        MaintenanceDto maintenanceDto = this.rentalDao.getByCarIdWhereMaintenanceReturnDateIsNull(carId);
+        if (maintenanceDto != null) {
+            return new ErrorResult(Messages.RENTALMAINTENANCEERROR);
+        }
+        return new SuccessResult(Messages.RENTALMAINTENANCE);
+    }
+
+    private Result checkIfCompareUserAndCarFindexScore(int userId, int carId) {
+        DataResult<CarSearchListDto> car = this.carService.getById(carId);
+        int user = this.userService.getById(userId).getData().getFindeksScore();
+        if (car.getData().getMinFindeksScore() >= user) {
+            return new ErrorResult(Messages.RENTALFINDEXSCOREERROR);
+        }
+        return new SuccessResult(Messages.RENTALFINDEXSCORE);
+    }
+
+    private Result checkIfUserExists(int userId) {
+        if (!this.userService.checkIfUserExists(userId).isSuccess()) {
+            return new ErrorResult(Messages.USERNOTFOUND);
+        }
+        return new SuccessResult(Messages.USERFOUND);
+    }
+
+    private Result checkIfRentalExists(int rentalId) {
+        if (!this.rentalDao.existsById(rentalId)) {
+            return new ErrorResult(Messages.RENTALNOTFOUND);
+        }
+        return new SuccessResult(Messages.RENTALGET);
+    }
+
+    private Result checkIfCarExists(int carId) {
+        if (!this.carService.checkIfCarExists(carId).isSuccess()) {
+            return new ErrorResult(Messages.CARNOTFOUND);
+        }
+        return new SuccessResult(Messages.CARFOUND);
+    }
+
+
+    private Result checkIfCityExists(int cityId) {
+        if (!this.cityService.checkIfCityExists(cityId).isSuccess()) {
+            return new ErrorResult(Messages.CITYNOTFOUND);
+        }
+        return new SuccessResult(Messages.CITYFOUND);
+    }
+
+    private Result updateInvoice(Rental rental, int extra, int additionalTotalPrice) {
+        this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental, extra, additionalTotalPrice);
+        return new SuccessResult(Messages.INVOICEUPDATE);
+    }
 
 }

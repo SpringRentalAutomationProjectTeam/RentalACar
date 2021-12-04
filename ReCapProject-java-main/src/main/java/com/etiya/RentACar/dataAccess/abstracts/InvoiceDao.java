@@ -18,10 +18,4 @@ public interface InvoiceDao extends JpaRepository<Invoice, Integer> {
 
     List<Invoice> findByInvoiceDateBetween(LocalDate beginDate, LocalDate endDate);
 
-/*
-    @Query(value = "Select new com.etiya.RentACar.entites.Invoice " +
-            "(i.invoiceId,i.invoiceNumber,i.invoiceDate,i.totalRentalDay,i.totalAmount) "
-            + "From Invoice i where i.invoiceDate between :minDate and :maxDate")
-    List<Invoice> getByCreationDateBetween(@Param("minDate") LocalDate startDate, @Param("maxDate") LocalDate endDate);
-*/
 }

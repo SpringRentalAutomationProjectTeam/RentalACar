@@ -14,5 +14,5 @@ public interface ColorService {
 	Result add(CreateColorRequest createColorRequest);
 	Result update(UpdateColorRequest updateColorRequest);
 	Result delete(DeleteColorRequest deleteColorRequest);
-	Result existsByColor_Id(int colorId);
+	Result checkIfColorExists(int colorId);
 }

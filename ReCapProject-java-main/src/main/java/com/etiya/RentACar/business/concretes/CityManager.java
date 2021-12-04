@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 
 import com.etiya.RentACar.business.abstracts.CityService;
+import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CitySearchListDto;
 import com.etiya.RentACar.business.requests.city.CreateCityRequest;
 import com.etiya.RentACar.business.requests.city.DeleteCityRequest;
@@ -19,9 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CityManager implements CityService {
-
     private CityDao cityDao;
-
     private ModelMapperService modelMapperService;
 
     @Autowired
@@ -35,58 +34,61 @@ public class CityManager implements CityService {
         List<City> cities = this.cityDao.findAll();
         List<CitySearchListDto> response = cities.stream().map(city -> modelMapperService.forDto()
                 .map(city, CitySearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CitySearchListDto>>(response);
+        return new SuccessDataResult<List<CitySearchListDto>>(response, Messages.CITYLIST);
     }
 
     @Override
     public Result add(CreateCityRequest createCityRequest) {
-        Result result= BusinessRules.run(existsByCityName(createCityRequest.getCityName()));
-        if (result!=null){
+        Result result = BusinessRules.run(checkIfCityNameExists(createCityRequest.getCityName()));
+        if (result != null) {
             return result;
         }
+
         City city = modelMapperService.forRequest().map(createCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult("City added");
+        return new SuccessResult(Messages.CITYADD);
     }
 
     @Override
     public Result update(UpdateCityRequest updateCityRequest) {
-        Result result= BusinessRules.run(existsByCityName(updateCityRequest.getCityName()));
-        if (result!=null){
+        Result result = BusinessRules.run(checkIfCityExists(updateCityRequest.getCityId()),
+                checkIfCityNameExists(updateCityRequest.getCityName()));
+        if (result != null) {
             return result;
         }
+
         City city = modelMapperService.forRequest().map(updateCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult("City updated");
+        return new SuccessResult(Messages.CITYUPDATE);
     }
 
     @Override
     public Result delete(DeleteCityRequest deleteCityRequest) {
-        Result result= BusinessRules.run(existsByCityId(deleteCityRequest.getCityId()));
-        if (result!=null){
+        Result result = BusinessRules.run(checkIfCityExists(deleteCityRequest.getCityId()));
+        if (result != null) {
             return result;
         }
+
         this.cityDao.deleteById(deleteCityRequest.getCityId());
-        return new SuccessResult("silme işlemi gerçekleşti");
-    }
-
-
-    @Override
-    public Result existsByCityId(int cityId) {
-        if (!this.cityDao.existsById(cityId)) {
-            return new ErrorResult("City Bulunamadı");
-        }
-        return new SuccessResult();
+        return new SuccessResult(Messages.CITYDELETE);
     }
 
     @Override
     public DataResult<City> getByCity(int cityId) {
-        return new SuccessDataResult<City>( this.cityDao.getById(cityId));
+        return new SuccessDataResult<City>(this.cityDao.getById(cityId), Messages.CITYFOUND);
     }
 
-    private Result existsByCityName(String cityName) {
+    @Override
+    public Result checkIfCityExists(int cityId) {
+        if (!this.cityDao.existsById(cityId)) {
+            return new ErrorResult(Messages.CITYNOTFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfCityNameExists(String cityName) {
         if (this.cityDao.existsByCityName(cityName)) {
-            return new ErrorResult("City ismi bulundu başka city giriniz");
+            return new ErrorResult(Messages.CITYALREADYEXISTS);
         }
         return new SuccessResult();
     }

@@ -54,36 +54,28 @@ public class CarManager implements CarService {
         this.brandService = brandService;
         this.colorService = colorService;
         this.rentalService = rentalService;
-        this.cityService=cityService;
+        this.cityService = cityService;
         this.maintenanceService = maintenanceService;
-
-
     }
 
-    //car eklendıgınde return date ve rent date once mı sonra mı kontrol edılmelı
     @Override
     public DataResult<List<CarSearchListDto>> getAll() {
         List<Car> result = this.carDao.findAll();
-
         List<CarSearchListDto> response = result.stream()
                 .map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CarSearchListDto>>(response, Messages.ListedCar);
+        return new SuccessDataResult<List<CarSearchListDto>>(response, Messages.CARLIST);
     }
 
     @Override
     public DataResult<List<CarSearchListDto>> getAllAvailableCars() {
         List<CarSearchListDto> result = this.carDao.getAllWithoutMaintenanceOfCar();
-
         return new SuccessDataResult<List<CarSearchListDto>>(result);
-
     }
 
     @Override
-    public Result save(CreateCarRequest createCarRequest) {
-
+    public Result add(CreateCarRequest createCarRequest) {
         Result result = BusinessRules
-                .run(checkBrandExists(createCarRequest.getBrandId()), checkColorExists(createCarRequest.getColorId()));
-
+                .run(checkIfBrandExists(createCarRequest.getBrandId()), checkIfColorExists(createCarRequest.getColorId()));
         if (result != null) {
             return result;
         }
@@ -92,88 +84,86 @@ public class CarManager implements CarService {
         Random random = new Random();
         car.setMinFindeksScore(random.nextInt(1900));
         this.carDao.save(car);
-        return new SuccessResult(Messages.AddedCar);
+        return new SuccessResult(Messages.CARADD);
     }
 
     @Override
-    public Result update(UpdateCarRequest updateCarRequest) {// ıd den dolayı muhtemelen yeniden eklıyor
+    public Result update(UpdateCarRequest updateCarRequest) {
         Result result = BusinessRules.run(
-                checkBrandExists(updateCarRequest.getBrandId())
-                , checkColorExists(updateCarRequest.getColorId()),
-                checkCarExists(updateCarRequest.getCarId()));
-
+                checkIfBrandExists(updateCarRequest.getBrandId())
+                , checkIfColorExists(updateCarRequest.getColorId()),
+                checkIfCarExists(updateCarRequest.getCarId()));
         if (result != null) {
             return result;
         }
+
         Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
         car.setMinFindeksScore(this.carDao.getById(updateCarRequest.getCarId()).getMinFindeksScore());
         carDao.save(car);
-        return new SuccessResult(Messages.UpdatedCar);
+        return new SuccessResult(Messages.CARUPDATE);
     }
 
     @Override
-    public Result delete(DeleteCarRequest deleteCarRequest) {//kiradan dondu mu ve bakımda mı kontrolu yapılıcak brand ve color da bak
-        Result result = BusinessRules.run(checkCarExists(deleteCarRequest.getCarId())
-                , checkIfCarFromRental(deleteCarRequest.getCarId())
-                , checkIfCarReturnMaintanence(deleteCarRequest.getCarId()));
-
+    public Result delete(DeleteCarRequest deleteCarRequest) {
+        Result result = BusinessRules.run(checkIfCarExists(deleteCarRequest.getCarId())
+                , checkIfCarReturnRental(deleteCarRequest.getCarId())
+                , checkIfCarReturnMaintenance(deleteCarRequest.getCarId()));
         if (result != null) {
             return result;
         }
+
         Car car = modelMapperService.forRequest().map(deleteCarRequest, Car.class);
         carDao.delete(car);
-        return new SuccessResult();
+        return new SuccessResult(Messages.CARDELETE);
     }
 
     @Override
     public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails() {
         List<CarDetail> result = this.carDao.getCarWithBrandAndColorDetails();
-        return new SuccessDataResult<List<CarDetail>>(result);
+        return new SuccessDataResult<List<CarDetail>>(result,Messages.CARBRANDANDCOLORLIST);
     }
 
     @Override
     public DataResult<List<CarDetail>> getCarByBrandId(int brandId) {
-        Result resultcheck = BusinessRules.run(checkBrandExists(brandId));
+        Result resultcheck = BusinessRules.run(checkIfBrandExists(brandId));
 
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarDetail>>(null, "brand Bulunamadı");
+            return new ErrorDataResult<List<CarDetail>>(null,Messages.BRANDNOTFOUND);
         }
         List<Car> result = this.carDao.getByBrand_BrandId(brandId);
         List<CarDetail> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarDetail.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarDetail>>(response);
+        return new SuccessDataResult<List<CarDetail>>(response,Messages.CARGETBRAND);
     }
 
     @Override
     public DataResult<List<CarDetail>> getCarByColorId(int colorId) {
-        Result resultcheck = BusinessRules.run(checkColorExists(colorId));
+        Result resultcheck = BusinessRules.run(checkIfColorExists(colorId));
 
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarDetail>>(null, "Color Bulunamadı");
+            return new ErrorDataResult<List<CarDetail>>(null,Messages.COLORNOTFOUND);
         }
         List<Car> result = this.carDao.getByColor_ColorId(colorId);
         List<CarDetail> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarDetail.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarDetail>>(response);
+        return new SuccessDataResult<List<CarDetail>>(response,Messages.CARGETCOLOR);
     }
 
     @Override
     public DataResult<CarSearchListDto> getById(int carId) {
-
         Car car = this.carDao.findById(carId).get();
-
         if (car != null) {
             CarSearchListDto carSearchListDto = modelMapperService.forDto().map(car, CarSearchListDto.class);
-            return new SuccessDataResult<CarSearchListDto>(carSearchListDto);
+            return new SuccessDataResult<CarSearchListDto>(carSearchListDto,Messages.CARGET);
         }
         return null;
     }
 
     @Override
     public DataResult<List<CarDetailDto>> getByCarAllDetail(int carId) {
-        Result result = BusinessRules.run(checkCarExists(carId));
+        Result result = BusinessRules.run(checkIfCarExists(carId));
         if (result != null) {
-            return new ErrorDataResult<List<CarDetailDto>>(null, "Araba bulunamadı");
+            return new ErrorDataResult<List<CarDetailDto>>(null,Messages.CARNOTFOUND);
         }
 
         Car cars = this.carDao.getById(carId);
@@ -181,83 +171,81 @@ public class CarManager implements CarService {
         CarDetailDto carDetailDto = modelMapperService.forDto().map(cars, CarDetailDto.class);
         carDetailDto.setCarImagesDetail(this.carImageService.getCarImageByCarId(cars.getCarId()).getData());
         carDetailDtos.add(carDetailDto);
-        return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos, "Araç detayları listelendi");
-
-    }
-
-    @Override
-    public Result checkCarExists(int carId) {
-        if (!this.carDao.existsById(carId)) {
-            return new ErrorResult("araba bulunamadı");
-        }
-        return new SuccessResult();
-
-    }
-
-    @Override
-    public Result checkIfExistsColorIdInCar(int colorId) {
-        if (!this.carDao.getByColor_ColorId(colorId).isEmpty()) {
-            return new SuccessResult("Böyle bir color a sahip araba var");
-        }
-        return new ErrorResult();
-    }
-
-    @Override
-    public Result checkIfExistsBrandIdInCar(int brandId) {
-        if (!this.carDao.getByBrand_BrandId(brandId).isEmpty()) {
-            return new SuccessResult("Böyle bir brand a sahip araba var");
-        }
-        return new ErrorResult();
-
+        return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos, Messages.CARLIST);
     }
 
     @Override
     public DataResult<List<CarSearchListDto>> getCarByCityId(int cityId) {
         List<Car> result = this.carDao.getByCity_CityId(cityId);
         List<CarSearchListDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CarSearchListDto>>(response);
-    }
-
-    public void updateCarCity(int carId, int cityId) {
-        Car request = this.carDao.getById(carId);
-        request.setCity(this.cityService.getByCity(cityId).getData());
-        this.carDao.save(request);
+        return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CARGETCITY);
     }
 
     @Override
-    public Result updateCarKm(int carId, String kilometer) {//dao dan model mapper sevıse maplemıyor
-        //miin findeks scora sahip
-       Car car = this.carDao.getById(carId);
-       car.setKilometer(kilometer);
-       // car.setMinFindeksScore(this.carDao.getById(carId).getMinFindeksScore());
-       this.carDao.save(car);
-       return new SuccessResult();
+    public Result updateCarCity(int carId, int cityId) {
+        Car request = this.carDao.getById(carId);
+        request.setCity(this.cityService.getByCity(cityId).getData());
+        this.carDao.save(request);
+        return new SuccessResult(Messages.CITYUPDATE);
     }
 
-    private Result checkColorExists(int colorId) {
-        if (!this.colorService.existsByColor_Id(colorId).isSuccess()) {
-            return new ErrorResult("color bulunamadı");
+    @Override
+    public Result updateCarKm(int carId, String kilometer) {
+        Car car = this.carDao.getById(carId);
+        car.setKilometer(kilometer);
+        this.carDao.save(car);
+        return new SuccessResult(Messages.CARKMUPDATE);
+    }
+
+    @Override
+    public Result checkIfCarExists(int carId) {
+        if (!this.carDao.existsById(carId)) {
+            return new ErrorResult(Messages.CARNOTFOUND);
+        }
+        return new SuccessResult(Messages.CARFOUND);
+    }
+
+    @Override
+    public Result checkIfExistsColorInCar(int colorId) {
+        if (!this.carDao.getByColor_ColorId(colorId).isEmpty()) {
+            return new SuccessResult(Messages.COLORDELETEERROR);
+        }
+        return new ErrorResult();
+    }
+
+    @Override
+    public Result checkIfExistsBrandInCar(int brandId) {
+        if (!this.carDao.getByBrand_BrandId(brandId).isEmpty()) {
+            return new SuccessResult(Messages.BRANDDELETEERROR);
+        }
+        return new ErrorResult();
+    }
+
+
+    private Result checkIfColorExists(int colorId) {
+        if (!this.colorService.checkIfColorExists(colorId).isSuccess()) {
+            return new ErrorResult(Messages.COLORNOTFOUND);
         }
         return new SuccessResult();
     }
 
-    private Result checkBrandExists(int brandId) {
-        if (!this.brandService.existsByBrand_Id(brandId).isSuccess()) {
-            return new ErrorResult("brand yada color bulunamdı");
+    private Result checkIfBrandExists(int brandId) {
+        if (!this.brandService.checkIfBrandExists(brandId).isSuccess()) {
+            return new ErrorResult(Messages.BRANDNOTFOUND);
         }
         return new SuccessResult();
     }
 
-    private Result checkIfCarFromRental(int carId) {
-        if (!this.rentalService.checkCarIsReturned(carId).isSuccess()) {
-            return new ErrorResult("Araç kiradan dönmedi.");
+    private Result checkIfCarReturnRental(int carId) {
+        if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
+            return new ErrorResult(Messages.CARDONOTRETURNFROMRENTAL);
         }
         return new SuccessResult();
     }
 
-    private Result checkIfCarReturnMaintanence(int carId) {
-        if (!this.maintenanceService.checkCarIsMaintenance(carId).isSuccess()) {
-            return new ErrorResult("Araç bakımdan dönmedi.");
+    private Result checkIfCarReturnMaintenance(int carId) {
+        if (!this.maintenanceService.checkIfCarIsMaintenance(carId).isSuccess()) {
+            return new ErrorResult(Messages.CARMAINTENANCEFOUND);
         }
         return new SuccessResult();
     }

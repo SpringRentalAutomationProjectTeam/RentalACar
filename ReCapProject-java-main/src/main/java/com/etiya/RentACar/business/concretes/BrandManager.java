@@ -2,6 +2,8 @@ package com.etiya.RentACar.business.concretes;
 
 import java.util.List;
 
+import com.etiya.RentACar.business.constants.Messages;
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -24,84 +26,80 @@ import com.etiya.RentACar.entites.Brand;
 @Service
 public class BrandManager implements BrandService {
 
-	private BrandDao brandDao;
-	private ModelMapperService modelMapperService;
-	private CarService carService;
+    private BrandDao brandDao;
+    private ModelMapperService modelMapperService;
+    private CarService carService;
 
-	@Autowired
-	private BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, @Lazy CarService carService) {
-		super();
-		this.brandDao = brandDao;
-		this.modelMapperService = modelMapperService;
-		this.carService = carService;
-	}
+    @Autowired
+    private BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, @Lazy CarService carService) {
+        super();
+        this.brandDao = brandDao;
+        this.modelMapperService = modelMapperService;
+        this.carService = carService;
+    }
 
-	@Override
-	public DataResult<List<Brand>> getAll() {
-		
-		return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), "Markalar listelendi");
-	}
+    @Override
+    public DataResult<List<Brand>> getAll() {
+        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), Messages.BRANDLIST);
+    }
 
-	@Override
-	public Result add(CreateBrandRequest createBrandRequest) {
-		Result result = BusinessRules.run(this.checkBrandByBrandName(createBrandRequest.getBrandName()));
-		if (result != null) {
-			return result;
-		}
-		Brand brand2 = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
-		this.brandDao.save(brand2);
-		return new SuccessResult();
-	}
+    @Override
+    public Result add(CreateBrandRequest createBrandRequest) {
+        Result result = BusinessRules.run(this.checkIfBrandNameExists(createBrandRequest.getBrandName()));
+        if (result != null) {
+            return result;
+        }
 
-	@Override
-	public Result update(UpdateBrandRequest updateBrandRequest) {
-		Result result = BusinessRules.run(existsByBrand_Id(updateBrandRequest.getBrandId()));
+        Brand brand2 = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
+        this.brandDao.save(brand2);
+        return new SuccessResult(Messages.BRANDADD);
+    }
 
-		if (result != null) {
-			return result;
-		}
-		Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
-		this.brandDao.save(brand);
-		return new SuccessResult();
+    @Override
+    public Result update(UpdateBrandRequest updateBrandRequest) {
+        Result result = BusinessRules.run(checkIfBrandExists(updateBrandRequest.getBrandId()));
+        if (result != null) {
+            return result;
+        }
 
-	}
+        Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
+        this.brandDao.save(brand);
+        return new SuccessResult(Messages.BRANDUPDATE);
+    }
 
-	@Override
-	public Result delete(DeleteBrandRequest deleteBrandRequest) {
-		Result result = BusinessRules.run(existsByBrand_Id(deleteBrandRequest.getBrandId())
-				,checkIfExistsBrandIdInCar(deleteBrandRequest.getBrandId()));
+    @Override
+    public Result delete(DeleteBrandRequest deleteBrandRequest) {
+        Result result = BusinessRules.run(checkIfBrandExists(deleteBrandRequest.getBrandId())
+                , checkIfIsThereCarOfThisBrand(deleteBrandRequest.getBrandId()));
+        if (result != null) {
+            return result;
+        }
 
-		if (result != null) {
-			return result;
-		}
-		Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
-		this.brandDao.delete(brand);
-		return new SuccessResult();
-	}
+        Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
+        this.brandDao.delete(brand);
+        return new SuccessResult(Messages.BRANDDELETE);
+    }
 
-	private Result checkIfExistsBrandIdInCar(int brandId) {		
-		if (this.carService.checkIfExistsBrandIdInCar(brandId).isSuccess()) {
-			return new ErrorResult("Bu markaya ait araba bulundu. Önce arabaları silmelisiniz.");
-		}
-		return new SuccessResult();
-	
-}
-	
-	private Result checkBrandByBrandName(String brandName) {
+    @Override
+    public Result checkIfBrandExists(int brandId) {
+        if (!this.brandDao.existsById(brandId)) {
+            return new ErrorResult(Messages.BRANDNOTFOUND);
+        }
+        return new SuccessResult(Messages.BRANDGET);
+    }
 
-		if (this.brandDao.existsByBrandName(brandName)) {
-			return new ErrorResult("Bu Marka Mevcut");
-		}
-		return new SuccessResult();
-	}
+    private Result checkIfIsThereCarOfThisBrand(int brandId) {
+        if (this.carService.checkIfExistsBrandInCar(brandId).isSuccess()) {
+            return new ErrorResult(Messages.BRANDDELETEERROR);
+        }
+        return new SuccessResult();
+    }
 
-	@Override
-	public Result existsByBrand_Id(int brandId) {
-
-		if (!this.brandDao.existsById(brandId)) {
-			return new ErrorResult("Brand Bulunamadı");
-		}
-		return new SuccessResult();
-	}
+    private Result checkIfBrandNameExists(String brandName) {
+        if (this.brandDao.existsByBrandName(brandName)) {
+            return new ErrorResult(Messages.BRANDNAMEERROR);
+        }
+        return new SuccessResult();
+    }
 
 }

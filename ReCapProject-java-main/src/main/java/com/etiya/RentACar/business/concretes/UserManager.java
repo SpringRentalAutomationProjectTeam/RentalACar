@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
+import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,43 +18,47 @@ import com.etiya.RentACar.entites.Car;
 import com.etiya.RentACar.entites.User;
 
 @Service
-public class UserManager implements UserService{
+public class UserManager implements UserService {
 
-	private UserDao userDao;
-	private ModelMapperService modelMapperService;
-	@Autowired
-	public UserManager(UserDao userDao,ModelMapperService modelMapperService) {
-		super();
-		this.userDao = userDao;
-		this.modelMapperService = modelMapperService;
-	}
-	@Override
-	public Result existsByEmail(String email) {
-		if (this.userDao.existsByEmail(email)) {
-			return new ErrorResult("User bulunumadı.");
-		}
-		return new SuccessResult();
-	}
-	@Override
-	public DataResult<UserSearchListDto> getByEmail(String email) {
+    private UserDao userDao;
+    private ModelMapperService modelMapperService;
 
-		User user = this.userDao.getByEmail(email);
-		UserSearchListDto userSearchListDto = modelMapperService.forDto().map(user, UserSearchListDto.class);
-		return new SuccessDataResult<UserSearchListDto>(userSearchListDto);
-		
-	}
-	@Override
-	public DataResult<UserSearchListDto> getById(int id) {
-		User user = this.userDao.getById(id);
-		UserSearchListDto userSearchListDto = modelMapperService.forDto().map(user, UserSearchListDto.class);
-		return new SuccessDataResult<UserSearchListDto>(userSearchListDto);
-	}
-	@Override
-	public Result existsById(int userId) {
-		if(!this.userDao.existsById(userId)) {
-			return new ErrorResult("user bulunamadı");
-		}
-		return new SuccessResult();
-	}
+    @Autowired
+    public UserManager(UserDao userDao, ModelMapperService modelMapperService) {
+        super();
+        this.userDao = userDao;
+        this.modelMapperService = modelMapperService;
+    }
+
+    @Override
+    public DataResult<UserSearchListDto> getById(int id) {
+        User user = this.userDao.getById(id);
+        UserSearchListDto userSearchListDto = modelMapperService.forDto().map(user, UserSearchListDto.class);
+        return new SuccessDataResult<UserSearchListDto>(userSearchListDto);
+    }
+
+    @Override
+    public DataResult<UserSearchListDto> getByEmail(String email) {
+
+        User user = this.userDao.getByEmail(email);
+        UserSearchListDto userSearchListDto = modelMapperService.forDto().map(user, UserSearchListDto.class);
+        return new SuccessDataResult<UserSearchListDto>(userSearchListDto);
+    }
+
+    @Override
+    public Result checkIfEmailExists(String email) {
+        if (this.userDao.existsByEmail(email)) {
+            return new ErrorResult(Messages.USERNOTFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    @Override
+    public Result checkIfUserExists(int userId) {
+        if (!this.userDao.existsById(userId)) {
+            return new ErrorResult(Messages.USERNOTFOUND);
+        }
+        return new SuccessResult();
+    }
 
 }

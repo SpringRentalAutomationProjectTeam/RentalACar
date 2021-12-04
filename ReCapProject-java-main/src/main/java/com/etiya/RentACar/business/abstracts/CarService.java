@@ -16,27 +16,19 @@ import com.etiya.RentACar.entites.ComplexTypes.CarImageDetail;
 
 public interface CarService {
 	DataResult<List<CarSearchListDto>> getAll();
-
 	DataResult<List<CarSearchListDto>> getAllAvailableCars();
-	
-	Result save(CreateCarRequest createCarRequest);
-
+	Result add(CreateCarRequest createCarRequest);
 	Result update(UpdateCarRequest updateCarRequest);
-
 	Result delete(DeleteCarRequest deleteCarRequest);
-
 	DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails();
-	
 	DataResult<List<CarDetail>> getCarByBrandId(int brandId);
 	DataResult<List<CarDetail>> getCarByColorId(int colorId);
 	DataResult<List<CarSearchListDto>> getCarByCityId(int cityId);
-
 	DataResult<CarSearchListDto> getById(int id);
 	DataResult<List<CarDetailDto>> getByCarAllDetail(int carId);
-	Result checkCarExists(int carId);
-	
-	Result checkIfExistsColorIdInCar(int colorId);
-	Result checkIfExistsBrandIdInCar(int brandId);
-	void updateCarCity(int carId,int cityId);
+	Result checkIfCarExists(int carId);
+	Result checkIfExistsColorInCar(int colorId);
+	Result checkIfExistsBrandInCar(int brandId);
+	Result updateCarCity(int carId,int cityId);
 	Result updateCarKm(int carId,String kilometer);
 }

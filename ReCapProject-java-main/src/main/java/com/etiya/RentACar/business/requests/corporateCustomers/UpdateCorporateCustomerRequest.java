@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.requests.corporateCustomers;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
+import com.etiya.RentACar.business.constants.Messages;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ public class UpdateCorporateCustomerRequest {
 	private String companyName;
 	@NotNull
 	private String taxNumber;
-	@Email
+	@Email(message = Messages.EMAILFORMATERROR)
 	private String email;
 	@NotNull
 	private String password;

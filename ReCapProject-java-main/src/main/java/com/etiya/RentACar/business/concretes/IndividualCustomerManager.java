@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,60 +27,63 @@ import com.etiya.RentACar.entites.IndividualCustomer;
 @Service
 public class IndividualCustomerManager implements IndividualCustomerService {
 
-	private IndividualCustomerDao individualCustomerDao;
-	private ModelMapperService modelMapperService;
+    private IndividualCustomerDao individualCustomerDao;
+    private ModelMapperService modelMapperService;
 
-	@Autowired
-	private IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
-			ModelMapperService modelMapperService) {
-		super();
-		this.individualCustomerDao = individualCustomerDao;
-		this.modelMapperService = modelMapperService;
-	}
+    @Autowired
+    private IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
+                                      ModelMapperService modelMapperService) {
+        super();
+        this.individualCustomerDao = individualCustomerDao;
+        this.modelMapperService = modelMapperService;
+    }
 
-	@Override
-	public DataResult<List<IndividualCustomerSearchListDto>> getAll() {
-		List<IndividualCustomer> result=this.individualCustomerDao.findAll();
-		List<IndividualCustomerSearchListDto> response=result.stream()
-				.map(customerIndividual-> modelMapperService.forDto()
-						.map(customerIndividual,IndividualCustomerSearchListDto.class)).collect(Collectors.toList());
-		return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response);
-	}
+    @Override
+    public DataResult<List<IndividualCustomerSearchListDto>> getAll() {
+        List<IndividualCustomer> result = this.individualCustomerDao.findAll();
+        List<IndividualCustomerSearchListDto> response = result.stream()
+                .map(customerIndividual -> modelMapperService.forDto()
+                        .map(customerIndividual, IndividualCustomerSearchListDto.class)).collect(Collectors.toList());
+        return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response, Messages.CUSTOMERLIST);
+    }
 
-	@Override
-	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
-		IndividualCustomer result =modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
-		this.individualCustomerDao.save(result);
-		return new SuccessResult("Customer added");
-	}
+    @Override
+    public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
+        IndividualCustomer result = modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
+        this.individualCustomerDao.save(result);
+        return new SuccessResult(Messages.CUSTOMERADD);
+    }
 
-	@Override
-	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
-		Result result=BusinessRules.run(checkUserExists(updateIndividualCustomerRequest.getUserId()));
-		if (result!=null) {
-			return result;
-		}
-		IndividualCustomer individualCustomerResult =modelMapperService.forRequest().map(updateIndividualCustomerRequest, IndividualCustomer.class);
-		this.individualCustomerDao.save(individualCustomerResult);
-		return new SuccessResult("Customer added");
-	}
-	@Override
-	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
-		Result result=BusinessRules.run(checkUserExists(deleteIndividualCustomerRequest.getUserId()));
-		if (result!=null) {
-			return result;
-		}
-		IndividualCustomer individualCustomerResult =modelMapperService.forRequest().map(deleteIndividualCustomerRequest, IndividualCustomer.class);
-		this.individualCustomerDao.delete(individualCustomerResult);
-		return new SuccessResult("CustomerDeleted");
-	}
-	private Result checkUserExists(int id) {
+    @Override
+    public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest) {
+        Result result = BusinessRules.run(checkIfUserExists(updateIndividualCustomerRequest.getUserId()));
+        if (result != null) {
+            return result;
+        }
+
+        IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(updateIndividualCustomerRequest, IndividualCustomer.class);
+        this.individualCustomerDao.save(individualCustomerResult);
+        return new SuccessResult(Messages.CUSTOMERUPDATE);
+    }
+
+    @Override
+    public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
+        Result result = BusinessRules.run(checkIfUserExists(deleteIndividualCustomerRequest.getUserId()));
+        if (result != null) {
+            return result;
+        }
+
+        IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(deleteIndividualCustomerRequest, IndividualCustomer.class);
+        this.individualCustomerDao.delete(individualCustomerResult);
+        return new SuccessResult(Messages.CUSTOMERDELETE);
+    }
+
+    private Result checkIfUserExists(int id) {
         var result = this.individualCustomerDao.existsById(id);
         if (!result) {
-            return new ErrorResult("Kullanıcı bulunamadı.");
-
+            return new ErrorResult(Messages.USERNOTFOUND);
         }
-        return new SuccessResult("Kullanıcı bulundu.");
+        return new SuccessResult(Messages.USERFOUND);
     }
 
 }

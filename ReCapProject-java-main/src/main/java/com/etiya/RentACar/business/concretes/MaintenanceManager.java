@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import antlr.debug.MessageAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,110 +32,104 @@ import com.etiya.RentACar.entites.Maintenance;
 @Service
 public class MaintenanceManager implements MaintenanceService {
 
-	private MaintenanceDao maintenanceDao;
-	private ModelMapperService modelMapperService;
-	private RentalService rentalService;
-	private CarService carService;
+    private MaintenanceDao maintenanceDao;
+    private ModelMapperService modelMapperService;
+    private RentalService rentalService;
+    private CarService carService;
 
-	@Autowired
-	public MaintenanceManager(MaintenanceDao maintenanceDao, ModelMapperService modelMapperService,
-			CarService carService, RentalService rentalService) {
-		this.maintenanceDao = maintenanceDao;
-		this.modelMapperService = modelMapperService;
-		this.carService = carService;
-		this.rentalService = rentalService;
-	}
+    @Autowired
+    public MaintenanceManager(MaintenanceDao maintenanceDao, ModelMapperService modelMapperService,
+                              CarService carService, RentalService rentalService) {
+        this.maintenanceDao = maintenanceDao;
+        this.modelMapperService = modelMapperService;
+        this.carService = carService;
+        this.rentalService = rentalService;
+    }
 
-	@Override
-	public DataResult<List<MaintenanceSearchListDto>> getAll() {
-		List<Maintenance> result = this.maintenanceDao.findAll();
-		List<MaintenanceSearchListDto> response = result.stream()
-				.map(maintenance -> modelMapperService.forDto().map(maintenance, MaintenanceSearchListDto.class))
-				.collect(Collectors.toList());
-		return new SuccessDataResult<List<MaintenanceSearchListDto>>(response, "Arac bakımda olan araçlar");
-	}
+    @Override
+    public DataResult<List<MaintenanceSearchListDto>> getAll() {
+        List<Maintenance> result = this.maintenanceDao.findAll();
+        List<MaintenanceSearchListDto> response = result.stream()
+                .map(maintenance -> modelMapperService.forDto().map(maintenance, MaintenanceSearchListDto.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<List<MaintenanceSearchListDto>>(response, Messages.CARMAINTENANCELIST);
+    }
 
-	@Override
-	public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
-		Result result = BusinessRules.run(checkCarExists(createMaintenanceRequest.getCarId()),
-				checkByCarReturnFromRental(createMaintenanceRequest.getCarId()));
+    @Override
+    public Result add(CreateMaintenanceRequest createMaintenanceRequest) {
+        Result result = BusinessRules.run(checkIfCarExists(createMaintenanceRequest.getCarId()),
+                checkByCarReturnFromRental(createMaintenanceRequest.getCarId()));
+        if (result != null) {
+            return result;
+        }
 
-		if (result != null) {
-			return result;
-		}
+        Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
+        this.maintenanceDao.save(maintenance);
+        return new SuccessResult(Messages.CARMAINTENANCEADD);
+    }
 
-		Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
-		this.maintenanceDao.save(maintenance);
-		return new SuccessResult("Araç Bakıma Gönderildi");
-	}
+    @Override
+    public Result update(UpdateMaintenanceRequest updateMaintenanceRequest) {
+        Result result = BusinessRules.run(checkIfMaintenanceExists(updateMaintenanceRequest.getMaintenanceId()),
+                checkIfCarExists(updateMaintenanceRequest.getCarId()),
+                checkByCarReturnFromRental(updateMaintenanceRequest.getCarId()));
+        if (result != null) {
+            return result;
+        }
 
-	@Override
-	public Result update(UpdateMaintenanceRequest updateMaintenanceRequest) {//yeni ekledi 
-		Result result = BusinessRules.run(checkMaintenanceExists(updateMaintenanceRequest.getMaintenanceId()),
-				checkCarExists(updateMaintenanceRequest.getCarId()),
-				checkByCarReturnFromRental(updateMaintenanceRequest.getCarId()));
+        Maintenance maintenance = this.modelMapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
+        this.maintenanceDao.save(maintenance);
+        return new SuccessResult(Messages.CARMAINTENANCEUPDATE);
+    }
 
-		if (result != null) {
-			return result;
-		}
+    @Override
+    public Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
+        Result result = BusinessRules.run(checkIfMaintenanceExists(deleteMaintenanceRequest.getMaintenanceId()));
+        if (result != null) {
+            return result;
+        }
 
-		Maintenance maintenance = this.modelMapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
+        this.maintenanceDao.deleteById(deleteMaintenanceRequest.getMaintenanceId());
+        return new SuccessResult(Messages.CARMAINTENANCEDELETE);
+    }
 
-		// MaintenanceDto result = getById(updateMaintenanceRequest.getId()).getData();
-		this.maintenanceDao.save(maintenance);
-		return new SuccessResult("Araç Bakımı güncellendi");
-	}
+    @Override
+    public DataResult<MaintenanceSearchListDto> getById(int maintenanceId) {
 
-	@Override
-	public Result delete(DeleteMaintenanceRequest deleteMaintenanceRequest) {
-		Result result = BusinessRules.run(checkMaintenanceExists(deleteMaintenanceRequest.getMaintenanceId()));
+        Maintenance maintenance = this.maintenanceDao.findById(maintenanceId).get();
+        MaintenanceSearchListDto response = this.modelMapperService.forDto().map(maintenance,
+                MaintenanceSearchListDto.class);
+        return new SuccessDataResult<MaintenanceSearchListDto>(response,Messages.CARMAINTENANCELIST);
+    }
 
-		if (result != null) {
-			return result;
-		}
-		this.maintenanceDao.deleteById(deleteMaintenanceRequest.getMaintenanceId());
-		return new SuccessResult("Araç Bakım Listesinden Silindi");
-	}
+    @Override
+    public Result checkIfCarIsMaintenance(int carId) {
+        MaintenanceDto maintenanceDto = this.maintenanceDao.getByCarIdWhereReturnDateIsNull(carId);
+        if (maintenanceDto != null) {
+            return new ErrorResult(Messages.CARMAINTENANCEERROR);
+        }
+        return new SuccessResult(Messages.CARGET);
+    }
 
-	@Override
-	public DataResult<MaintenanceSearchListDto> getById(int maintenanceId) {
+    private Result checkByCarReturnFromRental(int carId) {
+        if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
+            return new ErrorResult(Messages.CARMAINTENANCERENTALERROR);
+        }
+        return new SuccessResult(Messages.CARGET);
+    }
 
-		Maintenance maintenance = this.maintenanceDao.findById(maintenanceId).get();
-		MaintenanceSearchListDto response = this.modelMapperService.forDto().map(maintenance,
-				MaintenanceSearchListDto.class);
-		return new SuccessDataResult<MaintenanceSearchListDto>(response);
-	}
+    private Result checkIfCarExists(int carId) {
+        if (!this.carService.checkIfCarExists(carId).isSuccess()) {
+            return new ErrorResult(Messages.CARNOTFOUND);
+        }
+        return new SuccessResult(Messages.CARFOUND);
+    }
 
-	// Kiralanmış araç bakıma gidemez
-	private Result checkByCarReturnFromRental(int carId) {
-		if (!this.rentalService.checkCarIsReturned(carId).isSuccess()) {
-			return new ErrorResult("Araç şuan da bakıma gidemez.");
-		}
-		return new SuccessResult();
-
-	}
-
-	private Result checkCarExists(int carId) {
-		if (!this.carService.checkCarExists(carId).isSuccess()) {
-			return new ErrorResult("araba bulunamadı");
-		}
-		return new SuccessResult();
-	}
-
-	private Result checkMaintenanceExists(int maintenanceId) {
-		if (!this.maintenanceDao.existsById(maintenanceId)) {
-			return new ErrorResult("maintenance bulunamadı");
-		}
-		return new SuccessResult();
-	}
-	
-	@Override
-	public Result checkCarIsMaintenance(int carId) {
-		MaintenanceDto maintenanceDto = this.maintenanceDao.getByCarIdWhereReturnDateIsNull(carId);
-		if (maintenanceDto != null) {
-			return new ErrorResult("Araç şuan da bakımda ve müsait değil.");
-		}
-		return new SuccessResult();
-	}
+    private Result checkIfMaintenanceExists(int maintenanceId) {
+        if (!this.maintenanceDao.existsById(maintenanceId)) {
+            return new ErrorResult(Messages.CARMAINTENANCENOTFOUND);
+        }
+        return new SuccessResult(Messages.CARMAINTENANCEFOUND);
+    }
 
 }

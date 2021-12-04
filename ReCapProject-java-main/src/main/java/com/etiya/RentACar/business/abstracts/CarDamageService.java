@@ -10,11 +10,9 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import java.util.List;
 
 public interface CarDamageService {
-
     DataResult<List<CarDamageSearchListDto>> getAllDamages();
     Result add(CreateCarDamageRequest createCarDamageRequest);
     Result delete(DeleteCarDamageRequest deleteCarDamageRequest);
     Result update(UpdateCarDamageRequest updateCarDamageRequest);
     DataResult<List<CarDamageSearchListDto>> getDamagesByCarId(int carId);
-
 }

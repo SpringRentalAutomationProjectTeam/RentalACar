@@ -77,7 +77,7 @@ public class CarsController {
 
 	@PostMapping("add")
 	public Result add(@RequestBody @Valid CreateCarRequest createCarRequest) {
-		return this.carService.save(createCarRequest);
+		return this.carService.add(createCarRequest);
 	}
 
 	@PutMapping("update")
