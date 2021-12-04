@@ -58,9 +58,10 @@ public class InvoiceManager implements InvoiceService {
     }
     @Override
     public DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId) {
-        Result resultCheck = BusinessRules.run(checkIfUserExists(userId));
+        Result resultCheck = BusinessRules.run(checkIfUserExists(userId),//1ındu 1 corparate      3 inovice yok
+                checkIsThereInvoiceOfUser(userId));
         if (resultCheck != null) {
-            return new ErrorDataResult<List<InvoiceSearchListDto>>(null, Messages.USERNOTFOUND);
+            return new ErrorDataResult(resultCheck);
         }
         List<Invoice> result = invoiceDao.getByRental_User_Id(userId);
         List<InvoiceSearchListDto> response = result.stream()
@@ -71,7 +72,8 @@ public class InvoiceManager implements InvoiceService {
 
     @Override
     public Result add(CreateInvoiceRequest createInvoiceRequest) {
-        Result result = BusinessRules.run(checkIfRentalExists(createInvoiceRequest.getRentalId()));
+        Result result = BusinessRules.run(
+                checkIfRentalExists(createInvoiceRequest.getRentalId()));
         if (result != null) {
             return result;
         }
@@ -97,6 +99,12 @@ public class InvoiceManager implements InvoiceService {
 
     @Override
     public Result delete(DeleteInvoiceRequest deleteRentalRequest) {
+
+        Result result = BusinessRules.run(checkIfInvoiceExists(deleteRentalRequest.getInvoiceId()));
+        if (result!=null){
+            return result;
+        }
+
         Invoice invoice = modelMapperService.forDto().map(deleteRentalRequest, Invoice.class);
         this.invoiceDao.delete(invoice);
         return new SuccessResult(Messages.INVOICEDELETE);
@@ -138,9 +146,7 @@ public class InvoiceManager implements InvoiceService {
     }
 
     private DataResult<Integer> totalRentDays(Rental rental) {
-        LocalDate returnDateCount = rental.getReturnDate();
-        LocalDate rentDateCount = rental.getRentDate();
-        Period period = Period.between(rentDateCount, returnDateCount);
+        Period period = Period.between(rental.getRentDate(), rental.getReturnDate());
         return new SuccessDataResult<Integer>(period.getDays());
     }
 
@@ -148,6 +154,20 @@ public class InvoiceManager implements InvoiceService {
 
         if (this.invoiceDao.existsByRental_RentalId(rentalId)) {
             return new ErrorResult(Messages.INVOICENOTADD);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIsThereInvoiceOfUser(int userId){
+        if (!this.invoiceDao.existsByRental_UserId(userId)){
+            return new ErrorResult(Messages.INVOICEUSERROR);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfInvoiceExists(int invoiceId){
+        if (!this.invoiceDao.existsById(invoiceId)){
+            return new ErrorResult(Messages.INVOICENOTFOUND);
         }
         return new SuccessResult();
     }

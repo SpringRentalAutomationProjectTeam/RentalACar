@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.etiya.RentACar.business.constants.Messages;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +18,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateCreditCardRequest {
+
+
 	@JsonIgnore
 	private int creditCardId;
 	
@@ -24,11 +27,11 @@ public class CreateCreditCardRequest {
 	@Size(max=40)
 	private String name;
 
-	@Pattern(regexp="(\\d{16})",message = "Kredi Kartı numarasında 16 karakter olmalı")
+	@Pattern(regexp="(\\d{16})",message = Messages.CREDITCARDNUMBERERROR)
 	@NotNull
 	private String cardNumber;
 	
-	@Pattern(regexp="(\\d{3})",message = "Cvv de 3 karakter olmalı")
+	@Pattern(regexp="(\\d{3})",message = Messages.CREDITCARDCVCERROR)
 	@NotNull
 	private String cvv;
 	

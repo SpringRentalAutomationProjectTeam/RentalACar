@@ -55,6 +55,7 @@ public class AuthManager implements AuthService {
 
     @Override
     public Result corporateCustomerRegister(RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
+
         CreateCorporateCustomerRequest result = modelMapperService.forRequest()
                 .map(registerCorporateCustomerRequest, CreateCorporateCustomerRequest.class);
 

@@ -13,6 +13,7 @@ import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceRequest;
 import com.etiya.RentACar.business.requests.PosServiceRequest;
 import com.etiya.RentACar.core.utilities.adapters.fakePos.PaymentByFakePosService;
 import com.etiya.RentACar.core.utilities.adapters.fakePos.PaymentByFakePosServiceAdapter;
+import com.etiya.RentACar.core.utilities.results.*;
 import com.etiya.RentACar.entites.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,6 @@ import com.etiya.RentACar.business.requests.Rental.DeleteRentalRequest;
 import com.etiya.RentACar.business.requests.Rental.UpdateRentalRequest;
 import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.mapping.ModelMapperService;
-import com.etiya.RentACar.core.utilities.results.DataResult;
-import com.etiya.RentACar.core.utilities.results.ErrorResult;
-import com.etiya.RentACar.core.utilities.results.Result;
-import com.etiya.RentACar.core.utilities.results.SuccessDataResult;
-import com.etiya.RentACar.core.utilities.results.SuccessResult;
 import com.etiya.RentACar.dataAccess.abstracts.RentalDao;
 import com.etiya.RentACar.entites.ComplexTypes.RentalDetail;
 
@@ -71,6 +67,11 @@ public class RentalManager implements RentalService {
 
     @Override
     public DataResult<RentalSearchListDto> getByRentalId(int rentalId) {
+        Result resultcheck = BusinessRules.run(checkIfRentalExists(rentalId));
+        if (resultcheck!=null){
+            return new ErrorDataResult(resultcheck);
+        }
+
         Rental rental = this.rentalDao.getById(rentalId);
         RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);
         return new SuccessDataResult<RentalSearchListDto>(result, Messages.RENTALGET);
@@ -104,6 +105,7 @@ public class RentalManager implements RentalService {
                 checkIfIsLimitEnough(updateRentalRequest.getRentalId(), updateRentalRequest.getReturnDate(),
                         updateRentalRequest.getCreditCard()),
                 checkIfRentalExists(updateRentalRequest.getRentalId()),
+                checkIsRentDateIsAfterThanReturnDate(updateRentalRequest.getRentalId(),updateRentalRequest.getReturnDate()),
                 checkIfCityExists(updateRentalRequest.getReturnCityId()));
         if (resultCheck != null) {
             return resultCheck;
@@ -195,10 +197,12 @@ public class RentalManager implements RentalService {
     }
 
     private Result checkIfIsLimitEnough(int rentalId, LocalDate returnDate, CreditCardRentalDto creditCard) {
+
+
+
         Rental rental = this.rentalDao.getById(rentalId);
 
         CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
-
         double totalAmount = (car.getDailyPrice() * totalRentDays(rental.getRentDate(), returnDate));
 
         PosServiceRequest posServiceRequest = new PosServiceRequest();
@@ -262,6 +266,16 @@ public class RentalManager implements RentalService {
     private Result updateInvoice(Rental rental, int extra, int additionalTotalPrice) {
         this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental, extra, additionalTotalPrice);
         return new SuccessResult(Messages.INVOICEUPDATE);
+    }
+
+    private Result checkIsRentDateIsAfterThanReturnDate(int rentalID , LocalDate returnDate){
+        LocalDate rentDate = this.rentalDao.getById(rentalID).getRentDate();
+        Period period = Period.between(rentDate, returnDate);
+        if (period.getDays()<0){
+            return new ErrorResult(Messages.RENTALDATEERROR);
+        }
+        return new SuccessResult();
+
     }
 
 }

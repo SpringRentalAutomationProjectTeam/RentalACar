@@ -109,7 +109,8 @@ public class CarImageManager implements CarImageService {
 
     @Override
     public Result delete(DeleteCarImagesRequest deleteCarImagesRequest) {
-        Result result = BusinessRules.run(checkIfImageExists(deleteCarImagesRequest.getImageId()));
+        Result result = BusinessRules.run(
+                checkIfImageExists(deleteCarImagesRequest.getImageId()));
         if (result != null) {
             return result;
         }

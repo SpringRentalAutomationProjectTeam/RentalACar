@@ -6,4 +6,6 @@ import com.etiya.RentACar.entites.CorporateCustomer;
 
 public interface CorporateCustomersDao extends JpaRepository<CorporateCustomer, Integer>{
 
+    boolean existsCorporateCustomerByCompanyName(String companyName);
+
 }

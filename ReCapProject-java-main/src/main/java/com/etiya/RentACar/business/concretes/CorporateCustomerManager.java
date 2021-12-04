@@ -48,6 +48,11 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
     @Override
     public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest) {
+        Result resultCheck = BusinessRules.run(checkIfCompanyNameExists(createCorporateCustomerRequest.getCompanyName()));
+        if (resultCheck != null) {
+            return resultCheck;
+        }
+
         CorporateCustomer result = modelMapperService.forRequest().map(createCorporateCustomerRequest, CorporateCustomer.class);
         this.corporateCustomersDao.save(result);
         return new SuccessResult(Messages.CUSTOMERADD);
@@ -55,7 +60,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
     @Override
     public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
-        Result result = BusinessRules.run(checkIfUserExists(updateCorporateCustomerRequest.getUserId()));
+        Result result = BusinessRules.run(checkIfCompanyNameExists(updateCorporateCustomerRequest.getCompanyName()),
+                checkIfUserExists(updateCorporateCustomerRequest.getUserId()));
         if (result != null) {
             return result;
         }
@@ -81,6 +87,13 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         var result = this.corporateCustomersDao.existsById(id);
         if (!result) {
             return new ErrorResult(Messages.CUSTOMERNOTFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfCompanyNameExists(String companyName) {
+        if (!this.corporateCustomersDao.existsCorporateCustomerByCompanyName(companyName)) {
+            return new ErrorResult(Messages.CUSTOMERISALREADYEXISTS);
         }
         return new SuccessResult();
     }

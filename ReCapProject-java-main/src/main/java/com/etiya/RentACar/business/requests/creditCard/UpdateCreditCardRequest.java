@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.requests.LoginRequest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -23,11 +24,11 @@ public class UpdateCreditCardRequest {
 	@Size(max=40)
 	private String name;
 
-	@Pattern(regexp="(\\d{16})")
+	@Pattern(regexp="(\\d{16})",message = Messages.CREDITCARDNUMBERERROR)
 	@NotNull
 	private String cardNumber;
-	
-	@Size(min=3,max=3)
+
+	@Pattern(regexp="(\\d{3})",message = Messages.CREDITCARDCVCERROR)
 	@NotNull
 	private String cvv;
 	

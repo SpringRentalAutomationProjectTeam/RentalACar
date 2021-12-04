@@ -39,12 +39,17 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
     @Override
     public DataResult<AdditionalService> getById(int rentalAdditionalId) {
+        Result result = BusinessRules.run(checkIfAdditionalService(rentalAdditionalId));
+        if (result!=null){
+            return new ErrorDataResult(result);
+        }
+
         return new SuccessDataResult<AdditionalService>(this.additionalServiceDao.getById(rentalAdditionalId), Messages.ADDITIONALSERVICEFOUND);
     }
 
     @Override
     public Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest) {
-        Result result = BusinessRules.run(checkIfExistsServiceName(createAdditionalServiceRequest.getServiceName()));
+        Result result = BusinessRules.run(checkIfServiceNameExists(createAdditionalServiceRequest.getServiceName()));
 
         if (result != null) {
             return result;
@@ -57,6 +62,13 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
     @Override
     public Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest) {
+
+        Result result = BusinessRules.run(checkIfServiceNameExists(updateAdditionalServiceRequest.getServiceName()),
+                checkIfAdditionalService(updateAdditionalServiceRequest.getServiceId()));
+        if (result!=null){
+            return result;
+        }
+
         AdditionalService additionalService = this.modelMapperService.forRequest().map(updateAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
         return new SuccessResult(Messages.ADDITIONALSERVICEUPDATE);
@@ -64,11 +76,23 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
     @Override
     public Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest) {
+        Result result = BusinessRules.run(checkIfAdditionalService(deleteAdditionalServiceRequest.getServiceId()));
+        if (result!=null){
+            return result;
+        }
+
         this.additionalServiceDao.deleteById(deleteAdditionalServiceRequest.getServiceId());
         return new SuccessResult(Messages.ADDITIONALSERVICEDELETE);
     }
 
-    private Result checkIfExistsServiceName(String serviceName) {
+    private Result checkIfAdditionalService(int additionalServiceId){
+        if (!this.additionalServiceDao.existsById(additionalServiceId)){
+            return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfServiceNameExists(String serviceName) {
         if (this.additionalServiceDao.existsByServiceName(serviceName)) {
             return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
         }

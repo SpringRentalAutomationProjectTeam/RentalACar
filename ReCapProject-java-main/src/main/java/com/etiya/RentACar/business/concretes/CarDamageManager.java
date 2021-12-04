@@ -45,6 +45,12 @@ public class CarDamageManager implements CarDamageService {
 
     @Override
     public DataResult<List<CarDamageSearchListDto>> getDamagesByCarId(int carId) {
+
+        Result result = BusinessRules.run(checkIsThereDamageInCar(carId));
+
+        if (result != null) {
+            return new ErrorDataResult(result);
+        }
         List<CarDamage> request = carDamageDao.getByCar_CarId(carId);
         List<CarDamageSearchListDto> response = request.stream().map(carDamage -> modelMapperService.forDto().map(carDamage, CarDamageSearchListDto.class)).collect(Collectors.toList());
         return new SuccessDataResult<List<CarDamageSearchListDto>>(response);
@@ -64,7 +70,8 @@ public class CarDamageManager implements CarDamageService {
 
     @Override
     public Result update(UpdateCarDamageRequest updateCarDamageRequest) {
-        Result result = BusinessRules.run(checkIfCarDamageExists(updateCarDamageRequest.getCarDamageId()));
+        Result result = BusinessRules.run(checkIfCarExists(updateCarDamageRequest.getCarId()),
+                checkIfCarDamageExists(updateCarDamageRequest.getCarDamageId()));
         if (result != null) {
             return result;
         }
@@ -89,6 +96,13 @@ public class CarDamageManager implements CarDamageService {
     private Result checkIfCarDamageExists(int carDamageId){
         if (!this.carDamageDao.existsById(carDamageId)){
             return new ErrorResult(Messages.DAMAGENOTFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIsThereDamageInCar(int carId){
+        if (this.carDamageDao.getByCar_CarId(carId).isEmpty()){
+            return new ErrorResult(Messages.DAMAGEBELONGTOCAR);
         }
         return new SuccessResult();
     }

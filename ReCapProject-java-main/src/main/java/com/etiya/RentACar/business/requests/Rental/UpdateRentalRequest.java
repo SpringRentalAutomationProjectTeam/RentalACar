@@ -24,7 +24,6 @@ public class UpdateRentalRequest  {
 	private int rentalId;
 
 	@NotNull
-	@Pattern(regexp = "yyyy-MM-dd",message = "yyyy-MM-dd formatında girmelisiniz.")
 	private LocalDate returnDate;
 
 	private int returnCityId;

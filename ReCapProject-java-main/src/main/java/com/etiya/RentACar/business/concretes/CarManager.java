@@ -75,7 +75,8 @@ public class CarManager implements CarService {
     @Override
     public Result add(CreateCarRequest createCarRequest) {
         Result result = BusinessRules
-                .run(checkIfBrandExists(createCarRequest.getBrandId()), checkIfColorExists(createCarRequest.getColorId()));
+                .run(checkIfCityExists(createCarRequest.getCityId()),
+                        checkIfBrandExists(createCarRequest.getBrandId()), checkIfColorExists(createCarRequest.getColorId()));
         if (result != null) {
             return result;
         }
@@ -89,7 +90,7 @@ public class CarManager implements CarService {
 
     @Override
     public Result update(UpdateCarRequest updateCarRequest) {
-        Result result = BusinessRules.run(
+        Result result = BusinessRules.run(checkIfCityExists(updateCarRequest.getCityId()),
                 checkIfBrandExists(updateCarRequest.getBrandId())
                 , checkIfColorExists(updateCarRequest.getColorId()),
                 checkIfCarExists(updateCarRequest.getCarId()));
@@ -151,12 +152,17 @@ public class CarManager implements CarService {
 
     @Override
     public DataResult<CarSearchListDto> getById(int carId) {
+
+        Result result = BusinessRules.run(checkIfCarExists(carId));
+        if (result!=null){
+            return new ErrorDataResult(result);
+        }
+
         Car car = this.carDao.findById(carId).get();
-        if (car != null) {
+
             CarSearchListDto carSearchListDto = modelMapperService.forDto().map(car, CarSearchListDto.class);
             return new SuccessDataResult<CarSearchListDto>(carSearchListDto,Messages.CARGET);
-        }
-        return null;
+
     }
 
     @Override
@@ -176,6 +182,12 @@ public class CarManager implements CarService {
 
     @Override
     public DataResult<List<CarSearchListDto>> getCarByCityId(int cityId) {
+
+        Result resultCheck = BusinessRules.run(checkIfCityExists(cityId));
+        if (resultCheck!=null){
+            return  new ErrorDataResult(resultCheck);
+        }
+
         List<Car> result = this.carDao.getByCity_CityId(cityId);
         List<CarSearchListDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
         return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CARGETCITY);
@@ -183,6 +195,7 @@ public class CarManager implements CarService {
 
     @Override
     public Result updateCarCity(int carId, int cityId) {
+
         Car request = this.carDao.getById(carId);
         request.setCity(this.cityService.getByCity(cityId).getData());
         this.carDao.save(request);
@@ -246,6 +259,13 @@ public class CarManager implements CarService {
     private Result checkIfCarReturnMaintenance(int carId) {
         if (!this.maintenanceService.checkIfCarIsMaintenance(carId).isSuccess()) {
             return new ErrorResult(Messages.CARMAINTENANCEFOUND);
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfCityExists(int cityId){
+        if (!this.cityService.getByCity(cityId).isSuccess()){
+            return new ErrorResult(Messages.CITYNOTFOUND);
         }
         return new SuccessResult();
     }

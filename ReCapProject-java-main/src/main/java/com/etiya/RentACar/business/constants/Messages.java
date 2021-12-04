@@ -66,7 +66,7 @@ public class Messages {
     public static final String RENTALUPDATE = "Rental updated.";
     public static final String RENTALDELETE = "Rental deleted.";
     public static final String RENTALLIST = "Rentals listed.";
-    public static final String RENTALDATEERROR = "Vehicle can not rented.";
+    public static final String RENTALDATEERROR = "Rental rent date must be before return date.";
     public static final String RENTALDATESUCCESS = "Vehicle can be rented.";
     public static final String RENTALFINDEXSCOREERROR = "Your findex score is not enough to rent this car..";
     public static final String RENTALFINDEXSCORE = "Your findex score is enough to rent this car.";
@@ -122,8 +122,11 @@ public class Messages {
     public static final String CARMAINTENANCENOTFOUND = "CAR MAINTENANCE NOT FOUND.";
 
     public static final String INVOICEADD = "Invoice added.";
+    public static final String INVOICEUSERROR = "The customer does not have an invoice.";
     public static final String INVOICEUPDATE = "Invoice updated.";
     public static final String INVOICEDELETE = "Invoice deleted.";
+
+    public static final String INVOICENOTFOUND = "Invoice not found";
     public static final String INVOICELIST = "Invoice listed.";
     public static final String INVOICEBYCUSTOMERLIST = "Invoice listed.";
     public static final String INVOICEGET = "Invoice found";
@@ -140,6 +143,7 @@ public class Messages {
     public static final String DAMAGELIST = "Damages are listed";
     public static final String DAMAGENOTFOUND = "Damage not found";
     public static final String DAMAGEFOUND = "Damage found";
+    public static final String DAMAGEBELONGTOCAR = "There is not damage belong to car";
 
     public static final String ADDITIONALSERVICEADD = "Additional service added.";
     public static final String ADDITIONALSERVICEUPDATE = "Additional service updated.";

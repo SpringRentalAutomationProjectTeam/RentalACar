@@ -75,6 +75,11 @@ public class CityManager implements CityService {
 
     @Override
     public DataResult<City> getByCity(int cityId) {
+        Result result = BusinessRules.run(checkIfCityExists(cityId));
+        if (result != null) {
+            return new ErrorDataResult(result);
+        }
+
         return new SuccessDataResult<City>(this.cityDao.getById(cityId), Messages.CITYFOUND);
     }
 

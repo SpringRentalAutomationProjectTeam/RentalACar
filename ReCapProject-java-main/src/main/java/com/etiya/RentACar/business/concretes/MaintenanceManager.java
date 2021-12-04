@@ -1,9 +1,11 @@
 package com.etiya.RentACar.business.concretes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import antlr.debug.MessageAdapter;
+import com.etiya.RentACar.core.utilities.results.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,6 @@ import com.etiya.RentACar.business.requests.maintenance.DeleteMaintenanceRequest
 import com.etiya.RentACar.business.requests.maintenance.UpdateMaintenanceRequest;
 import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.mapping.ModelMapperService;
-import com.etiya.RentACar.core.utilities.results.DataResult;
-import com.etiya.RentACar.core.utilities.results.ErrorResult;
-import com.etiya.RentACar.core.utilities.results.Result;
-import com.etiya.RentACar.core.utilities.results.SuccessDataResult;
-import com.etiya.RentACar.core.utilities.results.SuccessResult;
 import com.etiya.RentACar.dataAccess.abstracts.MaintenanceDao;
 import com.etiya.RentACar.entites.Car;
 import com.etiya.RentACar.entites.Maintenance;
@@ -96,6 +93,11 @@ public class MaintenanceManager implements MaintenanceService {
     @Override
     public DataResult<MaintenanceSearchListDto> getById(int maintenanceId) {
 
+        Result resultCheck = BusinessRules.run(checkIfMaintenanceExists(maintenanceId));
+        if (resultCheck != null) {
+            return new ErrorDataResult(resultCheck);
+        }
+
         Maintenance maintenance = this.maintenanceDao.findById(maintenanceId).get();
         MaintenanceSearchListDto response = this.modelMapperService.forDto().map(maintenance,
                 MaintenanceSearchListDto.class);
@@ -108,14 +110,14 @@ public class MaintenanceManager implements MaintenanceService {
         if (maintenanceDto != null) {
             return new ErrorResult(Messages.CARMAINTENANCEERROR);
         }
-        return new SuccessResult(Messages.CARGET);
+        return new SuccessResult();
     }
 
     private Result checkByCarReturnFromRental(int carId) {
         if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
             return new ErrorResult(Messages.CARMAINTENANCERENTALERROR);
         }
-        return new SuccessResult(Messages.CARGET);
+        return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
