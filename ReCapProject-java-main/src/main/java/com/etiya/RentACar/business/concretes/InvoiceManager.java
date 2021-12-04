@@ -66,9 +66,13 @@ public class InvoiceManager implements InvoiceService {
         }
 
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
+
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
-        int days = totalRentDays(rental);
+        LocalDate returnDateCount = rental.getReturnDate();
+        LocalDate rentDateCount = rental.getRentDate();
+        Period period = Period.between( rentDateCount,returnDateCount);
+        int days = period.getDays();
         double totalAmount = car.getDailyPrice() * days;
 
         Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest,Invoice.class);
@@ -89,7 +93,7 @@ public class InvoiceManager implements InvoiceService {
         String invoiceNumber = currentYear + currentMonth + "-" + rentalIdS;
         return new SuccessDataResult<>(invoiceNumber);
     }
-    private int  totalRentDays(RentalSearchListDto rental){
+    private int  totalRentDays(Rental rental){
         LocalDate returnDateCount = rental.getReturnDate();
         LocalDate rentDateCount = rental.getRentDate();
         Period period = Period.between( rentDateCount,returnDateCount);
@@ -137,21 +141,22 @@ public class InvoiceManager implements InvoiceService {
         return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos);
     }
     @Override
-    public void updateInvoiceIfReturnDateIsNotNull(int rentalId,int ekstra){
+    public void updateInvoiceIfReturnDateIsNotNull(Rental rental,int ekstra,int addtionalTotalPrice){
 
-        RentalSearchListDto rental = rentalService.getByRentalId(rentalId).getData();
 
-        CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
+        CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
 
         int days = totalRentDays(rental);
-        double totalAmount = car.getDailyPrice() * days + ekstra;
+        double totalAmount = (car.getDailyPrice() * days) + ekstra+(addtionalTotalPrice*days);
 
-        Invoice invoice = modelMapperService.forRequest().map(rentalId,Invoice.class);
+        Invoice invoice =  modelMapperService.forRequest().map(rental,Invoice.class);
         invoice.setTotalRentalDay(days);
+      //  invoice.setRental(rental);
         invoice.setInvoiceDate(LocalDate.now());
-        invoice.setTotalAmount(totalAmount+ekstra);
+        invoice.setTotalAmount(totalAmount);
         invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
         this.invoiceDao.save(invoice);
+
     }
 
 

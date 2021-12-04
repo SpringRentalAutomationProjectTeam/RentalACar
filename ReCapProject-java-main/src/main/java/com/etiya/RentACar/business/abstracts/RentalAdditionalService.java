@@ -6,6 +6,7 @@ import com.etiya.RentACar.business.requests.additionalService.DeleteAdditionalSe
 import com.etiya.RentACar.business.requests.additionalService.UpdateAdditionalServiceRequest;
 import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
+import com.etiya.RentACar.entites.AdditionalService;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ public interface RentalAdditionalService {
     Result add(CreateAdditionalServiceRequest createAdditionalServiceRequest);
     Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest);
     Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest);
+    DataResult<AdditionalService> getById(int rentalAdditionalId);
 }

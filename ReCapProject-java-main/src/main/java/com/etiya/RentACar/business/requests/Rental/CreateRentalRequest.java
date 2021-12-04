@@ -1,6 +1,7 @@
 package com.etiya.RentACar.business.requests.Rental;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.etiya.RentACar.business.requests.creditCard.CreateCreditCardRequest;
 import com.etiya.RentACar.entites.CreditCard;
@@ -32,6 +33,8 @@ public class CreateRentalRequest  {
 
     @NotNull
     private int rentCityId;
+
+    private List<Integer> additionalServicesId;
 
 
 }

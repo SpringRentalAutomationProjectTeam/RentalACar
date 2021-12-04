@@ -63,6 +63,11 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         return new SuccessResult("Ek hizmet silindi.");
     }
 
+    @Override
+    public DataResult<AdditionalService> getById(int rentalAdditionalId) {
+        return new SuccessDataResult<AdditionalService>(this.additionalServiceDao.getById(rentalAdditionalId));
+    }
+
     private Result checkExistsServiceName(String serviceName){
         if(this.additionalServiceDao.existsByServiceName(serviceName)){
             return new ErrorResult("Bu Service bulunmaktadır.");

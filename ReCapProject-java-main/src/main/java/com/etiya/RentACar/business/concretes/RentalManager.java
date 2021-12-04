@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,17 +40,20 @@ public class RentalManager implements RentalService {
     private InvoiceService invoiceService;
     private CityService cityService;
     private PaymentByFakePosService paymentByFakePosService;
+    private RentalAdditionalService rentalAdditionalService;
+
 
     @Autowired
     private RentalManager(RentalDao rentalDao, ModelMapperService modelMapperService, CarService carService,
                           UserService userService, @Lazy InvoiceService invoiceService, @Lazy CityService cityService
-            , PaymentByFakePosServiceAdapter paymentByFakePosService) {
+            , PaymentByFakePosServiceAdapter paymentByFakePosService, RentalAdditionalService rentalAdditionalService) {
         super();
         this.rentalDao = rentalDao;
         this.modelMapperService = modelMapperService;
         this.carService = carService;
         this.userService = userService;
         this.invoiceService = invoiceService;
+        this.rentalAdditionalService = rentalAdditionalService;
         this.cityService = cityService;
         this.paymentByFakePosService = paymentByFakePosService;
     }
@@ -64,6 +68,8 @@ public class RentalManager implements RentalService {
     }
 
 
+
+    //rent data ve return date dırek ıs yazarak kontrol edicez 
     @Override
     public Result add(CreateRentalRequest createRentalRequest) {
         Result result = BusinessRules.run(checkCarExists(createRentalRequest.getCarId()),
@@ -77,7 +83,11 @@ public class RentalManager implements RentalService {
             return result;
         }
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-        rentalDao.save(rental);
+
+       List<AdditionalService> rentalAdditionalServices = getRentalAdditionals(createRentalRequest.getAdditionalServicesId()).getData();
+       rental.setAdditionalServices(rentalAdditionalServices);
+
+               rentalDao.save(rental);
         return new SuccessResult("Araba kiralandı");
 
     }
@@ -100,8 +110,6 @@ public class RentalManager implements RentalService {
         response.setReturnCity(result.getReturnCity());
         response.setStartKm(response.getStartKm());
         response.setEndKm(updateRentalRequest.getEndKm());
-
-
 
 
         createInvoice(response);
@@ -165,8 +173,8 @@ public class RentalManager implements RentalService {
     }
 
 
-    private void updateInvoice(Rental rental , int ekstra) {
-        this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental.getRentalId(),ekstra);
+    private void updateInvoice(Rental rental , int ekstra , int additionalTotalPrice) {
+        this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental,ekstra,additionalTotalPrice);
 
     }
 
@@ -228,14 +236,55 @@ public class RentalManager implements RentalService {
         }
     }*/
     private void createInvoice(Rental rental) {
-        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
 
-            updateInvoice(rental,500);
+
+
+        if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())){
+
+            updateInvoice(rental,500, getRentalDailyTotalPrice(rental).getData());
             this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
         }else{
-            updateInvoice(rental,0);
+            updateInvoice(rental,0, getRentalDailyTotalPrice(rental).getData());
             this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
         }
+    }
+
+
+    private DataResult<List<AdditionalService>> getRentalAdditionals(List<Integer> rentalAdditionalIds) {
+
+        List<AdditionalService> rentalAdditionals = new ArrayList<AdditionalService>();
+
+        for (int rentalAdditionalId : rentalAdditionalIds) {
+
+            AdditionalService additionalService = new AdditionalService();
+            additionalService.setServiceId(rentalAdditionalId);
+
+            rentalAdditionals.add(additionalService);
+        }
+
+        return new SuccessDataResult<List<AdditionalService>>(rentalAdditionals);
+    }
+
+
+
+
+
+
+      public DataResult<Integer> getRentalAdditionalDailyPrice(AdditionalService rentalAdditionalId) {
+
+        AdditionalService rentalAdditional = this.rentalAdditionalService.getById(rentalAdditionalId.getServiceId()).getData();
+        int rentalAdditionalDailyPrice = rentalAdditional.getServiceDailyPrice();
+
+        return new SuccessDataResult<Integer>(rentalAdditionalDailyPrice);
+    }
+
+
+    public DataResult<Integer> getRentalDailyTotalPrice(Rental rental) {
+        int additionalDailyTotalPrice = 0;
+        for (AdditionalService rentalAdditionalId : rental.getAdditionalServices()) {
+            additionalDailyTotalPrice += this.getRentalAdditionalDailyPrice(rentalAdditionalId).getData();
+        }
+        return new SuccessDataResult<Integer>(additionalDailyTotalPrice);
     }
 
 

@@ -53,6 +53,7 @@ public class Rental {
 	@JoinColumn(name = "return_city_id")
 	private City returnCity;
     //car 1 brand rental bırden hızmetı
+
 	@ManyToMany()
 	@JoinTable(name = "rental_additionals",
 			joinColumns = @JoinColumn(name = "id"),

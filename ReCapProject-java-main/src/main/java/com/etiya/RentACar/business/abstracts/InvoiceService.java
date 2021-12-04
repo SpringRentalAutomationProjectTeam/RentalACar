@@ -10,6 +10,7 @@ import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceRequest;
 import com.etiya.RentACar.business.requests.Invoice.DeleteInvoiceRequest;
 import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
+import com.etiya.RentACar.entites.Rental;
 
 public interface InvoiceService {
 
@@ -18,7 +19,7 @@ public interface InvoiceService {
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
 	DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId);
 	DataResult<List<InvoiceSearchListDto>> getByCreateDateBetweenBeginDateAndEndDate(LocalDate beginDate, LocalDate endDate);
-	void updateInvoiceIfReturnDateIsNotNull(int rentalId,int ekstra);
+	void updateInvoiceIfReturnDateIsNotNull(Rental rental, int ekstra, int additionalTotalPrice);
 
 
 	
