@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -65,5 +66,13 @@ public class RentACarApplication {
 		ErrorResult error = new ErrorResult(Messages.RECORDNOTFOUND);
 		return error;
 	}
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult HttpMessageNotReadableException(HttpMessageNotReadableException exception){
+
+		ErrorResult error = new ErrorResult(Messages.LOCALDATEERROR);
+		return error;
+	}
+
 	
 }

@@ -159,5 +159,6 @@ public class Messages {
     public static final String ADDITIONALRENTALITEMNOTFOUND = "Additional rental item not found";
 
     public static final String RECORDNOTFOUND = "Record is not found";
+    public static final String LOCALDATEERROR = "date must be in format yyyy-mm-dd";
 
 }
