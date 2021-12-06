@@ -55,7 +55,7 @@ public class RentACarApplication {
 		for (FieldError fieldError : exceptions.getBindingResult().getFieldErrors()) {
 			validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
 		}
-		ErrorDataResult<Object> errors=new ErrorDataResult<Object>(validationErrors,"Validations Errors");
+		ErrorDataResult<Object> errors=new ErrorDataResult<Object>(validationErrors,Messages.VALIDATIONERROR);
 		return errors;
 	}
 	
