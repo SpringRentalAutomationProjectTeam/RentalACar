@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import com.etiya.RentACar.business.constants.Messages;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @RestControllerAdvice
-public class RentACarApplication {
+public class RentACarApplication implements InitializingBean {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RentACarApplication.class, args);
@@ -66,6 +67,7 @@ public class RentACarApplication {
 		ErrorResult error = new ErrorResult(Messages.RECORDNOTFOUND);
 		return error;
 	}
+
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult HttpMessageNotReadableException(HttpMessageNotReadableException exception){
@@ -74,5 +76,10 @@ public class RentACarApplication {
 		return error;
 	}
 
-	
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		//database git ordan mesasges dan value messages degisken classına yapıstır
+	}
+
 }

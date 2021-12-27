@@ -28,6 +28,7 @@ public class RentalSearchListDto {
 	private String endKm;
 
 	private String rentCity;
+
 	private String returnCity;
 	
 }

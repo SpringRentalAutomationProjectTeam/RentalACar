@@ -85,7 +85,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         return new SuccessResult(Messages.ADDITIONALSERVICEDELETE);
     }
 
-    private Result checkIfAdditionalService(int additionalServiceId){
+    public Result checkIfAdditionalService(int additionalServiceId){
         if (!this.additionalServiceDao.existsById(additionalServiceId)){
             return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
         }
@@ -98,4 +98,5 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         }
         return new SuccessResult();
     }
+
 }

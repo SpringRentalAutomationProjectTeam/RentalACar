@@ -54,11 +54,9 @@ public class Rental {
 	private City returnCity;
     //car 1 brand rental bırden hızmetı
 
-	@ManyToMany()
-	@JoinTable(name = "rental_additionals",
-			joinColumns = @JoinColumn(name = "id"),
-			inverseJoinColumns = @JoinColumn(name = "service_id"))
-	private List<AdditionalService> additionalServices;
+	@OneToMany(mappedBy = "rental")
+	private List<AdditionalRentalItem>additionalRentalItems;
+
 
 
 

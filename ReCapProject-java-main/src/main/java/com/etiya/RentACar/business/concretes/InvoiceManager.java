@@ -7,15 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.etiya.RentACar.business.abstracts.CarService;
-import com.etiya.RentACar.business.abstracts.InvoiceService;
-import com.etiya.RentACar.business.abstracts.RentalService;
-import com.etiya.RentACar.business.abstracts.UserService;
+import com.etiya.RentACar.business.abstracts.*;
 import com.etiya.RentACar.business.constants.Messages;
-import com.etiya.RentACar.business.dtos.CarImagesDto;
-import com.etiya.RentACar.business.dtos.CarSearchListDto;
-import com.etiya.RentACar.business.dtos.InvoiceSearchListDto;
-import com.etiya.RentACar.business.dtos.RentalSearchListDto;
+import com.etiya.RentACar.business.dtos.*;
 import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceDateRequest;
 import com.etiya.RentACar.business.requests.Invoice.CreateInvoiceRequest;
 import com.etiya.RentACar.business.requests.Invoice.DeleteInvoiceRequest;
@@ -38,16 +32,22 @@ public class InvoiceManager implements InvoiceService {
     private RentalService rentalService;
     private CarService carService;
     private UserService userService;
+    private RentalAdditionalService rentalAdditionalService;
+    private AdditionalRentalItemService additionalRentalItemService;
 
     @Autowired
     public InvoiceManager(InvoiceDao invoiceDao, ModelMapperService modelMapperService, @Lazy RentalService rentalService,
-                          CarService carService, UserService userService) {
+                          CarService carService, UserService userService,
+                          RentalAdditionalService rentalAdditionalService,
+     AdditionalRentalItemService additionalRentalItemService) {
         super();
         this.invoiceDao = invoiceDao;
         this.modelMapperService = modelMapperService;
         this.rentalService = rentalService;
         this.userService = userService;
         this.carService = carService;
+        this.rentalAdditionalService=rentalAdditionalService;
+        this.additionalRentalItemService = additionalRentalItemService;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class InvoiceManager implements InvoiceService {
     }
     @Override
     public DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId) {
-        Result resultCheck = BusinessRules.run(checkIfUserExists(userId),//1ındu 1 corparate      3 inovice yok
+        Result resultCheck = BusinessRules.run(checkIfUserExists(userId),
                 checkIsThereInvoiceOfUser(userId));
         if (resultCheck != null) {
             return new ErrorDataResult(resultCheck);
@@ -79,6 +79,7 @@ public class InvoiceManager implements InvoiceService {
         }
 
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
+        //AdditionalServiceSearchListDto additionalServiceSearchListDto = rentalAdditionalService.
 
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
@@ -86,8 +87,9 @@ public class InvoiceManager implements InvoiceService {
         LocalDate rentDateCount = rental.getRentDate();
         Period period = Period.between(rentDateCount, returnDateCount);
         int days = period.getDays();
-        double totalAmount = car.getDailyPrice() * days;
-
+        double totalAmount = days *
+                (car.getDailyPrice() + getAdditionalItemsTotalPriceByRentalId(createInvoiceRequest.getRentalId()))
+                +priceOnDifferentCity(createInvoiceRequest.getRentalId());
         Invoice invoice = modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
         invoice.setTotalRentalDay(days);
         invoice.setInvoiceDate(LocalDate.now());
@@ -120,13 +122,12 @@ public class InvoiceManager implements InvoiceService {
         return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos,Messages.INVOICEBYCUSTOMERLIST);
     }
 
-    @Override
+    /*@Override
     public Result updateInvoiceIfReturnDateIsNotNull(Rental rental, int extra, int addtionalTotalPrice) {
         CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
 
         int days = totalRentDays(rental).getData();
         double totalAmount = (car.getDailyPrice() * days) + extra + (addtionalTotalPrice * days);
-
         Invoice invoice = modelMapperService.forRequest().map(rental, Invoice.class);
         invoice.setTotalRentalDay(days);
         invoice.setInvoiceDate(LocalDate.now());
@@ -134,7 +135,7 @@ public class InvoiceManager implements InvoiceService {
         invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
         this.invoiceDao.save(invoice);
         return new SuccessResult(Messages.INVOICEADD);
-    }
+    }*/
 
     private DataResult<String> createInvoiceNumber(int rentalId) {
         LocalDate now = LocalDate.now();
@@ -178,5 +179,26 @@ public class InvoiceManager implements InvoiceService {
         }
         return new SuccessResult(Messages.USERFOUND);
     }
+
+    public int getAdditionalItemsTotalPriceByRentalId(int rentalId) {
+        var result = this.additionalRentalItemService.getByRentalId(rentalId).getData();
+        int totalAmount=0;
+        for(AdditionalRentalItemSearchListDto item : result){
+           int id= item.getAdditionalServiceId();
+            totalAmount+=this.rentalAdditionalService.getById(id).getData().getServiceDailyPrice();
+        }
+        return totalAmount;
+    }
+
+    private int priceOnDifferentCity(int rentalId) {
+
+         RentalSearchListDto rt=  this.rentalService.getByRentalId(rentalId).getData();
+        if (rt.getRentCity()!= rt.getReturnCity()) {
+            return 500;
+        } else {
+            return 0;
+        }
+    }
+
 
 }

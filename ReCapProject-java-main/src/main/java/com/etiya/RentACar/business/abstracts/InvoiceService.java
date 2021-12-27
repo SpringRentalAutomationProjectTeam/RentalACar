@@ -19,7 +19,7 @@ public interface InvoiceService {
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
 	DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId);
 	DataResult<List<InvoiceSearchListDto>> getByCreateDateBetweenBeginDateAndEndDate(LocalDate beginDate, LocalDate endDate);
-	Result updateInvoiceIfReturnDateIsNotNull(Rental rental, int extra, int additionalTotalPrice);
+	//Result updateInvoiceIfReturnDateIsNotNull(Rental rental, int extra, int additionalTotalPrice);
 
 
 	

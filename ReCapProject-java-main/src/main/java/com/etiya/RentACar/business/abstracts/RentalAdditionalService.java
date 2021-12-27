@@ -16,4 +16,5 @@ public interface RentalAdditionalService {
     Result update(UpdateAdditionalServiceRequest updateAdditionalServiceRequest);
     Result delete(DeleteAdditionalServiceRequest deleteAdditionalServiceRequest);
     DataResult<AdditionalService> getById(int rentalAdditionalId);
+    Result checkIfAdditionalService(int additionalServiceId);
 }

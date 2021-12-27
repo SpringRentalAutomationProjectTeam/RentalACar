@@ -26,7 +26,7 @@ public class AdditionalService {
     @Column(name = "service_daily_price")
     private int serviceDailyPrice;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "additionalServices")
-    private List<Rental> rentals;
+    @OneToMany(mappedBy = "additionalService")
+    private List<AdditionalRentalItem> additionalRentalItems;
+
 }

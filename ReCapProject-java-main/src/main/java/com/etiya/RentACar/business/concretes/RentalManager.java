@@ -92,9 +92,6 @@ public class RentalManager implements RentalService {
 
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 
-        List<AdditionalService> rentalAdditionalServices = getRentalAdditionals(createRentalRequest.getAdditionalServicesId()).getData();
-        rental.setAdditionalServices(rentalAdditionalServices);
-
         rentalDao.save(rental);
         return new SuccessResult(Messages.RENTALADD);
     }
@@ -118,9 +115,9 @@ public class RentalManager implements RentalService {
         response.setStartKm(response.getStartKm());
         response.setEndKm(updateRentalRequest.getEndKm());
 
-        createInvoice(response);
-        updateCarKm(response);
 
+        updateCarKm(response);
+        updateCityNameIfReturnCityIsDifferent(response);
         this.rentalDao.save(response);
         return new SuccessResult(Messages.RENTALUPDATE);
     }
@@ -155,17 +152,13 @@ public class RentalManager implements RentalService {
         this.carService.updateCarKm(rental.getCar().getCarId(), rental.getEndKm());
     }
 
-    private void createInvoice(Rental rental) {
+    private void updateCityNameIfReturnCityIsDifferent(Rental rental) {
         if ((rental.getRentCity().getCityId()) != (rental.getReturnCity().getCityId())) {
-            updateInvoice(rental, 500, getRentalDailyTotalPrice(rental).getData());
-            this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
-        } else {
-            updateInvoice(rental, 0, getRentalDailyTotalPrice(rental).getData());
             this.carService.updateCarCity(rental.getCar().getCarId(), rental.getReturnCity().getCityId());
         }
     }
 
-    private DataResult<List<AdditionalService>> getRentalAdditionals(List<Integer> rentalAdditionalIds) {
+  /*  private DataResult<List<AdditionalService>> getRentalAdditionals(List<Integer> rentalAdditionalIds) {
 
         List<AdditionalService> rentalAdditionals = new ArrayList<AdditionalService>();
 
@@ -178,27 +171,24 @@ public class RentalManager implements RentalService {
         }
 
         return new SuccessDataResult<List<AdditionalService>>(rentalAdditionals);
-    }
+    }*/
 
-    private DataResult<Integer> getRentalAdditionalDailyPrice(AdditionalService rentalAdditionalId) {
+   /* private DataResult<Integer> getRentalAdditionalDailyPrice(AdditionalService rentalAdditionalId) {
 
         AdditionalService rentalAdditional = this.rentalAdditionalService.getById(rentalAdditionalId.getServiceId()).getData();
         int rentalAdditionalDailyPrice = rentalAdditional.getServiceDailyPrice();
 
         return new SuccessDataResult<Integer>(rentalAdditionalDailyPrice);
-    }
-
-    private DataResult<Integer> getRentalDailyTotalPrice(Rental rental) {
+    }*/
+    /*private DataResult<Integer> getRentalDailyTotalPrice(Rental rental) {
         int additionalDailyTotalPrice = 0;
         for (AdditionalService rentalAdditionalId : rental.getAdditionalServices()) {
             additionalDailyTotalPrice += this.getRentalAdditionalDailyPrice(rentalAdditionalId).getData();
         }
         return new SuccessDataResult<Integer>(additionalDailyTotalPrice);
-    }
+    }*/
 
     private Result checkIfIsLimitEnough(int rentalId, LocalDate returnDate, CreditCardRentalDto creditCard) {
-
-
 
         Rental rental = this.rentalDao.getById(rentalId);
 
@@ -241,7 +231,7 @@ public class RentalManager implements RentalService {
         return new SuccessResult(Messages.USERFOUND);
     }
 
-    private Result checkIfRentalExists(int rentalId) {
+    public Result checkIfRentalExists(int rentalId) {
         if (!this.rentalDao.existsById(rentalId)) {
             return new ErrorResult(Messages.RENTALNOTFOUND);
         }
@@ -263,10 +253,10 @@ public class RentalManager implements RentalService {
         return new SuccessResult(Messages.CITYFOUND);
     }
 
-    private Result updateInvoice(Rental rental, int extra, int additionalTotalPrice) {
+    /*private Result updateInvoice(Rental rental, int extra, int additionalTotalPrice) {
         this.invoiceService.updateInvoiceIfReturnDateIsNotNull(rental, extra, additionalTotalPrice);
         return new SuccessResult(Messages.INVOICEUPDATE);
-    }
+    }*/
 
     private Result checkIsRentDateIsAfterThanReturnDate(int rentalID , LocalDate returnDate){
         LocalDate rentDate = this.rentalDao.getById(rentalID).getRentDate();

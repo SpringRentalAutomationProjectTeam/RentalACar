@@ -92,7 +92,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     private Result checkIfCompanyNameExists(String companyName) {
-        if (!this.corporateCustomersDao.existsCorporateCustomerByCompanyName(companyName)) {
+        if (this.corporateCustomersDao.existsCorporateCustomerByCompanyName(companyName)) {
             return new ErrorResult(Messages.CUSTOMERISALREADYEXISTS);
         }
         return new SuccessResult();
