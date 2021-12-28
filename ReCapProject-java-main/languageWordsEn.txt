@@ -130,7 +130,26 @@ INSERT INTO public.language_words(
 ('Additional rental item not found.',123,1),
 ('Record is not found.',124,1),
 ('The date must be in format yyyy-mm-dd.',125,1),
-('Validation error.',126,1);
+('Validation error.',126,1),
+('Message not found.',127,1),
+('Language Added.',128,1),
+('Language Updated.',129,1),
+('Language Deleted.',130,1),
+('Languages Listed.',131,1),
+('The Language name already exists.',132,1),
+('Language Not Found.',133,1),
+('Message Key added.',134,1),
+('MessageKey updated.',135,1),
+('MessageKey Deleted.',136,1),
+('Message Key Listed.',137,1),
+('The Message Key already exists.',138,1),
+('Message Key Not found.',139,1),
+('Message added.',140,1),
+('Message updated.',141,1),
+('Message deleted.',142,1),
+('Message listed.',143,1),
+('The message already exists.',144,1),
+('Message not found.',145,1);
 
 
 
