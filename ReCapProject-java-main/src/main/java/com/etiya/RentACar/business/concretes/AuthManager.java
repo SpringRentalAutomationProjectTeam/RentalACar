@@ -1,13 +1,10 @@
 package com.etiya.RentACar.business.concretes;
 
+import com.etiya.RentACar.business.abstracts.*;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.etiya.RentACar.business.abstracts.AuthService;
-import com.etiya.RentACar.business.abstracts.CorporateCustomerService;
-import com.etiya.RentACar.business.abstracts.IndividualCustomerService;
-import com.etiya.RentACar.business.abstracts.UserService;
 import com.etiya.RentACar.business.requests.LoginRequest;
 import com.etiya.RentACar.business.requests.IndıvidualCustomer.CreateIndividualCustomerRequest;
 import com.etiya.RentACar.business.requests.IndıvidualCustomer.RegisterIndividualCustomerRequest;
@@ -28,17 +25,20 @@ public class AuthManager implements AuthService {
     private UserService userService;
     private ModelMapperService modelMapperService;
     private CustomerFindexScoreService customerFindexScoreService;
+    private LanguageWordService languageWordService;
 
     @Autowired
     public AuthManager(IndividualCustomerService individualCustomerService, UserService userService,
                        ModelMapperService modelMapperService, CustomerFindexScoreService customerFindexScoreService
-            , CorporateCustomerService corporateCustomerService) {
+            , CorporateCustomerService corporateCustomerService,
+                       LanguageWordService languageWordService) {
         super();
         this.individualCustomerService = individualCustomerService;
         this.userService = userService;
         this.modelMapperService = modelMapperService;
         this.customerFindexScoreService = customerFindexScoreService;
         this.corporateCustomerService = corporateCustomerService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AuthManager implements AuthService {
     private Result checkCustomerEmailByEmailIsMatched(LoginRequest loginRequest) {
 
         if (this.userService.checkIfEmailExists(loginRequest.getEmail()).isSuccess()) {
-            return new ErrorResult(Messages.EMAILERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("email_error").getData());
         }
         return new SuccessResult();
     }

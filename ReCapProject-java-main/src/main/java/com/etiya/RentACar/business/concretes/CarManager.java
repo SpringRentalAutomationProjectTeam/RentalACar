@@ -69,7 +69,7 @@ public class CarManager implements CarService {
     @Override
     public DataResult<List<CarSearchListDto>> getAllAvailableCars() {
         List<CarSearchListDto> result = this.carDao.getAllWithoutMaintenanceOfCar();
-        return new SuccessDataResult<List<CarSearchListDto>>(result);
+        return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CARAVAILABLE);
     }
 
     @Override

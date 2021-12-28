@@ -1,15 +1,24 @@
 package com.etiya.RentACar;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
+import com.etiya.RentACar.business.abstracts.MessageKeyService;
+import com.etiya.RentACar.business.concretes.LanguageWordManager;
 import com.etiya.RentACar.business.constants.Messages;
+import com.etiya.RentACar.core.utilities.results.SuccessResult;
+import com.etiya.RentACar.entites.LanguageWord;
+import com.etiya.RentACar.entites.MessageKey;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -30,12 +39,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @RestControllerAdvice
-public class RentACarApplication implements InitializingBean {
+public class RentACarApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RentACarApplication.class, args);
 	}
-	
+
+
 	@Bean
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  
@@ -77,9 +87,16 @@ public class RentACarApplication implements InitializingBean {
 	}
 
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		//database git ordan mesasges dan value messages degisken classına yapıstır
-	}
+	/*@Override
+	@Bean
+	public void afterPropertiesSet() throws Exception {//string value int keyId
+		List<LanguageWord> languageWords = this.languageWordService.findAllByLanguageId(1).getData();
+
+		for (LanguageWord languageWord: languageWords) {
+			String messageKey =this.messageKeyService.getById(languageWord.getMessageKey().getId()).getData().getKey();
+			Messages.keyAndValue.put(messageKey,languageWord.getTranslation());
+		}
+	}*/
 
 }
+

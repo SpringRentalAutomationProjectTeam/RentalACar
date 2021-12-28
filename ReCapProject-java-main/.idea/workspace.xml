@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/RentACarApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/RentACarApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AuthManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <list id="17ce63d7-1314-4f9e-966d-b3eff0d8714b" name="Changes by berkan.senger" comment="" />
+    <list id="be35b98e-4ef9-4211-aae8-a5dbbb850435" name="Changes by emin.sahan" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="myId2FirstActivated">
+      <map>
+        <entry key="JPA Inspector" value="true" />
+        <entry key="JPA Palette" value="true" />
+        <entry key="JPA Structure" value="true" />
+      </map>
+    </option>
+    <option name="myId2Visible">
+      <map>
+        <entry key="JPA Inspector" value="false" />
+        <entry key="JPA Palette" value="false" />
+        <entry key="JPA Structure" value="false" />
+      </map>
+    </option>
+  </component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java">
+      <ranges>
+        <range start1="2" end1="2" start2="2" end2="11" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="4" end1="4" start2="13" end2="14" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="5" end1="6" start2="15" end2="16" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="7" end1="14" start2="17" end2="38" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="15" end1="29" start2="39" end2="47" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="31" end1="42" start2="49" end2="50" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="46" end1="47" start2="54" end2="55" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="51" end1="51" start2="59" end2="60" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="74" end1="75" start2="83" end2="84" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="105" end1="114" start2="114" end2="115" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="121" end1="123" start2="122" end2="124" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="124" end1="125" start2="125" end2="126" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="127" end1="128" start2="128" end2="128" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="132" end1="133" start2="132" end2="133" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="134" end1="135" start2="134" end2="135" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="137" end1="156" start2="137" end2="156" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="159" end1="160" start2="159" end2="160" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="165" end1="165" start2="165" end2="166" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+      </ranges>
+    </file>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="22r9BEJtgLh7n3IRHlvsRkGfHVT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.updates" />
+  </component>
+  <component name="RunManager">
+    <configuration name="RentACarApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="RentACar" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.etiya.RentACar.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.etiya.RentACar.RentACarApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.RentACarApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" name="Changes" comment="" />
+      <created>1640584702568</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1640584702568</updated>
+      <workItem from="1640584703764" duration="4320000" />
+      <workItem from="1640589116682" duration="31637000" />
+      <workItem from="1640681437366" duration="1882000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
