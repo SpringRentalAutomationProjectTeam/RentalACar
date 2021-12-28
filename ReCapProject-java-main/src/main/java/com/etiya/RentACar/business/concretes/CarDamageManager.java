@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 import com.etiya.RentACar.business.abstracts.CarDamageService;
 import com.etiya.RentACar.business.abstracts.CarService;
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CarDamageSearchListDto;
 import com.etiya.RentACar.business.requests.carDamage.CreateCarDamageRequest;
@@ -27,12 +28,14 @@ public class CarDamageManager implements CarDamageService {
     private ModelMapperService modelMapperService;
     private CarDamageDao carDamageDao;
     private CarService carService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    public CarDamageManager(ModelMapperService modelMapperService, CarDamageDao carDamageDao, CarService carService) {
+    public CarDamageManager(ModelMapperService modelMapperService, CarDamageDao carDamageDao, CarService carService,LanguageWordService languageWordService) {
         this.modelMapperService = modelMapperService;
         this.carService = carService;
         this.carDamageDao = carDamageDao;
+        this.languageWordService= languageWordService;
     }
 
     @Override
@@ -40,7 +43,8 @@ public class CarDamageManager implements CarDamageService {
         List<CarDamage> list = this.carDamageDao.findAll();
         List<CarDamageSearchListDto> response = list.stream().map(carDamage -> modelMapperService.forDto().
                 map(carDamage, CarDamageSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CarDamageSearchListDto>>(response,Messages.DAMAGELIST);
+        return new SuccessDataResult<List<CarDamageSearchListDto>>(response,
+                this.languageWordService.getValueByKey("damage_list").getData());
     }
 
     @Override
@@ -65,7 +69,7 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(createCarDamageRequest, CarDamage.class);
         this.carDamageDao.save(carDamage);
-        return new SuccessResult(Messages.DAMAGEADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("damage_add").getData());
     }
 
     @Override
@@ -78,7 +82,7 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(updateCarDamageRequest, CarDamage.class);
         this.carDamageDao.save(carDamage);
-        return new SuccessResult(Messages.DAMAGEUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("damage_update").getData());
     }
 
     @Override
@@ -90,26 +94,26 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(deleteCarDamageRequest, CarDamage.class);
         this.carDamageDao.delete(carDamage);
-        return new SuccessResult(Messages.DAMAGEDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("damage_delete").getData());
     }
 
     private Result checkIfCarDamageExists(int carDamageId){
         if (!this.carDamageDao.existsById(carDamageId)){
-            return new ErrorResult(Messages.DAMAGENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("damage_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIsThereDamageInCar(int carId){
         if (this.carDamageDao.getByCar_CarId(carId).isEmpty()){
-            return new ErrorResult(Messages.DAMAGEBELONGTOCAR);
+            return new ErrorResult(this.languageWordService.getValueByKey("damage_belong_to_car").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(Messages.CARNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("damage_not_found").getData());
         }
         return new SuccessResult();
     }

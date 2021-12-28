@@ -5,15 +5,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/RentACarApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/RentACarApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AuthManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AuthManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarDamageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarDamageManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/InvoiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/InvoiceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MaintenanceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MaintenanceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalAdditionalServiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalAdditionalServiceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/LanguageDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/LanguageDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/LanguageWordDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/LanguageWordDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/MessageKeyDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/dataAccess/abstracts/MessageKeyDao.java" afterDir="false" />
     </list>
-    <list id="17ce63d7-1314-4f9e-966d-b3eff0d8714b" name="Changes by berkan.senger" comment="" />
-    <list id="be35b98e-4ef9-4211-aae8-a5dbbb850435" name="Changes by emin.sahan" comment="">
+    <list id="72d04be6-8497-4356-ab01-07deb33aa4b0" name="Changes by berkan.senger" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/BrandManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/BrandManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarImageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CarImageManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/ColorManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/ColorManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CreditCardManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CreditCardManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/InvoiceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/InvoiceManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/UserManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageWordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageWordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/MessageKeyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/MessageKeyController.java" afterDir="false" />
+    </list>
+    <list id="be35b98e-4ef9-4211-aae8-a5dbbb850435" name="Changes by emin.sahan" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/LanguageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/LanguageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/LanguageWordService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/LanguageWordService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/MessageKeyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/abstracts/MessageKeyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AdditionalRentalItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/AdditionalRentalItemManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CorporateCustomerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/CorporateCustomerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/IndividualCustomerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/IndividualCustomerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/Language/CreateLanguageRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/Language/CreateLanguageRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/brand/CreateBrandRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/brand/CreateBrandRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/brand/UpdateBrandRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/requests/brand/UpdateBrandRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,26 +89,154 @@
     </option>
   </component>
   <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageManager.java">
+      <ranges>
+        <range start1="3" end1="3" start2="3" end2="5" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="4" end1="4" start2="6" end2="9" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="7" end1="7" start2="12" end2="13" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="8" end1="10" start2="14" end2="15" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="15" end1="15" start2="20" end2="23" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="21" end1="21" start2="29" end2="30" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="23" end1="24" start2="32" end2="33" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="26" end1="26" start2="35" end2="36" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="28" end1="28" start2="38" end2="46" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="30" end1="30" start2="48" end2="52" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="32" end1="33" start2="54" end2="55" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="37" end1="37" start2="59" end2="64" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="39" end1="40" start2="66" end2="67" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="44" end1="44" start2="71" end2="75" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="45" end1="46" start2="76" end2="77" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="47" end1="47" start2="78" end2="102" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/LanguageWordManager.java">
+      <ranges>
+        <range start1="2" end1="2" start2="2" end2="3" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="5" end1="5" start2="6" end2="8" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="8" end1="8" start2="11" end2="12" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="9" end1="10" start2="13" end2="14" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="11" end1="14" start2="15" end2="15" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="16" end1="19" start2="17" end2="18" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="21" end1="21" start2="20" end2="22" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="23" end1="23" start2="24" end2="25" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="24" end1="24" start2="26" end2="28" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="29" end1="29" start2="33" end2="35" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="31" end1="31" start2="37" end2="38" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="34" end1="35" start2="41" end2="43" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="38" end1="38" start2="46" end2="48" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="40" end1="40" start2="50" end2="61" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="43" end1="43" start2="64" end2="69" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="45" end1="46" start2="71" end2="72" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="47" end1="48" start2="73" end2="73" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="52" end1="52" start2="77" end2="83" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="54" end1="55" start2="85" end2="86" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="59" end1="59" start2="90" end2="95" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="61" end1="62" start2="97" end2="98" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="66" end1="66" start2="102" end2="106" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="70" end1="71" start2="110" end2="118" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="73" end1="73" start2="120" end2="151" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/InvoiceManager.java">
+      <ranges>
+        <range start1="36" end1="36" start2="36" end2="37" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="41" end1="43" start2="42" end2="43" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="50" end1="50" start2="50" end2="51" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="56" end1="57" start2="57" end2="58" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="69" end1="70" start2="70" end2="71" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="81" end1="82" start2="82" end2="83" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="98" end1="99" start2="99" end2="100" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="111" end1="112" start2="112" end2="113" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="121" end1="122" start2="122" end2="123" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="124" end1="138" start2="125" end2="125" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="156" end1="157" start2="143" end2="144" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="163" end1="164" start2="150" end2="151" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="170" end1="171" start2="157" end2="158" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="177" end1="178" start2="164" end2="165" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/ws/LanguageController.java">
+      <ranges>
+        <range start1="6" end1="6" start2="6" end2="7" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="14" end1="14" start2="15" end2="17" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="31" end1="31" start2="34" end2="39" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/MessageKeyManager.java">
+      <ranges>
+        <range start1="2" end1="2" start2="2" end2="3" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="3" end1="3" start2="4" end2="7" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="6" end1="6" start2="10" end2="11" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="7" end1="11" start2="12" end2="13" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="12" end1="12" start2="14" end2="15" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="15" end1="15" start2="18" end2="21" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="21" end1="21" start2="27" end2="28" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="23" end1="24" start2="30" end2="31" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="26" end1="26" start2="33" end2="34" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="27" end1="27" start2="35" end2="44" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="30" end1="30" start2="47" end2="52" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="32" end1="33" start2="54" end2="55" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="37" end1="37" start2="59" end2="65" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="40" end1="41" start2="68" end2="69" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="45" end1="45" start2="73" end2="78" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="47" end1="48" start2="80" end2="81" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="49" end1="49" start2="82" end2="84" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="54" end1="54" start2="89" end2="106" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+      </ranges>
+    </file>
+    <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/concretes/RentalManager.java">
+      <ranges>
+        <range start1="41" end1="41" start2="41" end2="42" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="46" end1="46" start2="47" end2="48" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="47" end1="48" start2="49" end2="50" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="64" end1="65" start2="66" end2="67" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="76" end1="77" start2="78" end2="79" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="95" end1="96" start2="97" end2="98" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="121" end1="122" start2="123" end2="124" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="133" end1="134" start2="135" end2="136" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="140" end1="141" start2="142" end2="143" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="142" end1="143" start2="144" end2="145" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="160" end1="189" start2="162" end2="162" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="203" end1="204" start2="176" end2="177" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="205" end1="206" start2="178" end2="179" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="212" end1="213" start2="185" end2="186" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="214" end1="215" start2="187" end2="188" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="221" end1="222" start2="194" end2="195" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="223" end1="224" start2="196" end2="197" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="228" end1="229" start2="201" end2="202" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="230" end1="231" start2="203" end2="204" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="235" end1="236" start2="208" end2="209" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="237" end1="238" start2="210" end2="211" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="242" end1="243" start2="215" end2="216" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="244" end1="245" start2="217" end2="218" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="250" end1="251" start2="223" end2="224" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="252" end1="253" start2="225" end2="226" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="254" end1="259" start2="227" end2="227" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="264" end1="265" start2="232" end2="233" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="267" end1="268" start2="235" end2="235" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+      </ranges>
+    </file>
     <file path="$PROJECT_DIR$/src/main/java/com/etiya/RentACar/business/constants/Messages.java">
       <ranges>
-        <range start1="2" end1="2" start2="2" end2="11" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="4" end1="4" start2="13" end2="14" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="5" end1="6" start2="15" end2="16" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="7" end1="14" start2="17" end2="38" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="15" end1="29" start2="39" end2="47" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="31" end1="42" start2="49" end2="50" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="46" end1="47" start2="54" end2="55" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="51" end1="51" start2="59" end2="60" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="74" end1="75" start2="83" end2="84" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="105" end1="114" start2="114" end2="115" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="121" end1="123" start2="122" end2="124" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="124" end1="125" start2="125" end2="126" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="127" end1="128" start2="128" end2="128" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
-        <range start1="132" end1="133" start2="132" end2="133" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="134" end1="135" start2="134" end2="135" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="137" end1="156" start2="137" end2="156" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="159" end1="160" start2="159" end2="160" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
-        <range start1="165" end1="165" start2="165" end2="166" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="15" end1="19" start2="15" end2="19" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="23" end1="25" start2="23" end2="24" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="39" end1="42" start2="38" end2="41" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="45" end1="46" start2="44" end2="45" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="48" end1="48" start2="47" end2="56" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="49" end1="58" start2="57" end2="58" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="59" end1="59" start2="59" end2="67" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="60" end1="68" start2="68" end2="68" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="69" end1="69" start2="69" end2="71" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="70" end1="72" start2="72" end2="86" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="73" end1="99" start2="87" end2="98" changelist="be35b98e-4ef9-4211-aae8-a5dbbb850435" />
+        <range start1="100" end1="103" start2="99" end2="114" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="104" end1="122" start2="115" end2="123" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="123" end1="132" start2="124" end2="133" changelist="9bfb3d7a-bdf6-46aa-95ad-e6d31e7bc3bd" />
+        <range start1="134" end1="137" start2="135" end2="138" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="138" end1="139" start2="139" end2="140" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="146" end1="147" start2="147" end2="148" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="153" end1="154" start2="154" end2="155" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
+        <range start1="159" end1="160" start2="160" end2="161" changelist="72d04be6-8497-4356-ab01-07deb33aa4b0" />
       </ranges>
     </file>
   </component>

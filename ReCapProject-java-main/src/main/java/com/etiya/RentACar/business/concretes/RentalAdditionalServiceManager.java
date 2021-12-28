@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.abstracts.RentalAdditionalService;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.AdditionalServiceSearchListDto;
@@ -21,11 +22,12 @@ import java.util.stream.Collectors;
 public class RentalAdditionalServiceManager implements RentalAdditionalService {
     private AdditionalServiceDao additionalServiceDao;
     private ModelMapperService modelMapperService;
-
+    private LanguageWordService languageWordService;
     @Autowired
-    public RentalAdditionalServiceManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService) {
+    public RentalAdditionalServiceManager(AdditionalServiceDao additionalServiceDao, ModelMapperService modelMapperService,LanguageWordService languageWordService) {
         this.additionalServiceDao = additionalServiceDao;
         this.modelMapperService = modelMapperService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         List<AdditionalService> result = this.additionalServiceDao.findAll();
         List<AdditionalServiceSearchListDto> response = result.stream().map(additionalService -> modelMapperService.forDto()
                 .map(additionalService, AdditionalServiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult(Messages.ADDITIONALSERVICELIST);
+        return new SuccessDataResult(this.languageWordService.getValueByKey("additionalservice_list").getData());
 
     }
 
@@ -44,7 +46,8 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
             return new ErrorDataResult(result);
         }
 
-        return new SuccessDataResult<AdditionalService>(this.additionalServiceDao.getById(rentalAdditionalId), Messages.ADDITIONALSERVICEFOUND);
+        return new SuccessDataResult<AdditionalService>(this.additionalServiceDao.getById(rentalAdditionalId),
+                this.languageWordService.getValueByKey("additionalservice_found").getData());
     }
 
     @Override
@@ -57,7 +60,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult(Messages.ADDITIONALSERVICEADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_add").getData());
     }
 
     @Override
@@ -71,7 +74,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(updateAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult(Messages.ADDITIONALSERVICEUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_update").getData());
     }
 
     @Override
@@ -82,19 +85,19 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         }
 
         this.additionalServiceDao.deleteById(deleteAdditionalServiceRequest.getServiceId());
-        return new SuccessResult(Messages.ADDITIONALSERVICEDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_delete").getData());
     }
 
     public Result checkIfAdditionalService(int additionalServiceId){
         if (!this.additionalServiceDao.existsById(additionalServiceId)){
-            return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfServiceNameExists(String serviceName) {
         if (this.additionalServiceDao.existsByServiceName(serviceName)) {
-            return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
         }
         return new SuccessResult();
     }

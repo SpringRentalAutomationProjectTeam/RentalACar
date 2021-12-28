@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +33,15 @@ public class CreditCardManager implements CreditCardService {
     private CreditCardDao creditCardDao;
     private ModelMapperService modelMapperService;
     private UserService userService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    public CreditCardManager(CreditCardDao creditCardDao, ModelMapperService modelMapperService, UserService userService) {
-        super();
+    public CreditCardManager(CreditCardDao creditCardDao, ModelMapperService modelMapperService, UserService userService
+                            ,LanguageWordService languageWordService) {
         this.creditCardDao = creditCardDao;
         this.modelMapperService = modelMapperService;
         this.userService = userService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class CreditCardManager implements CreditCardService {
         List<CreditCard> result = this.creditCardDao.findAll();
         List<CreditCardDto> response = result.stream().map(creditCard -> modelMapperService.forDto()
                 .map(creditCard, CreditCardDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CreditCardDto>>(response, Messages.CREDITCARDLIST);
+        return new SuccessDataResult<List<CreditCardDto>>(response, this.languageWordService.getValueByKey("creditcard_list").getData());
     }
 
     @Override
@@ -60,7 +63,7 @@ public class CreditCardManager implements CreditCardService {
 
         CreditCard creditCard = modelMapperService.forRequest().map(createCreditCardRequest, CreditCard.class);
         this.creditCardDao.save(creditCard);
-        return new SuccessResult(Messages.CREDITCARDADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_add").getData());
     }
 
     @Override
@@ -75,7 +78,7 @@ public class CreditCardManager implements CreditCardService {
 
         CreditCard result = modelMapperService.forRequest().map(updateCreditCardRequest, CreditCard.class);
         this.creditCardDao.save(result);
-        return new SuccessResult(Messages.CREDITCARDUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_update").getData());
     }
 
     @Override
@@ -86,7 +89,7 @@ public class CreditCardManager implements CreditCardService {
         }
 
         this.creditCardDao.deleteById(deleteCreditCardRequest.getCreditCardId());
-        return new SuccessResult(Messages.CREDITCARDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_delete").getData());
     }
 
     private Result checkCreditCardFormat(String cardNumber) {
@@ -98,28 +101,28 @@ public class CreditCardManager implements CreditCardService {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(cardNumber);
         if (!matcher.find()) {
-            return new ErrorResult(Messages.CREDITCARDNUMBERERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_number_error").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkCardNumberByCardNumber(String cardNumber) {
         if (this.creditCardDao.existsByCardNumber(cardNumber)) {
-            return new ErrorResult(Messages.CREDITCARDSAVE);
+            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_save").getData());
         }
         return new SuccessResult();
     }
 
-    private Result checkIfCreditCardExists(int credidCard) {
-        if (!this.creditCardDao.existsById(credidCard)) {
-            return new ErrorResult(Messages.CREDITCARDNOTSAVE);
+    private Result checkIfCreditCardExists(int creditCard) {
+        if (!this.creditCardDao.existsById(creditCard)) {
+            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_not_save").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkUserExists(int userId) {
         if (!userService.checkIfUserExists(userId).isSuccess()) {
-            return new ErrorResult(Messages.USERNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
         }
         return new SuccessResult();
     }

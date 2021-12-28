@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import antlr.debug.MessageAdapter;
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -42,15 +43,16 @@ public class CarImageManager implements CarImageService {
     private ModelMapperService modelMapperService;
     private CarService carService;
     private FileHelper fileHelper;
+    private LanguageWordService languageWordService;
 
     @Autowired
     private CarImageManager(CarImageDao carImageDao, ModelMapperService modelMapperService,
-                            @Lazy CarService carService, FileHelper fileHelper) {
-        super();
+                            @Lazy CarService carService, FileHelper fileHelper, LanguageWordService languageWordService) {
         this.carImageDao = carImageDao;
         this.modelMapperService = modelMapperService;
         this.carService = carService;
         this.fileHelper = fileHelper;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -59,21 +61,21 @@ public class CarImageManager implements CarImageService {
         List<CarImagesSearchListDto> result = carImages.stream()
                 .map(carImage -> modelMapperService.forDto().map(carImage, CarImagesSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarImagesSearchListDto>>(result, Messages.CARIMAGELIST);
+        return new SuccessDataResult<List<CarImagesSearchListDto>>(result, this.languageWordService.getValueByKey("carimage_list").getData());
     }
 
     @Override
     public DataResult<List<CarImagesDto>> getCarImageByCarId(int carId) {
         Result resultcheck = BusinessRules.run(checkIfCarExists(carId));
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarImagesDto>>(null, Messages.CARNOTFOUND);
+            return new ErrorDataResult<List<CarImagesDto>>(null, this.languageWordService.getValueByKey("car_not_found").getData());
         }
 
         List<CarImage> carImages = this.checkIfCarImageExists(carId).getData();
         List<CarImagesDto> result = carImages.stream()
                 .map(carImage -> modelMapperService.forDto().map(carImage, CarImagesDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult(result, Messages.CARIMAGELIST);
+        return new SuccessDataResult(result, this.languageWordService.getValueByKey("carimage_list").getData());
     }
 
     @Override
@@ -89,7 +91,7 @@ public class CarImageManager implements CarImageService {
 
         carImage.setImagePath(generateImage(createCarImageRequest.getFile()).toString());
         this.carImageDao.save(carImage);
-        return new SuccessResult(Messages.CARIMAGEADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("carimage_add").getData());
     }
 
     @Override
@@ -104,7 +106,7 @@ public class CarImageManager implements CarImageService {
         carImage.setImageDate(LocalDate.now());
         carImage.setImagePath(generateImage(updateCarImageRequest.getFile()).toString());
         this.carImageDao.save(carImage);
-        return new SuccessResult(Messages.CARIMAGEUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("carimage_update").getData());
     }
 
     @Override
@@ -118,7 +120,7 @@ public class CarImageManager implements CarImageService {
         CarImage carImage = this.carImageDao.getById(deleteCarImagesRequest.getImageId());
         fileHelper.deleteImage(carImage.getImagePath());
         this.carImageDao.delete(carImage);
-        return new SuccessResult(Messages.CARIMAGEDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("carimage_delete").getData());
     }
 
     private File generateImage(MultipartFile file) throws IOException {
@@ -144,30 +146,30 @@ public class CarImageManager implements CarImageService {
         CarImage carImage = new CarImage();
         carImage.setImagePath(FilePathConfiguration.mainPath + FilePathConfiguration.defaultImage);
         carImages.add(carImage);
-        return new SuccessDataResult<List<CarImage>>(carImages, Messages.CARIMAGELIST);
+        return new SuccessDataResult<List<CarImage>>(carImages, this.languageWordService.getValueByKey("carimage_list").getData());
     }
 
 
     private Result checkCountOfCarImages(int carId) {
         if (this.carImageDao.countCarImageByCar_CarId(carId) >= 5) {
-            return new ErrorResult(Messages.CARIMAGELIMITERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("carimage_limit_error").getData());
         }
-        return new SuccessResult(Messages.CARIMAGELIMIT);
+        return new SuccessResult(this.languageWordService.getValueByKey("carimage_limit").getData());
     }
 
 
     private Result checkIfImageExists(int imageId) {
         if (!this.carImageDao.existsById(imageId)) {
-            return new ErrorResult(Messages.CARIMAGENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("carimage_not_found").getData());
         }
-        return new SuccessResult(Messages.CARIMAGEGET);
+        return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
 
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(Messages.CARNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("carimage_not_found").getData());
         }
-        return new SuccessResult(Messages.CARFOUND);
+        return new SuccessResult();
     }
 }

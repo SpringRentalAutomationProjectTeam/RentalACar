@@ -49,7 +49,7 @@ public class AuthManager implements AuthService {
 
         result.setFindeksScore(customerFindexScoreService.getIndividualFindeksScore());
         this.individualCustomerService.add(result);
-        return new SuccessResult(Messages.CUSTOMERADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
 
     }
 
@@ -61,7 +61,7 @@ public class AuthManager implements AuthService {
 
         result.setFindeksScore(customerFindexScoreService.getCorporateFindeksScore());
         this.corporateCustomerService.add(result);
-        return new SuccessResult(Messages.CUSTOMERADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class AuthManager implements AuthService {
             return result;
         }
 
-        return new SuccessResult(Messages.LOGINSUCCESS);
+        return new SuccessResult(this.languageWordService.getValueByKey("login_success").getData());
     }
 
     private Result checkCustomerEmailByEmailIsMatched(LoginRequest loginRequest) {
@@ -90,7 +90,7 @@ public class AuthManager implements AuthService {
 
             if (!this.userService.getByEmail(loginRequest.getEmail()).getData().getPassword()
                     .equals(loginRequest.getPassword())) {
-                return new ErrorResult(Messages.LOGINPASSWORDERROR);
+                return new ErrorResult(this.languageWordService.getValueByKey("login_password_error").getData());
             }
         }
         return new SuccessResult();

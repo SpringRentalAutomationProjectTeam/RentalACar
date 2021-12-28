@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 import java.util.List;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,18 +30,20 @@ public class BrandManager implements BrandService {
     private BrandDao brandDao;
     private ModelMapperService modelMapperService;
     private CarService carService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    private BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, @Lazy CarService carService) {
+    private BrandManager(BrandDao brandDao, ModelMapperService modelMapperService, @Lazy CarService carService, LanguageWordService languageWordService) {
         super();
         this.brandDao = brandDao;
         this.modelMapperService = modelMapperService;
         this.carService = carService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
     public DataResult<List<Brand>> getAll() {
-        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), Messages.BRANDLIST);
+        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), this.languageWordService.getValueByKey("brand_list").getData());
     }
 
     @Override
@@ -52,7 +55,7 @@ public class BrandManager implements BrandService {
 
         Brand brand2 = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
         this.brandDao.save(brand2);
-        return new SuccessResult(Messages.BRANDADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("brand_add").getData());
     }
 
     @Override
@@ -65,7 +68,7 @@ public class BrandManager implements BrandService {
 
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
         this.brandDao.save(brand);
-        return new SuccessResult(Messages.BRANDUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("brand_update").getData());
     }
 
     @Override
@@ -78,27 +81,27 @@ public class BrandManager implements BrandService {
 
         Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
         this.brandDao.delete(brand);
-        return new SuccessResult(Messages.BRANDDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("brand_delete").getData());
     }
 
     @Override
     public Result checkIfBrandExists(int brandId) {
         if (!this.brandDao.existsById(brandId)) {
-            return new ErrorResult(Messages.BRANDNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("brand_not_found").getData());
         }
-        return new SuccessResult(Messages.BRANDGET);
+        return new SuccessResult();
     }
 
     private Result checkIfIsThereCarOfThisBrand(int brandId) {
         if (this.carService.checkIfExistsBrandInCar(brandId).isSuccess()) {
-            return new ErrorResult(Messages.BRANDDELETEERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("brand_delete_error").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfBrandNameExists(String brandName) {
         if (this.brandDao.existsByBrandName(brandName)) {
-            return new ErrorResult(Messages.BRANDNAMEERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("brand_name_error").getData());
         }
         return new SuccessResult();
     }

@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,13 +30,15 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
     private IndividualCustomerDao individualCustomerDao;
     private ModelMapperService modelMapperService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    private IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,
+    private IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,LanguageWordService languageWordService,
                                       ModelMapperService modelMapperService) {
-        super();
+
         this.individualCustomerDao = individualCustomerDao;
         this.modelMapperService = modelMapperService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -44,14 +47,14 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         List<IndividualCustomerSearchListDto> response = result.stream()
                 .map(customerIndividual -> modelMapperService.forDto()
                         .map(customerIndividual, IndividualCustomerSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response, Messages.CUSTOMERLIST);
+        return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response, this.languageWordService.getValueByKey("customer_list").getData());
     }
 
     @Override
     public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
         IndividualCustomer result = modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
         this.individualCustomerDao.save(result);
-        return new SuccessResult(Messages.CUSTOMERADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
     }
 
     @Override
@@ -63,7 +66,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
         IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(updateIndividualCustomerRequest, IndividualCustomer.class);
         this.individualCustomerDao.save(individualCustomerResult);
-        return new SuccessResult(Messages.CUSTOMERUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("customer_update").getData());
     }
 
     @Override
@@ -75,15 +78,15 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
         IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(deleteIndividualCustomerRequest, IndividualCustomer.class);
         this.individualCustomerDao.delete(individualCustomerResult);
-        return new SuccessResult(Messages.CUSTOMERDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("customer_delete").getData());
     }
 
     private Result checkIfUserExists(int id) {
         var result = this.individualCustomerDao.existsById(id);
         if (!result) {
-            return new ErrorResult(Messages.USERNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
         }
-        return new SuccessResult(Messages.USERFOUND);
+        return new SuccessResult();
     }
 
 }

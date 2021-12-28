@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface LanguageWordDao extends JpaRepository<LanguageWord,Integer> {
     LanguageWord getByLanguageIdAndMessageKeyId(int languageId,int keyId);
+    boolean existsByLanguageLanguageName(String languageName);
 }

@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 import java.util.List;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -29,18 +30,20 @@ public class ColorManager implements ColorService {
     private ColorDao colorDao;
     private ModelMapperService modelMapperService;
     private CarService carService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    private ColorManager(ColorDao colorDao, ModelMapperService modelMapperService, @Lazy CarService carService) {
-        super();
+    private ColorManager(ColorDao colorDao, ModelMapperService modelMapperService, @Lazy CarService carService
+                        ,LanguageWordService languageWordService) {
         this.colorDao = colorDao;
         this.modelMapperService = modelMapperService;
         this.carService = carService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
     public DataResult<List<Color>> getAll() {
-        return new SuccessDataResult<List<Color>>(this.colorDao.findAll(),Messages.COLORLIST);
+        return new SuccessDataResult<List<Color>>(this.colorDao.findAll(),this.languageWordService.getValueByKey("color_list").getData());
     }
 
     @Override
@@ -52,7 +55,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
         this.colorDao.save(color);
-        return new SuccessResult(Messages.COLORADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("color_add").getData());
     }
 
     @Override
@@ -65,7 +68,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(updateColorRequest, Color.class);
         this.colorDao.save(color);
-        return new SuccessResult(Messages.COLORUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("color_update").getData());
     }
 
     @Override
@@ -78,12 +81,12 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(deleteColorRequest, Color.class);
         this.colorDao.delete(color);
-        return new SuccessResult(Messages.COLORDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("color_delete").getData());
     }
 
     private Result checkIfExistsColorInCar(int colorId) {
         if (this.carService.checkIfExistsColorInCar(colorId).isSuccess()) {
-            return new ErrorResult(Messages.COLORDELETEERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("color_delete_error").getData());
         }
         return new SuccessResult();
     }
@@ -91,14 +94,14 @@ public class ColorManager implements ColorService {
     @Override
     public Result checkIfColorExists(int colorId) {
         if (!this.colorDao.existsById(colorId)) {
-            return new ErrorResult(Messages.COLORNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("color_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfColorNameExists(String colorName) {
         if (this.colorDao.existsByColorName(colorName)) {
-            return new ErrorResult(Messages.COLORNAMEERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("color_name_error").getData());
         }
         return new SuccessResult();
     }

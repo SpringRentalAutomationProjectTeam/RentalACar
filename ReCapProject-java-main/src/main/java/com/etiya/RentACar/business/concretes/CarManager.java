@@ -42,12 +42,13 @@ public class CarManager implements CarService {
     private RentalService rentalService;
     private MaintenanceService maintenanceService;
     private CityService cityService;
+    private LanguageWordService languageWordService;
 
     @Autowired
     private CarManager(CarDao carDao, ModelMapperService modelMapperService, @Lazy CarImageService carImageService,
                        @Lazy BrandService brandService, ColorService colorService, @Lazy RentalService rentalService,
-                       @Lazy MaintenanceService maintenanceService, CityService cityService) {
-        super();
+                       @Lazy MaintenanceService maintenanceService, CityService cityService,LanguageWordService languageWordService) {
+
         this.carDao = carDao;
         this.modelMapperService = modelMapperService;
         this.carImageService = carImageService;
@@ -56,6 +57,7 @@ public class CarManager implements CarService {
         this.rentalService = rentalService;
         this.cityService = cityService;
         this.maintenanceService = maintenanceService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -63,13 +65,13 @@ public class CarManager implements CarService {
         List<Car> result = this.carDao.findAll();
         List<CarSearchListDto> response = result.stream()
                 .map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CarSearchListDto>>(response, Messages.CARLIST);
+        return new SuccessDataResult<List<CarSearchListDto>>(response, this.languageWordService.getValueByKey("car_list").getData());
     }
 
     @Override
     public DataResult<List<CarSearchListDto>> getAllAvailableCars() {
         List<CarSearchListDto> result = this.carDao.getAllWithoutMaintenanceOfCar();
-        return new SuccessDataResult<List<CarSearchListDto>>(result,Messages.CARAVAILABLE);
+        return new SuccessDataResult<List<CarSearchListDto>>(result,this.languageWordService.getValueByKey("car_available").getData());
     }
 
     @Override
@@ -85,7 +87,7 @@ public class CarManager implements CarService {
         Random random = new Random();
         car.setMinFindeksScore(random.nextInt(1900));
         this.carDao.save(car);
-        return new SuccessResult(Messages.CARADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("car_add").getData());
     }
 
     @Override
@@ -101,7 +103,7 @@ public class CarManager implements CarService {
         Car car = modelMapperService.forRequest().map(updateCarRequest, Car.class);
         car.setMinFindeksScore(this.carDao.getById(updateCarRequest.getCarId()).getMinFindeksScore());
         carDao.save(car);
-        return new SuccessResult(Messages.CARUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("car_update").getData());
     }
 
     @Override
@@ -115,13 +117,13 @@ public class CarManager implements CarService {
 
         Car car = modelMapperService.forRequest().map(deleteCarRequest, Car.class);
         carDao.delete(car);
-        return new SuccessResult(Messages.CARDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("car_update").getData());
     }
 
     @Override
     public DataResult<List<CarDetail>> getCarsWithBrandAndColorDetails() {
         List<CarDetail> result = this.carDao.getCarWithBrandAndColorDetails();
-        return new SuccessDataResult<List<CarDetail>>(result,Messages.CARBRANDANDCOLORLIST);
+        return new SuccessDataResult<List<CarDetail>>(result,this.languageWordService.getValueByKey("car_brand_and_color_list").getData());
     }
 
     @Override
@@ -129,12 +131,12 @@ public class CarManager implements CarService {
         Result resultcheck = BusinessRules.run(checkIfBrandExists(brandId));
 
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarDetail>>(null,Messages.BRANDNOTFOUND);
+            return new ErrorDataResult<List<CarDetail>>(null,this.languageWordService.getValueByKey("brand_not_found").getData());
         }
         List<Car> result = this.carDao.getByBrand_BrandId(brandId);
         List<CarDetail> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarDetail.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarDetail>>(response,Messages.CARGETBRAND);
+        return new SuccessDataResult<List<CarDetail>>(response,this.languageWordService.getValueByKey("car_get_brand").getData());
     }
 
     @Override
@@ -142,12 +144,12 @@ public class CarManager implements CarService {
         Result resultcheck = BusinessRules.run(checkIfColorExists(colorId));
 
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarDetail>>(null,Messages.COLORNOTFOUND);
+            return new ErrorDataResult<List<CarDetail>>(null,this.languageWordService.getValueByKey("color_not_found").getData());
         }
         List<Car> result = this.carDao.getByColor_ColorId(colorId);
         List<CarDetail> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarDetail.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarDetail>>(response,Messages.CARGETCOLOR);
+        return new SuccessDataResult<List<CarDetail>>(response,this.languageWordService.getValueByKey("car_get_color").getData());
     }
 
     @Override
@@ -161,7 +163,7 @@ public class CarManager implements CarService {
         Car car = this.carDao.findById(carId).get();
 
             CarSearchListDto carSearchListDto = modelMapperService.forDto().map(car, CarSearchListDto.class);
-            return new SuccessDataResult<CarSearchListDto>(carSearchListDto,Messages.CARGET);
+            return new SuccessDataResult<CarSearchListDto>(carSearchListDto,this.languageWordService.getValueByKey("car_found").getData());
 
     }
 
@@ -169,7 +171,7 @@ public class CarManager implements CarService {
     public DataResult<List<CarDetailDto>> getByCarAllDetail(int carId) {
         Result result = BusinessRules.run(checkIfCarExists(carId));
         if (result != null) {
-            return new ErrorDataResult<List<CarDetailDto>>(null,Messages.CARNOTFOUND);
+            return new ErrorDataResult<List<CarDetailDto>>(null,this.languageWordService.getValueByKey("car_not_found").getData());
         }
 
         Car cars = this.carDao.getById(carId);
@@ -177,7 +179,7 @@ public class CarManager implements CarService {
         CarDetailDto carDetailDto = modelMapperService.forDto().map(cars, CarDetailDto.class);
         carDetailDto.setCarImagesDetail(this.carImageService.getCarImageByCarId(cars.getCarId()).getData());
         carDetailDtos.add(carDetailDto);
-        return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos, Messages.CARLIST);
+        return new SuccessDataResult<List<CarDetailDto>>(carDetailDtos, this.languageWordService.getValueByKey("car_list").getData());
     }
 
     @Override
@@ -190,7 +192,7 @@ public class CarManager implements CarService {
 
         List<Car> result = this.carDao.getByCity_CityId(cityId);
         List<CarSearchListDto> response = result.stream().map(car -> modelMapperService.forDto().map(car, CarSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CarSearchListDto>>(response,Messages.CARGETCITY);
+        return new SuccessDataResult<List<CarSearchListDto>>(response,this.languageWordService.getValueByKey("car_get_city").getData());
     }
 
     @Override
@@ -199,7 +201,7 @@ public class CarManager implements CarService {
         Car request = this.carDao.getById(carId);
         request.setCity(this.cityService.getByCity(cityId).getData());
         this.carDao.save(request);
-        return new SuccessResult(Messages.CITYUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("city_update").getData());
     }
 
     @Override
@@ -207,21 +209,21 @@ public class CarManager implements CarService {
         Car car = this.carDao.getById(carId);
         car.setKilometer(kilometer);
         this.carDao.save(car);
-        return new SuccessResult(Messages.CARKMUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("car_km_update").getData());
     }
 
     @Override
     public Result checkIfCarExists(int carId) {
         if (!this.carDao.existsById(carId)) {
-            return new ErrorResult(Messages.CARNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("car_not_found").getData());
         }
-        return new SuccessResult(Messages.CARFOUND);
+        return new SuccessResult();
     }
 
     @Override
     public Result checkIfExistsColorInCar(int colorId) {
         if (!this.carDao.getByColor_ColorId(colorId).isEmpty()) {
-            return new SuccessResult(Messages.COLORDELETEERROR);
+            return new SuccessResult(this.languageWordService.getValueByKey("color_delete_error").getData());
         }
         return new ErrorResult();
     }
@@ -229,7 +231,7 @@ public class CarManager implements CarService {
     @Override
     public Result checkIfExistsBrandInCar(int brandId) {
         if (!this.carDao.getByBrand_BrandId(brandId).isEmpty()) {
-            return new SuccessResult(Messages.BRANDDELETEERROR);
+            return new SuccessResult(this.languageWordService.getValueByKey("brand_delete_error").getData());
         }
         return new ErrorResult();
     }
@@ -237,35 +239,35 @@ public class CarManager implements CarService {
 
     private Result checkIfColorExists(int colorId) {
         if (!this.colorService.checkIfColorExists(colorId).isSuccess()) {
-            return new ErrorResult(Messages.COLORNOTFOUND);
+            return new SuccessResult(this.languageWordService.getValueByKey("color_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfBrandExists(int brandId) {
         if (!this.brandService.checkIfBrandExists(brandId).isSuccess()) {
-            return new ErrorResult(Messages.BRANDNOTFOUND);
+            return new SuccessResult(this.languageWordService.getValueByKey("brand_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarReturnRental(int carId) {
         if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
-            return new ErrorResult(Messages.CARDONOTRETURNFROMRENTAL);
+            return new SuccessResult(this.languageWordService.getValueByKey("car_is_on_rent").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarReturnMaintenance(int carId) {
         if (!this.maintenanceService.checkIfCarIsMaintenance(carId).isSuccess()) {
-            return new ErrorResult(Messages.CARMAINTENANCEFOUND);
+            return new SuccessResult(this.languageWordService.getValueByKey("carmaintenance_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCityExists(int cityId){
         if (!this.cityService.getByCity(cityId).isSuccess()){
-            return new ErrorResult(Messages.CITYNOTFOUND);
+            return new SuccessResult(this.languageWordService.getValueByKey("city_not_found").getData());
         }
         return new SuccessResult();
     }

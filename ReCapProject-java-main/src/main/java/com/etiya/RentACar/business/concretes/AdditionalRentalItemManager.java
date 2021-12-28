@@ -1,8 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
-import com.etiya.RentACar.business.abstracts.AdditionalRentalItemService;
-import com.etiya.RentACar.business.abstracts.RentalAdditionalService;
-import com.etiya.RentACar.business.abstracts.RentalService;
+import com.etiya.RentACar.business.abstracts.*;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.AdditionalRentalItemSearchListDto;
 import com.etiya.RentACar.business.requests.additionalRentalItem.CreateAdditionalRentalItemRequest;
@@ -26,12 +24,16 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private AdditionalRentalItemDao additionalRentalItemDao;
     private RentalService rentalService;
     private RentalAdditionalService rentalAdditionalService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    public AdditionalRentalItemManager(ModelMapperService modelMapperService, AdditionalRentalItemDao additionalRentalItemDao, RentalService rentalService, RentalAdditionalService rentalAdditionalService) {
+    public AdditionalRentalItemManager(ModelMapperService modelMapperService
+            , AdditionalRentalItemDao additionalRentalItemDao, LanguageWordService languageWordService
+            ,RentalService rentalService, RentalAdditionalService rentalAdditionalService) {
         this.modelMapperService = modelMapperService;
         this.additionalRentalItemDao = additionalRentalItemDao;
         this.rentalService = rentalService;
+        this.languageWordService=languageWordService;
         this.rentalAdditionalService = rentalAdditionalService;
     }
 
@@ -41,7 +43,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         List<AdditionalRentalItem> additionalRentalItems=this.additionalRentalItemDao.findAll();
         List<AdditionalRentalItemSearchListDto> additionalRentalItemSearchListDtos=additionalRentalItems.stream()
                 .map(additional-> modelMapperService.forDto().map(additional,AdditionalRentalItemSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<>(additionalRentalItemSearchListDtos, Messages.ADDITIONALSERVICELIST);
+        return new SuccessDataResult<>(additionalRentalItemSearchListDtos, this.languageWordService.getValueByKey("additional_rental_item_list").getData());
 
     }
 
@@ -54,7 +56,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         }
         AdditionalRentalItem additionalRentalItem=modelMapperService.forRequest().map(createAdditionalRentalItemRequest,AdditionalRentalItem.class);
         this.additionalRentalItemDao.save(additionalRentalItem);
-        return new SuccessResult(Messages.ADDITIONALSERVICEADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_add").getData());
     }
 
     @Override
@@ -66,7 +68,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         AdditionalRentalItem additionalRentalItem = modelMapperService.forRequest()
                 .map(deleteAdditionalRentalItemRequest, AdditionalRentalItem.class);
         this.additionalRentalItemDao.delete(additionalRentalItem);
-        return new SuccessResult(Messages.ADDITIONALRENTALITEMDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_delete").getData());
     }
 
     @Override
@@ -80,7 +82,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         AdditionalRentalItem additionalRentalItem = modelMapperService.forRequest()
                 .map(updateAdditionalRentalItemRequest, AdditionalRentalItem.class);
         this.additionalRentalItemDao.save(additionalRentalItem);
-        return new SuccessResult(Messages.ADDITIONALRENTALITEMUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_update").getData());
     }
 
     @Override
@@ -101,7 +103,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private Result isRentalExists(int rentalId){
         var result = this.rentalService.checkIfRentalExists(rentalId);
         if (!result.isSuccess()){
-            return new ErrorResult(Messages.RENTALNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("rental_not_found").getData());
         }
         return new SuccessResult();
     }
@@ -109,7 +111,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private Result isAdditionalServiceExists(int id){
         var result = this.rentalAdditionalService.checkIfAdditionalService(id);
         if (!result.isSuccess()){
-            return new ErrorResult(Messages.ADDITIONALSERVICENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
         }
         return new SuccessResult();
     }
@@ -118,7 +120,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
         var result = this.additionalRentalItemDao.existsById(id);
         if (!result){
-            return new ErrorResult(Messages.ADDITIONALRENTALITEMNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("additional_rental_not_found").getData());
         }
         return new SuccessResult();
     }

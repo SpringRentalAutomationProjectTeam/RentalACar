@@ -34,13 +34,13 @@ public class InvoiceManager implements InvoiceService {
     private UserService userService;
     private RentalAdditionalService rentalAdditionalService;
     private AdditionalRentalItemService additionalRentalItemService;
+    private LanguageWordService languageWordService;
 
     @Autowired
     public InvoiceManager(InvoiceDao invoiceDao, ModelMapperService modelMapperService, @Lazy RentalService rentalService,
                           CarService carService, UserService userService,
                           RentalAdditionalService rentalAdditionalService,
-     AdditionalRentalItemService additionalRentalItemService) {
-        super();
+     AdditionalRentalItemService additionalRentalItemService,LanguageWordService languageWordService) {
         this.invoiceDao = invoiceDao;
         this.modelMapperService = modelMapperService;
         this.rentalService = rentalService;
@@ -48,13 +48,14 @@ public class InvoiceManager implements InvoiceService {
         this.carService = carService;
         this.rentalAdditionalService=rentalAdditionalService;
         this.additionalRentalItemService = additionalRentalItemService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
     public DataResult<List<InvoiceSearchListDto>> getAll() {
         List<Invoice> result = this.invoiceDao.findAll();
         List<InvoiceSearchListDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response, Messages.INVOICELIST);
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(response, this.languageWordService.getValueByKey("invoice_list").getData());
     }
     @Override
     public DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId) {
@@ -67,7 +68,7 @@ public class InvoiceManager implements InvoiceService {
         List<InvoiceSearchListDto> response = result.stream()
                 .map(invoice -> modelMapperService.forDto()
                         .map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response,Messages.INVOICEGET);
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(response,this.languageWordService.getValueByKey("invoice_found").getData());
     }
 
     @Override
@@ -79,7 +80,7 @@ public class InvoiceManager implements InvoiceService {
         }
 
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
-        //AdditionalServiceSearchListDto additionalServiceSearchListDto = rentalAdditionalService.
+
 
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
@@ -96,7 +97,7 @@ public class InvoiceManager implements InvoiceService {
         invoice.setTotalAmount(totalAmount);
         invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
         this.invoiceDao.save(invoice);
-        return new SuccessResult(Messages.INVOICEADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("invoice_add").getData());
     }
 
     @Override
@@ -109,7 +110,7 @@ public class InvoiceManager implements InvoiceService {
 
         Invoice invoice = modelMapperService.forDto().map(deleteRentalRequest, Invoice.class);
         this.invoiceDao.delete(invoice);
-        return new SuccessResult(Messages.INVOICEDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("invoice_delete").getData());
     }
 
 
@@ -119,23 +120,9 @@ public class InvoiceManager implements InvoiceService {
         List<Invoice> invoices = this.invoiceDao.findByInvoiceDateBetween(beginDate, endDate);
         List<InvoiceSearchListDto> invoiceSearchListDtos = invoices.stream()
                 .map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos,Messages.INVOICEBYCUSTOMERLIST);
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos,this.languageWordService.getValueByKey("invoice_by_customer_list").getData());
     }
 
-    /*@Override
-    public Result updateInvoiceIfReturnDateIsNotNull(Rental rental, int extra, int addtionalTotalPrice) {
-        CarSearchListDto car = this.carService.getById(rental.getCar().getCarId()).getData();
-
-        int days = totalRentDays(rental).getData();
-        double totalAmount = (car.getDailyPrice() * days) + extra + (addtionalTotalPrice * days);
-        Invoice invoice = modelMapperService.forRequest().map(rental, Invoice.class);
-        invoice.setTotalRentalDay(days);
-        invoice.setInvoiceDate(LocalDate.now());
-        invoice.setTotalAmount(totalAmount);
-        invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
-        this.invoiceDao.save(invoice);
-        return new SuccessResult(Messages.INVOICEADD);
-    }*/
 
     private DataResult<String> createInvoiceNumber(int rentalId) {
         LocalDate now = LocalDate.now();
@@ -154,28 +141,28 @@ public class InvoiceManager implements InvoiceService {
     private Result checkIfRentalExists(int rentalId) {
 
         if (this.invoiceDao.existsByRental_RentalId(rentalId)) {
-            return new ErrorResult(Messages.INVOICENOTADD);
+            return new ErrorResult(this.languageWordService.getValueByKey("invoice_not_add").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIsThereInvoiceOfUser(int userId){
         if (!this.invoiceDao.existsByRental_UserId(userId)){
-            return new ErrorResult(Messages.INVOICEUSERROR);
+            return new ErrorResult(this.languageWordService.getValueByKey("invoice_user_error").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfInvoiceExists(int invoiceId){
         if (!this.invoiceDao.existsById(invoiceId)){
-            return new ErrorResult(Messages.INVOICENOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("invoice_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfUserExists(int userId) {
         if (!userService.checkIfUserExists(userId).isSuccess()) {
-            return new ErrorResult(Messages.USERNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
         }
         return new SuccessResult(Messages.USERFOUND);
     }

@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 
 import com.etiya.RentACar.business.abstracts.CityService;
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CitySearchListDto;
 import com.etiya.RentACar.business.requests.city.CreateCityRequest;
@@ -22,11 +23,14 @@ import java.util.stream.Collectors;
 public class CityManager implements CityService {
     private CityDao cityDao;
     private ModelMapperService modelMapperService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    public CityManager(ModelMapperService modelMapperService, CityDao cityDao) {
+    public CityManager(ModelMapperService modelMapperService, CityDao cityDao
+    ,LanguageWordService languageWordService) {
         this.modelMapperService = modelMapperService;
         this.cityDao = cityDao;
+        this.languageWordService=languageWordService;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class CityManager implements CityService {
         List<City> cities = this.cityDao.findAll();
         List<CitySearchListDto> response = cities.stream().map(city -> modelMapperService.forDto()
                 .map(city, CitySearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CitySearchListDto>>(response, Messages.CITYLIST);
+        return new SuccessDataResult<List<CitySearchListDto>>(response, this.languageWordService.getValueByKey("city_list").getData());
     }
 
     @Override
@@ -46,7 +50,7 @@ public class CityManager implements CityService {
 
         City city = modelMapperService.forRequest().map(createCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult(Messages.CITYADD);
+        return new SuccessResult(this.languageWordService.getValueByKey("city_add").getData());
     }
 
     @Override
@@ -59,7 +63,7 @@ public class CityManager implements CityService {
 
         City city = modelMapperService.forRequest().map(updateCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult(Messages.CITYUPDATE);
+        return new SuccessResult(this.languageWordService.getValueByKey("city_update").getData());
     }
 
     @Override
@@ -70,7 +74,7 @@ public class CityManager implements CityService {
         }
 
         this.cityDao.deleteById(deleteCityRequest.getCityId());
-        return new SuccessResult(Messages.CITYDELETE);
+        return new SuccessResult(this.languageWordService.getValueByKey("city_delete").getData());
     }
 
     @Override
@@ -80,20 +84,20 @@ public class CityManager implements CityService {
             return new ErrorDataResult(result);
         }
 
-        return new SuccessDataResult<City>(this.cityDao.getById(cityId), Messages.CITYFOUND);
+        return new SuccessDataResult<City>(this.cityDao.getById(cityId));
     }
 
     @Override
     public Result checkIfCityExists(int cityId) {
         if (!this.cityDao.existsById(cityId)) {
-            return new ErrorResult(Messages.CITYNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("city_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCityNameExists(String cityName) {
         if (this.cityDao.existsByCityName(cityName)) {
-            return new ErrorResult(Messages.CITYALREADYEXISTS);
+            return new ErrorResult(this.languageWordService.getValueByKey("city_already_exists").getData());
         }
         return new SuccessResult();
     }

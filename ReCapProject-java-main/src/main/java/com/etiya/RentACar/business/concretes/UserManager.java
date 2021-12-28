@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.concretes;
 
+import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.results.*;
@@ -19,12 +20,13 @@ public class UserManager implements UserService {
 
     private UserDao userDao;
     private ModelMapperService modelMapperService;
+    private LanguageWordService languageWordService;
 
     @Autowired
-    public UserManager(UserDao userDao, ModelMapperService modelMapperService) {
-        super();
+    public UserManager(UserDao userDao, ModelMapperService modelMapperService, LanguageWordService languageWordService) {
         this.userDao = userDao;
         this.modelMapperService = modelMapperService;
+        this.languageWordService = languageWordService;
     }
 
     @Override
@@ -45,7 +47,7 @@ public class UserManager implements UserService {
     @Override
     public Result checkIfEmailExists(String email) {
         if (this.userDao.existsByEmail(email)) {
-            return new ErrorResult(Messages.USERNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
         }
         return new SuccessResult();
     }
@@ -53,7 +55,7 @@ public class UserManager implements UserService {
     @Override
     public Result checkIfUserExists(int userId) {
         if (!this.userDao.existsById(userId)) {
-            return new ErrorResult(Messages.USERNOTFOUND);
+            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
         }
         return new SuccessResult();
     }
