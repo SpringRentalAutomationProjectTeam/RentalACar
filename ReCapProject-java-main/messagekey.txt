@@ -26,6 +26,7 @@ INSERT INTO message_keys(key)
 ('city_delete'),
 ('city_list'),
 ('city_not_found'),
+('city_found'),
 ('city_already_exists'),
 ('color_add'),
   ('color_update'),
