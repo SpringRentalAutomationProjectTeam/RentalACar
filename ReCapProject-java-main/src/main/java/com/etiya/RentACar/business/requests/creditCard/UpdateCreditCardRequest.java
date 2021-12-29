@@ -1,5 +1,6 @@
 package com.etiya.RentACar.business.requests.creditCard;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -31,7 +32,10 @@ public class UpdateCreditCardRequest {
 	@Pattern(regexp="(\\d{3})",message = Messages.CREDITCARDCVCERROR)
 	@NotNull
 	private String cvv;
-	
+
+	@NotNull
+	private String expirationDate;
+
 	@NotNull
 	private int userId;
 

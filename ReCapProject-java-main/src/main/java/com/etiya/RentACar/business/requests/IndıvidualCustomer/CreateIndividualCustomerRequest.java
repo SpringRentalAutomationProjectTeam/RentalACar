@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.requests.IndıvidualCustomer;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class CreateIndividualCustomerRequest {
 	@NotNull
 	private String lastName;
 	@NotNull
+	@Email
 	private String email;
 	@NotNull
 	private String password;

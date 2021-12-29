@@ -8,5 +8,5 @@ public interface CreditCardDao extends JpaRepository<CreditCard, Integer>{
 	boolean existsByCardNumber(String cardNumber);
 
 	boolean existsById(int creditCardId);
-	
+	boolean existsByUserId(int userId);
 }

@@ -43,7 +43,10 @@ public class AuthManager implements AuthService {
 
     @Override
     public Result individualCustomerRegister(RegisterIndividualCustomerRequest registerIndividualCustomerRequest) {
-
+        Result resultCheck = BusinessRules.run(isValidEmailAddress(registerIndividualCustomerRequest.getEmail()));
+        if (resultCheck != null) {
+            return resultCheck;
+        }
         CreateIndividualCustomerRequest result = modelMapperService.forRequest()
                 .map(registerIndividualCustomerRequest, CreateIndividualCustomerRequest.class);
 
@@ -56,6 +59,11 @@ public class AuthManager implements AuthService {
     @Override
     public Result corporateCustomerRegister(RegisterCorporateCustomerRequest registerCorporateCustomerRequest) {
 
+        Result resultCheck = BusinessRules.run(isValidEmailAddress(registerCorporateCustomerRequest.getEmail()));
+        if (resultCheck != null) {
+            return resultCheck;
+        }
+
         CreateCorporateCustomerRequest result = modelMapperService.forRequest()
                 .map(registerCorporateCustomerRequest, CreateCorporateCustomerRequest.class);
 
@@ -67,7 +75,7 @@ public class AuthManager implements AuthService {
     @Override
     public Result login(LoginRequest loginRequest) {
         Result result = BusinessRules.run(this.checkCustomerEmailByEmailIsMatched(loginRequest),
-                this.checkCustomerPasswordByPasswordIsMatched(loginRequest));
+                this.checkCustomerPasswordByPasswordIsMatched(loginRequest),isValidEmailAddress(loginRequest.getEmail()));
 
         if (result != null) {
             return result;
@@ -96,4 +104,14 @@ public class AuthManager implements AuthService {
         return new SuccessResult();
     }
 
+    private Result isValidEmailAddress(String email) {
+        String ePattern = "^[\\w!#$%&’+/=?`{|}~^-]+(?:\\.[\\w!#$%&’+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+
+        if (!m.matches()){
+            return new ErrorResult(this.languageWordService.getValueByKey("email_format_error").getData());
+        }
+        return new SuccessResult();
+    }
 }

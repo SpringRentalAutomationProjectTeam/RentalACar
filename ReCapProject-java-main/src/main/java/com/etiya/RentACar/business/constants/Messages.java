@@ -112,7 +112,8 @@ public class Messages {
     public static final String CREDITCARDSAVE = "Credit card registered.";//83
     public static final String CREDITCARDNOTSAVE = "Credit card not registered.";//84
     public static final String CREDITCARDGET = "Credit card found";//85
-
+    // Reference of this color found. Cannot be deleted.
+    public static final String CREDİTCARTDELETEERROR =" Reference of this color found. Cannot be deleted.";
 
     public static final String CARMAINTENANCEADD = "Car maintenance added.";//86
     public static final String CARMAINTENANCEUPDATE = "Car maintenance updated.";//87

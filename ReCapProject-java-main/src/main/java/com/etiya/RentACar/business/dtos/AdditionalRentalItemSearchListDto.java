@@ -14,5 +14,5 @@ public class AdditionalRentalItemSearchListDto {
 
     private int additionalServiceId;
 
-    private int rentalId;
+    private int rentalRentalId;
 }

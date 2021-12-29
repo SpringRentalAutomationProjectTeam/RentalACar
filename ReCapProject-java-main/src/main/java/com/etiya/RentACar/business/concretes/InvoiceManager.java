@@ -168,7 +168,7 @@ public class InvoiceManager implements InvoiceService {
     }
 
     public int getAdditionalItemsTotalPriceByRentalId(int rentalId) {
-        var result = this.additionalRentalItemService.getByRentalId(rentalId).getData();
+        List<AdditionalRentalItemSearchListDto> result = this.additionalRentalItemService.getByRentalId(rentalId).getData();
         int totalAmount=0;
         for(AdditionalRentalItemSearchListDto item : result){
            int id= item.getAdditionalServiceId();

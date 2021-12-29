@@ -35,7 +35,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         List<AdditionalService> result = this.additionalServiceDao.findAll();
         List<AdditionalServiceSearchListDto> response = result.stream().map(additionalService -> modelMapperService.forDto()
                 .map(additionalService, AdditionalServiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult(this.languageWordService.getValueByKey("additionalservice_list").getData());
+        return new SuccessDataResult(response,this.languageWordService.getValueByKey("additionalservice_list").getData());
 
     }
 

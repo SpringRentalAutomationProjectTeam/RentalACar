@@ -49,7 +49,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
     @Override
     public Result add(CreateAdditionalRentalItemRequest createAdditionalRentalItemRequest) {
-        var result = BusinessRules.run(isAdditionalServiceExists(createAdditionalRentalItemRequest.getAdditionalServiceId()),
+        Result result = BusinessRules.run(isAdditionalServiceExists(createAdditionalRentalItemRequest.getAdditionalServiceId()),
                 isRentalExists(createAdditionalRentalItemRequest.getRentalId()));
         if (result!=null){
             return result;
@@ -61,7 +61,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
     @Override
     public Result delete(DeleteAdditionalRentalItemRequest deleteAdditionalRentalItemRequest) {
-        var result = BusinessRules.run(isAdditionalRentalItemExists(deleteAdditionalRentalItemRequest.getId()));
+        Result result = BusinessRules.run(isAdditionalRentalItemExists(deleteAdditionalRentalItemRequest.getId()));
         if (result!=null){
             return result;
         }
@@ -73,7 +73,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
     @Override
     public Result update(UpdateAdditionalRentalItemRequest updateAdditionalRentalItemRequest) {
-        var result = BusinessRules.run(isAdditionalRentalItemExists(updateAdditionalRentalItemRequest.getId()),
+        Result result = BusinessRules.run(isAdditionalRentalItemExists(updateAdditionalRentalItemRequest.getId()),
                 isAdditionalServiceExists(updateAdditionalRentalItemRequest.getAdditionalServiceId()),
                 isRentalExists(updateAdditionalRentalItemRequest.getRentalId()));
         if (result!=null){
@@ -87,7 +87,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
     @Override
     public DataResult<List<AdditionalRentalItemSearchListDto>> getByRentalId(int rentalId) {
-        var businessResult = BusinessRules.run(isRentalExists(rentalId));
+        Result businessResult = BusinessRules.run(isRentalExists(rentalId));
         if (businessResult!=null){
             return new ErrorDataResult(businessResult);
         }
@@ -101,16 +101,16 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
 
     private Result isRentalExists(int rentalId){
-        var result = this.rentalService.checkIfRentalExists(rentalId);
-        if (!result.isSuccess()){
+
+        if (!this.rentalService.checkIfRentalExists(rentalId).isSuccess()){
             return new ErrorResult(this.languageWordService.getValueByKey("rental_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result isAdditionalServiceExists(int id){
-        var result = this.rentalAdditionalService.checkIfAdditionalService(id);
-        if (!result.isSuccess()){
+
+        if (!this.rentalAdditionalService.checkIfAdditionalService(id).isSuccess()){
             return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
         }
         return new SuccessResult();
@@ -118,9 +118,8 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
 
     private Result isAdditionalRentalItemExists(int id){
 
-        var result = this.additionalRentalItemDao.existsById(id);
-        if (!result){
-            return new ErrorResult(this.languageWordService.getValueByKey("additional_rental_not_found").getData());
+        if (!this.additionalRentalItemDao.existsById(id)){
+            return new ErrorResult(this.languageWordService.getValueByKey("additional_rental_item_not_found").getData());
         }
         return new SuccessResult();
     }

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import antlr.debug.MessageAdapter;
+import com.etiya.RentACar.business.abstracts.CreditCardService;
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
+import com.etiya.RentACar.business.abstracts.UserService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,14 +32,19 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     private CorporateCustomersDao corporateCustomersDao;
     private ModelMapperService modelMapperService;
     private LanguageWordService languageWordService;
+    private CreditCardService creditCardService;
+    private UserService userService;
 
     @Autowired
     public CorporateCustomerManager(CorporateCustomersDao corporateCustomersDao,LanguageWordService languageWordService,
-                                    ModelMapperService modelMapperService) {
+                                    ModelMapperService modelMapperService,CreditCardService creditCardService,UserService userService) {
         super();
         this.corporateCustomersDao = corporateCustomersDao;
         this.modelMapperService = modelMapperService;
         this.languageWordService=languageWordService;
+        this.creditCardService= creditCardService;
+        this.userService = userService;
+
     }
 
     @Override
@@ -70,13 +77,15 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         }
 
         CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(updateCorporateCustomerRequest, CorporateCustomer.class);
+        corporateCustomer.setFindeksScore(this.userService.getById(updateCorporateCustomerRequest.getUserId()).getData().getFindeksScore());
         this.corporateCustomersDao.save(corporateCustomer);
         return new SuccessResult(this.languageWordService.getValueByKey("customer_update").getData());
     }
 
     @Override
     public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
-        Result result = BusinessRules.run(checkIfUserExists(deleteCorporateCustomerRequest.getUserId()));
+        Result result = BusinessRules.run(checkIfUserExists(deleteCorporateCustomerRequest.getUserId())
+                ,checkIfIsThereCreditCardOfThisUser(deleteCorporateCustomerRequest.getUserId()));
         if (result != null) {
             return result;
         }
@@ -87,8 +96,8 @@ public class CorporateCustomerManager implements CorporateCustomerService {
     }
 
     private Result checkIfUserExists(int id) {
-        var result = this.corporateCustomersDao.existsById(id);
-        if (!result) {
+
+        if (! this.corporateCustomersDao.existsById(id)) {
             return new ErrorResult(this.languageWordService.getValueByKey("customer_not_found").getData());
         }
         return new SuccessResult();
@@ -100,5 +109,15 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         }
         return new SuccessResult();
     }
+
+
+    private Result checkIfIsThereCreditCardOfThisUser(int userId){
+        if (this.creditCardService.getByUserId(userId).isSuccess()){
+            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_delete_error").getData());
+        }
+        return new SuccessResult();
+    }
+
+
 
 }

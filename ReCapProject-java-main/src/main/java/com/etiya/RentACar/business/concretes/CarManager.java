@@ -246,28 +246,28 @@ public class CarManager implements CarService {
 
     private Result checkIfBrandExists(int brandId) {
         if (!this.brandService.checkIfBrandExists(brandId).isSuccess()) {
-            return new SuccessResult(this.languageWordService.getValueByKey("brand_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("brand_not_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarReturnRental(int carId) {
         if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
-            return new SuccessResult(this.languageWordService.getValueByKey("car_is_on_rent").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("car_is_on_rent").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarReturnMaintenance(int carId) {
         if (!this.maintenanceService.checkIfCarIsMaintenance(carId).isSuccess()) {
-            return new SuccessResult(this.languageWordService.getValueByKey("carmaintenance_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("carmaintenance_found").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCityExists(int cityId){
         if (!this.cityService.getByCity(cityId).isSuccess()){
-            return new SuccessResult(this.languageWordService.getValueByKey("city_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("city_not_found").getData());
         }
         return new SuccessResult();
     }

@@ -3,7 +3,9 @@ package com.etiya.RentACar.business.concretes;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.etiya.RentACar.business.abstracts.CreditCardService;
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
+import com.etiya.RentACar.business.abstracts.UserService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,14 +33,18 @@ public class IndividualCustomerManager implements IndividualCustomerService {
     private IndividualCustomerDao individualCustomerDao;
     private ModelMapperService modelMapperService;
     private LanguageWordService languageWordService;
+    private CreditCardService creditCardService;
+    private UserService userService;
 
     @Autowired
     private IndividualCustomerManager(IndividualCustomerDao individualCustomerDao,LanguageWordService languageWordService,
-                                      ModelMapperService modelMapperService) {
+                                      ModelMapperService modelMapperService,CreditCardService creditCardService,UserService userService) {
 
         this.individualCustomerDao = individualCustomerDao;
         this.modelMapperService = modelMapperService;
         this.languageWordService = languageWordService;
+        this.creditCardService=creditCardService;
+        this.userService = userService;
     }
 
     @Override
@@ -65,13 +71,16 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         }
 
         IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(updateIndividualCustomerRequest, IndividualCustomer.class);
+        individualCustomerResult.setFindeksScore(this.userService.getById(updateIndividualCustomerRequest.getUserId()).getData().getFindeksScore());
+
         this.individualCustomerDao.save(individualCustomerResult);
         return new SuccessResult(this.languageWordService.getValueByKey("customer_update").getData());
     }
 
     @Override
     public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
-        Result result = BusinessRules.run(checkIfUserExists(deleteIndividualCustomerRequest.getUserId()));
+        Result result = BusinessRules.run(checkIfUserExists(deleteIndividualCustomerRequest.getUserId())
+                ,checkIfIsThereCreditCardOfThisUser(deleteIndividualCustomerRequest.getUserId()));
         if (result != null) {
             return result;
         }
@@ -82,9 +91,15 @@ public class IndividualCustomerManager implements IndividualCustomerService {
     }
 
     private Result checkIfUserExists(int id) {
-        var result = this.individualCustomerDao.existsById(id);
-        if (!result) {
+        if (!this.individualCustomerDao.existsById(id)) {
             return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+        }
+        return new SuccessResult();
+    }
+
+    private Result checkIfIsThereCreditCardOfThisUser(int userId){
+        if (this.creditCardService.getByUserId(userId).isSuccess()){
+            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_delete_error").getData());
         }
         return new SuccessResult();
     }

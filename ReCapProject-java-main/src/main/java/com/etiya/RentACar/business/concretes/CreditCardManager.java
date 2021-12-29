@@ -92,6 +92,14 @@ public class CreditCardManager implements CreditCardService {
         return new SuccessResult(this.languageWordService.getValueByKey("creditcard_delete").getData());
     }
 
+    @Override
+    public Result getByUserId(int userId) {
+      if (!this.creditCardDao.existsByUserId(userId)){
+          return new ErrorResult();
+      }
+      return new SuccessResult();
+    }
+
     private Result checkCreditCardFormat(String cardNumber) {
 
         String regex = "^(?:(?<visa>4[0-9]{12}(?:[0-9]{3})?)|" + "(?<mastercard>5[1-5][0-9]{14})|"

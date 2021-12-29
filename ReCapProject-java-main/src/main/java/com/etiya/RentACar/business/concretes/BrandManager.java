@@ -43,7 +43,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public DataResult<List<Brand>> getAll() {
-        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), this.languageWordService.getValueByKey("test_key").getData());
+        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), this.languageWordService.getValueByKey("brand_list").getData());
     }
 
     @Override

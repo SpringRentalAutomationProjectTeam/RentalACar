@@ -171,6 +171,7 @@ public class RentalManager implements RentalService {
         PosServiceRequest posServiceRequest = new PosServiceRequest();
         posServiceRequest.setTotalAmount(totalAmount);
         posServiceRequest.setCvv(creditCard.getCvv());
+        posServiceRequest.setExpirationDate(creditCard.getExpirationDate());
         posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
 
         if (!this.paymentByFakePosService.withdraw(posServiceRequest)) {

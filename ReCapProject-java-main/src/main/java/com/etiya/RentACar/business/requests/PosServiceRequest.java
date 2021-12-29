@@ -11,5 +11,6 @@ public class PosServiceRequest {
 
     private String creditCardNumber;
     private String cvv;
+    private String expirationDate;
     private double totalAmount;
 }
