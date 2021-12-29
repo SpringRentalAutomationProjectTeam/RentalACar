@@ -17,5 +17,6 @@ public interface LanguageService {
     Result delete(DeleteLanguageRequest deleteLanguageRequest);
     DataResult<LanguageSearchListDto> getById(int id);
     DataResult<List<LanguageSearchListDto>> getAll();
+    Result existsById
 
 }

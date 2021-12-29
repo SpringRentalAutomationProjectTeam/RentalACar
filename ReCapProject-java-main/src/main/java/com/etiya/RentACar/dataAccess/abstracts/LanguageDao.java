@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface LanguageDao extends JpaRepository<Language,Integer> {
     boolean existsByLanguageName(String languageName);
     LanguageSearchListDto getById(int id);
+    boolean existsById(int id);
 
 }

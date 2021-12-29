@@ -100,27 +100,30 @@ public class LanguageWordManager implements LanguageWordService {
 
     @Override
     public DataResult<String> getValueByKey(String key) { //key messakey ıd languece value
-      /*  if (!this.messageKeyService.getByKey(key).isSuccess()){
-            //127 default_key = message not found
-            return new SuccessDataResult<String>(findByLanguageIdAndKeyId(this.messageKeyService.getByKey("default_key").getData().getId()).getData().getTranslation());
-        }*/
+
+        if (!this.messageKeyService.getByKey(key).isSuccess()){
+
+            return new SuccessDataResult<String>(key);
+        }
+
         return new SuccessDataResult<String>(findByLanguageIdAndKeyId(this.messageKeyService.getByKey(key).getData().getId()).getData().getTranslation());
     }
 
     private DataResult<LanguageWord> findByLanguageIdAndKeyId(int keyId) {
-       //checkIfIsThereLanguage(this.languageId);
+
+       checkIfIsThereLanguage(this.languageId);
        //exists eklemek zorunda mıyız
-       /* if (this.languageWordDao.getByLanguageIdAndMessageKeyId(languageId,keyId)==null){
+        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(this.languageId,keyId)){
             int default_language= Integer.parseInt(this.environment.getProperty("message.languageId"));
            checkLanguageWord(default_language,keyId);
-        }*/
+        }
 
-        LanguageWord words= this.languageWordDao.getByLanguageIdAndMessageKeyId(languageId,keyId);
+        LanguageWord words= this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId,keyId);
         return new SuccessDataResult<LanguageWord>(words);
     }
 
     private void checkIfIsThereLanguage(int languageId){
-        if (this.languageService.getById(this.languageId)==null) {
+        if (!this.languageService.getById(languageId)) {
             this.languageId = Integer.parseInt(this.environment.getProperty("message.languageId"));
         }
     }
@@ -128,15 +131,16 @@ public class LanguageWordManager implements LanguageWordService {
                     /**önce default_language ye bakıyor varsa defult_language de message yazıyor yoksa
                      * default_message olan default mesage yazıyor **/
     private DataResult<LanguageWord> checkLanguageWord(int default_language,int keyId){//value varmı yoksa defaullanguage value varmı yoksa default messages
-        if (this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language ,keyId)==null) {
+        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language , keyId)) {
             return new SuccessDataResult<LanguageWord>(this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language,
                     this.messageKeyService.getByKey("default_key").getData().getId()));
         }
             return new SuccessDataResult<LanguageWord>(this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language,keyId));
     }
 
+
     private Result checkIfLanguageWordNameExists(String languageWord){
-        if (this.languageWordDao.existsByLanguageLanguageName(languageWord)){
+        if (this.languageWordDao.existsByTranslation(languageWord)){
             return new ErrorResult(getValueByKey("languageword_name_error").getData());
         }
         return new SuccessResult();
