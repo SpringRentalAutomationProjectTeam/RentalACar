@@ -67,7 +67,7 @@ VALUES
 	('Araç resmi güncellendi.',63 , 2),
 	('Araç resmi silindi.',64 , 2),
 	('Araç resimleri listelendi.',65 , 2),
-	('Bir arabada 5'ten fazla resim olamaz..',66 , 2),
+	('Bir arabada 5 ten fazla resim olamaz..',66 , 2),
 	('Varsayılan resim.',67 , 2),
 	('Resim seçilmedi.',68 , 2),
 	('Seçtiğiniz dosya bir resim dosyası değil.',69 , 2),
@@ -154,7 +154,7 @@ VALUES
 ('Mesaj silindi.',142,2),
 ('Mesajlar listelendi.',143,2),
 ('Mesaj zaten mevcut.',144,2),
-('Mesaj bulunamadı.',145,2)
+('Mesaj bulunamadı.',145,2);
 
 
 	
