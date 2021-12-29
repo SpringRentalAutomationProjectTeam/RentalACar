@@ -84,7 +84,7 @@ INSERT INTO message_keys(key)
 ('creditcard_cvv_error'),
 ('creditcard_save'),
 ('creditcard_not_save'),
-('creditcard_found');
+('creditcard_found'),
 ('carmaintenance_add'),
 ('carmaintenance_update'),
 ('carmaintenance_delete'),
