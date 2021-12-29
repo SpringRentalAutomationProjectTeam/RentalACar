@@ -9,16 +9,16 @@ INSERT INTO public.language_words(
 ( 'Brand Found.', 6, 1),
 ( 'Brand Not Found.', 7, 1),
 ( 'Reference of this brand found. Cannot be deleted.', 8, 1),
-( Car Added.', 9, 1),
+( 'Car Added.', 9, 1),
 ( 'Car Updated.', 10, 1),
 ( 'Car Deleted.', 11, 1),
 ( 'Cars Listed.', 12, 1),
 ( 'Car Found.', 13, 1),
-( Car Not Found.', 14, 1),
+( 'Car Not Found.', 14, 1),
 ( 'Car Detail Listed By Brand Name And Color Name.', 15, 1),
-( Car get by brand.', 16, 1),
+( 'Car get by brand.', 16, 1),
 ( 'Car get by color.', 17, 1),
-( Car get by city.', 18, 1),
+( 'Car get by city.', 18, 1),
 ( 'Car km updated.', 19, 1),
 ( 'Car do not return from rental.', 20, 1),
 ( 'Car available.', 21, 1),
@@ -150,13 +150,3 @@ INSERT INTO public.language_words(
 ('Message listed.',143,1),
 ('The message already exists.',144,1),
 ('Message not found.',145,1);
-
-
-
-
-
-
-
-
-
-;
