@@ -92,8 +92,8 @@ public class LanguageManager implements LanguageService {
         }
         return new SuccessResult();
     }
-
-    private Result checkIfLanguageId(int languageId){
+    @Override
+    public Result checkIfLanguageId(int languageId){
         if (!this.languageDao.existsById(languageId)){
             return new ErrorResult(this.languageWordService.getValueByKey("language_not_found").getData());
         }

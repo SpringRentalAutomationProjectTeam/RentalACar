@@ -3,9 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import com.etiya.RentACar.business.abstracts.LanguageService;
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.abstracts.MessageKeyService;
-import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.LanguageWordSearchListDto;
-import com.etiya.RentACar.business.dtos.MessageKeySearchListDto;
 import com.etiya.RentACar.business.requests.LanguageWord.CreateLanguageWordRequest;
 import com.etiya.RentACar.business.requests.LanguageWord.DeleteLanguageWordRequest;
 import com.etiya.RentACar.business.requests.LanguageWord.UpdateLanguageWordRequest;
@@ -13,7 +11,6 @@ import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.RentACar.core.utilities.results.*;
 
-import com.etiya.RentACar.dataAccess.abstracts.LanguageDao;
 import com.etiya.RentACar.dataAccess.abstracts.LanguageWordDao;
 import com.etiya.RentACar.entites.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +19,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +29,7 @@ public class LanguageWordManager implements LanguageWordService {
     private MessageKeyService messageKeyService;
     private LanguageService languageService;
     private Environment environment;
-    @Value("${message.languageId}")
-    private int languageId;
+    private int languageId=2;
 
 
 
@@ -101,41 +96,67 @@ public class LanguageWordManager implements LanguageWordService {
     @Override
     public DataResult<String> getValueByKey(String key) { //key messakey ıd languece value
 
-        if (!this.messageKeyService.getByKey(key).isSuccess()){
+        if (!this.messageKeyService.checkIfMessageKeyNameNotExists(key).isSuccess()){
 
             return new SuccessDataResult<String>(key);
         }
+        String  word = findByLanguageIdAndKeyId(this.messageKeyService.getByKey(key).getData().getId()).getData();
+        return new SuccessDataResult<String>(word);
+    }
+//
 
-        return new SuccessDataResult<String>(findByLanguageIdAndKeyId(this.messageKeyService.getByKey(key).getData().getId()).getData().getTranslation());
+    private DataResult<String> findByLanguageIdAndKeyId(int keyId){
+        checkIfIsThereLanguage(this.languageId);
+        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(this.languageId,keyId)){
+            int default_language_id= Integer.parseInt(this.environment.getProperty("message.languageId"));
+            if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language_id,keyId)){
+                int a =this.messageKeyService.getByKey("default_key").getData().getId();
+                String  word =this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId,
+                        a).getTranslation();
+                return new SuccessDataResult<String>(word);
+            }
+            else{
+                String word1=this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language_id,keyId).getTranslation();
+                return  new SuccessDataResult<String>(word1);
+            }
+
+        }
+        String  words= this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId,keyId).getTranslation();
+        return new SuccessDataResult<String>(words);
     }
 
-    private DataResult<LanguageWord> findByLanguageIdAndKeyId(int keyId) {
+  /*  private DataResult<LanguageWord> findByLanguageIdAndKeyId(int keyId) {
 
        checkIfIsThereLanguage(this.languageId);
-       //exists eklemek zorunda mıyız
-        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(this.languageId,keyId)){
-            int default_language= Integer.parseInt(this.environment.getProperty("message.languageId"));
-           checkLanguageWord(default_language,keyId);
-        }
+        //exists eklemek zorunda mıyız
+        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(this.languageId,keyId)){//value yok
+            this.languageId= Integer.parseInt(this.environment.getProperty("message.languageId"));
+           int b= checkLanguageWord(languageId,keyId).getData();
+           LanguageWord word1=this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId,b);
+          return new SuccessDataResult<>(word1);
 
+        }else{
         LanguageWord words= this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId,keyId);
         return new SuccessDataResult<LanguageWord>(words);
-    }
+        }
+
+    }*/
 
     private void checkIfIsThereLanguage(int languageId){
-        if (!this.languageService.getById(languageId)) {
+        if (!this.languageService.checkIfLanguageId(languageId).isSuccess()) {
             this.languageId = Integer.parseInt(this.environment.getProperty("message.languageId"));
         }
     }
 
                     /**önce default_language ye bakıyor varsa defult_language de message yazıyor yoksa
                      * default_message olan default mesage yazıyor **/
-    private DataResult<LanguageWord> checkLanguageWord(int default_language,int keyId){//value varmı yoksa defaullanguage value varmı yoksa default messages
+    private DataResult<Integer> checkLanguageWord(int default_language,int keyId){//value varmı yoksa defaullanguage value varmı yoksa default messages
         if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language , keyId)) {
-            return new SuccessDataResult<LanguageWord>(this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language,
-                    this.messageKeyService.getByKey("default_key").getData().getId()));
+            int a =this.messageKeyService.getByKey("default_key").getData().getId();
+
+            return new SuccessDataResult<Integer>(a);
         }
-            return new SuccessDataResult<LanguageWord>(this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language,keyId));
+            return new SuccessDataResult<Integer>(keyId);
     }
 
 

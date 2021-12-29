@@ -16,5 +16,5 @@ public interface MessageKeyService {
     Result delete(DeleteMessageKeyRequest deleteMessageKeyRequest);
     DataResult<List<MessageKeySearchListDto>> getAll();
     DataResult<MessageKey> getByKey(String key);
-
+    Result checkIfMessageKeyNameNotExists(String messageKey);
 }

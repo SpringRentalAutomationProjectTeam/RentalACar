@@ -88,11 +88,18 @@ public class MessageKeyManager implements MessageKeyService {
         return new SuccessDataResult<MessageKey>(this.messageKeyDao.findByKey(key));
     }
 
-
-
     private Result checkIfMessageKeyNameExists(String messageKey){
         if (this.messageKeyDao.existsByKey(messageKey)){
             return new ErrorResult(this.languageWordService.getValueByKey("messagekey_name_error").getData());
+        }
+        return new SuccessResult();
+    }
+
+
+    @Override
+    public Result checkIfMessageKeyNameNotExists(String messageKey){
+        if (!this.messageKeyDao.existsByKey(messageKey)){
+            return new ErrorResult();
         }
         return new SuccessResult();
     }
