@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cities")
+@RequestMapping("api/cities/")
 public class CitiesController {
 
     private CityService cityService;

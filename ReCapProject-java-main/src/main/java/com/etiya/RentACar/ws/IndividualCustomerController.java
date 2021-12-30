@@ -22,7 +22,7 @@ import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
 
 @RestController
-@RequestMapping("api/individualCustomer")
+@RequestMapping("api/individualCustomer/")
 public class IndividualCustomerController {
 	
 	private IndividualCustomerService individualCustomerService;

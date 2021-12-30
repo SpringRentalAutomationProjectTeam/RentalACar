@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/languages")
+@RequestMapping("api/languages/")
 public class LanguageController {
 
     private LanguageService languageService;

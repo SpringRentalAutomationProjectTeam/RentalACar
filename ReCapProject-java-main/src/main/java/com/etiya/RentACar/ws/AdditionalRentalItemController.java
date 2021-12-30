@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/additionalRentalItems")
+@RequestMapping("api/additionalRentalItems/")
 public class AdditionalRentalItemController {
 
     private AdditionalRentalItemService additionalRentalItemService;

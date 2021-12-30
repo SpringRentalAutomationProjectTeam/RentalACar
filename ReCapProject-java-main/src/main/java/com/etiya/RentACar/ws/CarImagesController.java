@@ -25,7 +25,7 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.entites.CarImage;
 
 @RestController
-@RequestMapping("api/carImages")
+@RequestMapping("api/carImages/")
 public class CarImagesController {
 
 	private CarImageService carImageService;
