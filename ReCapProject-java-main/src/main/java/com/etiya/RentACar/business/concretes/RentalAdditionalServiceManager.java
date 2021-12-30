@@ -35,7 +35,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         List<AdditionalService> result = this.additionalServiceDao.findAll();
         List<AdditionalServiceSearchListDto> response = result.stream().map(additionalService -> modelMapperService.forDto()
                 .map(additionalService, AdditionalServiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult(response,this.languageWordService.getValueByKey("additionalservice_list").getData());
+        return new SuccessDataResult(response,this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICELIST).getData());
 
     }
 
@@ -47,7 +47,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         }
 
         return new SuccessDataResult<AdditionalService>(this.additionalServiceDao.getById(rentalAdditionalId),
-                this.languageWordService.getValueByKey("additionalservice_found").getData());
+                this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICEFOUND).getData());
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(createAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICEADD).getData());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
 
         AdditionalService additionalService = this.modelMapperService.forRequest().map(updateAdditionalServiceRequest, AdditionalService.class);
         this.additionalServiceDao.save(additionalService);
-        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICEUPDATE).getData());
     }
 
     @Override
@@ -85,19 +85,19 @@ public class RentalAdditionalServiceManager implements RentalAdditionalService {
         }
 
         this.additionalServiceDao.deleteById(deleteAdditionalServiceRequest.getServiceId());
-        return new SuccessResult(this.languageWordService.getValueByKey("additionalservice_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICEDELETE).getData());
     }
 
     public Result checkIfAdditionalService(int additionalServiceId){
         if (!this.additionalServiceDao.existsById(additionalServiceId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICENOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfServiceNameExists(String serviceName) {
         if (this.additionalServiceDao.existsByServiceName(serviceName)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICENOTFOUND).getData());
         }
         return new SuccessResult();
     }

@@ -2,6 +2,7 @@ package com.etiya.RentACar.business.concretes;
 
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.abstracts.MessageKeyService;
+import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.CarDetailDto;
 import com.etiya.RentACar.business.dtos.LanguageSearchListDto;
 import com.etiya.RentACar.business.dtos.MessageKeySearchListDto;
@@ -40,7 +41,7 @@ public class MessageKeyManager implements MessageKeyService {
         List<MessageKey> result  = this.messageKeyDao.findAll();
         List<MessageKeySearchListDto> response = result.stream().map(messageKey -> modelMapperService.forDto()
                 .map(messageKey, MessageKeySearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<MessageKeySearchListDto>>(response,this.languageWordService.getValueByKey("messagekey_list").getData());
+        return new SuccessDataResult<List<MessageKeySearchListDto>>(response,this.languageWordService.getValueByKey(Messages.MESSAGEKEYLIST).getData());
     }
 
     @Override
@@ -52,7 +53,7 @@ public class MessageKeyManager implements MessageKeyService {
 
        MessageKey messageKey = modelMapperService.forRequest().map(createMessageKeyRequest,MessageKey.class);
        this.messageKeyDao.save(messageKey);
-       return new SuccessResult(this.languageWordService.getValueByKey("messagekey_add").getData());
+       return new SuccessResult(this.languageWordService.getValueByKey(Messages.MESSAGEKEYADD).getData());
     }
 
     @Override
@@ -66,7 +67,7 @@ public class MessageKeyManager implements MessageKeyService {
 
         MessageKey messageKey = modelMapperService.forRequest().map(updateMessageKeyRequest, MessageKey.class);
         this.messageKeyDao.save(messageKey);
-        return new SuccessResult(this.languageWordService.getValueByKey("messagekey_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.MESSAGEKEYUPDATE).getData());
     }
 
     @Override
@@ -78,7 +79,7 @@ public class MessageKeyManager implements MessageKeyService {
 
         MessageKey messageKey = modelMapperService.forRequest().map(deleteMessageKeyRequest,MessageKey.class);
         this.messageKeyDao.delete(messageKey);
-        return new SuccessResult(this.languageWordService.getValueByKey("messagekey_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.MESSAGEKEYDELETE).getData());
     }
 
 
@@ -90,7 +91,7 @@ public class MessageKeyManager implements MessageKeyService {
 
     private Result checkIfMessageKeyNameExists(String messageKey){
         if (this.messageKeyDao.existsByKey(messageKey)){
-            return new ErrorResult(this.languageWordService.getValueByKey("messagekey_name_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.MESSAGEKEYNAMEERROR).getData());
         }
         return new SuccessResult();
     }
@@ -106,7 +107,7 @@ public class MessageKeyManager implements MessageKeyService {
 
     private Result checkIfMessageKey(int messageKeyId){
         if (!this.messageKeyDao.existsById(messageKeyId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("messagekey_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.MESSAGEKEYNOTFOUND).getData());
         }
         return new SuccessResult();
 

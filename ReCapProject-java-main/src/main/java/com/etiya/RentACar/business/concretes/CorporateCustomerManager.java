@@ -53,7 +53,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         List<CorporateCustomerSearchListDto> response = result.stream()
                 .map(corporateCustomer -> modelMapperService.forDto()
                         .map(corporateCustomer, CorporateCustomerSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CorporateCustomerSearchListDto>>(response, this.languageWordService.getValueByKey("customer_list").getData());
+        return new SuccessDataResult<List<CorporateCustomerSearchListDto>>(response, this.languageWordService.getValueByKey(Messages.CUSTOMERLIST).getData());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
         CorporateCustomer result = modelMapperService.forRequest().map(createCorporateCustomerRequest, CorporateCustomer.class);
         this.corporateCustomersDao.save(result);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERADD).getData());
     }
 
     @Override
@@ -79,7 +79,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
         CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(updateCorporateCustomerRequest, CorporateCustomer.class);
         corporateCustomer.setFindeksScore(this.userService.getById(updateCorporateCustomerRequest.getUserId()).getData().getFindeksScore());
         this.corporateCustomersDao.save(corporateCustomer);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERUPDATE).getData());
     }
 
     @Override
@@ -92,20 +92,20 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
         CorporateCustomer corporateCustomer = modelMapperService.forRequest().map(deleteCorporateCustomerRequest, CorporateCustomer.class);
         this.corporateCustomersDao.delete(corporateCustomer);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERDELETE).getData());
     }
 
     private Result checkIfUserExists(int id) {
 
         if (! this.corporateCustomersDao.existsById(id)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("customer_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CUSTOMERNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCompanyNameExists(String companyName) {
         if (this.corporateCustomersDao.existsCorporateCustomerByCompanyName(companyName)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("customer_is_already_exists").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CUSTOMERISALREADYEXISTS).getData());
         }
         return new SuccessResult();
     }
@@ -113,7 +113,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 
     private Result checkIfIsThereCreditCardOfThisUser(int userId){
         if (this.creditCardService.getByUserId(userId).isSuccess()){
-            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_delete_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CREDITCARDDELETEERROR).getData());
         }
         return new SuccessResult();
     }

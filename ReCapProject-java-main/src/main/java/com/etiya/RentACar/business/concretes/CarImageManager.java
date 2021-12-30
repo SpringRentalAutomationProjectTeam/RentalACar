@@ -61,21 +61,21 @@ public class CarImageManager implements CarImageService {
         List<CarImagesSearchListDto> result = carImages.stream()
                 .map(carImage -> modelMapperService.forDto().map(carImage, CarImagesSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<CarImagesSearchListDto>>(result, this.languageWordService.getValueByKey("carimage_list").getData());
+        return new SuccessDataResult<List<CarImagesSearchListDto>>(result, this.languageWordService.getValueByKey(Messages.CARIMAGELIST).getData());
     }
 
     @Override
     public DataResult<List<CarImagesDto>> getCarImageByCarId(int carId) {
         Result resultcheck = BusinessRules.run(checkIfCarExists(carId));
         if (resultcheck != null) {
-            return new ErrorDataResult<List<CarImagesDto>>(null, this.languageWordService.getValueByKey("car_not_found").getData());
+            return new ErrorDataResult<List<CarImagesDto>>(null, this.languageWordService.getValueByKey(Messages.CARNOTFOUND).getData());
         }
 
         List<CarImage> carImages = this.checkIfCarImageExists(carId).getData();
         List<CarImagesDto> result = carImages.stream()
                 .map(carImage -> modelMapperService.forDto().map(carImage, CarImagesDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult(result, this.languageWordService.getValueByKey("carimage_list").getData());
+        return new SuccessDataResult(result, this.languageWordService.getValueByKey(Messages.CARIMAGELIST).getData());
     }
 
     @Override
@@ -91,7 +91,7 @@ public class CarImageManager implements CarImageService {
 
         carImage.setImagePath(generateImage(createCarImageRequest.getFile()).toString());
         this.carImageDao.save(carImage);
-        return new SuccessResult(this.languageWordService.getValueByKey("carimage_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARIMAGEADD).getData());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class CarImageManager implements CarImageService {
         carImage.setImageDate(LocalDate.now());
         carImage.setImagePath(generateImage(updateCarImageRequest.getFile()).toString());
         this.carImageDao.save(carImage);
-        return new SuccessResult(this.languageWordService.getValueByKey("carimage_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARIMAGEUPDATE).getData());
     }
 
     @Override
@@ -120,7 +120,7 @@ public class CarImageManager implements CarImageService {
         CarImage carImage = this.carImageDao.getById(deleteCarImagesRequest.getImageId());
         fileHelper.deleteImage(carImage.getImagePath());
         this.carImageDao.delete(carImage);
-        return new SuccessResult(this.languageWordService.getValueByKey("carimage_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARIMAGEDELETE).getData());
     }
 
     private File generateImage(MultipartFile file) throws IOException {
@@ -146,21 +146,21 @@ public class CarImageManager implements CarImageService {
         CarImage carImage = new CarImage();
         carImage.setImagePath(FilePathConfiguration.mainPath + FilePathConfiguration.defaultImage);
         carImages.add(carImage);
-        return new SuccessDataResult<List<CarImage>>(carImages, this.languageWordService.getValueByKey("carimage_list").getData());
+        return new SuccessDataResult<List<CarImage>>(carImages, this.languageWordService.getValueByKey(Messages.CARIMAGELIST).getData());
     }
 
 
     private Result checkCountOfCarImages(int carId) {
         if (this.carImageDao.countCarImageByCar_CarId(carId) >= 5) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carimage_limit_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARIMAGELIMITERROR).getData());
         }
-        return new SuccessResult(this.languageWordService.getValueByKey("carimage_limit").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARIMAGELIMIT).getData());
     }
 
 
     private Result checkIfImageExists(int imageId) {
         if (!this.carImageDao.existsById(imageId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carimage_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARIMAGENOTFOUND).getData());
         }
         return new SuccessResult();
     }
@@ -168,7 +168,7 @@ public class CarImageManager implements CarImageService {
     private Result checkIfCarExists(int carId) {
 
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carimage_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARNOTFOUND).getData());
         }
         return new SuccessResult();
     }

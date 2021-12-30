@@ -55,7 +55,7 @@ public class InvoiceManager implements InvoiceService {
     public DataResult<List<InvoiceSearchListDto>> getAll() {
         List<Invoice> result = this.invoiceDao.findAll();
         List<InvoiceSearchListDto> response = result.stream().map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response, this.languageWordService.getValueByKey("invoice_list").getData());
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(response, this.languageWordService.getValueByKey(Messages.INVOICELIST).getData());
     }
     @Override
     public DataResult<List<InvoiceSearchListDto>> getRentingInvoiceByUserId(int userId) {
@@ -68,7 +68,7 @@ public class InvoiceManager implements InvoiceService {
         List<InvoiceSearchListDto> response = result.stream()
                 .map(invoice -> modelMapperService.forDto()
                         .map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(response,this.languageWordService.getValueByKey("invoice_found").getData());
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(response,this.languageWordService.getValueByKey(Messages.INVOICENOTFOUND).getData());
     }
 
     @Override
@@ -80,7 +80,6 @@ public class InvoiceManager implements InvoiceService {
         }
 
         RentalSearchListDto rental = rentalService.getByRentalId(createInvoiceRequest.getRentalId()).getData();
-
 
         CarSearchListDto car = this.carService.getById(rental.getCarId()).getData();
 
@@ -97,7 +96,7 @@ public class InvoiceManager implements InvoiceService {
         invoice.setTotalAmount(totalAmount);
         invoice.setInvoiceNumber(createInvoiceNumber(rental.getRentalId()).getData());
         this.invoiceDao.save(invoice);
-        return new SuccessResult(this.languageWordService.getValueByKey("invoice_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.INVOICEADD).getData());
     }
 
     @Override
@@ -110,7 +109,7 @@ public class InvoiceManager implements InvoiceService {
 
         Invoice invoice = modelMapperService.forDto().map(deleteRentalRequest, Invoice.class);
         this.invoiceDao.delete(invoice);
-        return new SuccessResult(this.languageWordService.getValueByKey("invoice_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.INVOICEDELETE).getData());
     }
 
 
@@ -120,7 +119,7 @@ public class InvoiceManager implements InvoiceService {
         List<Invoice> invoices = this.invoiceDao.findByInvoiceDateBetween(beginDate, endDate);
         List<InvoiceSearchListDto> invoiceSearchListDtos = invoices.stream()
                 .map(invoice -> modelMapperService.forDto().map(invoice, InvoiceSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos,this.languageWordService.getValueByKey("invoice_by_customer_list").getData());
+        return new SuccessDataResult<List<InvoiceSearchListDto>>(invoiceSearchListDtos,this.languageWordService.getValueByKey(Messages.INVOICEBYCUSTOMERLIST).getData());
     }
 
 
@@ -141,33 +140,33 @@ public class InvoiceManager implements InvoiceService {
     private Result checkIfRentalExists(int rentalId) {
 
         if (this.invoiceDao.existsByRental_RentalId(rentalId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("invoice_not_add").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.INVOICENOTADD).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIsThereInvoiceOfUser(int userId){
         if (!this.invoiceDao.existsByRental_UserId(userId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("invoice_user_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.INVOICEUSERERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfInvoiceExists(int invoiceId){
         if (!this.invoiceDao.existsById(invoiceId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("invoice_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.INVOICENOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfUserExists(int userId) {
         if (!userService.checkIfUserExists(userId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.USERNOTFOUND).getData());
         }
         return new SuccessResult(Messages.USERFOUND);
     }
 
-    public int getAdditionalItemsTotalPriceByRentalId(int rentalId) {
+    public int getAdditionalItemsTotalPriceByRentalId(int rentalId) {//1-1 1-3 1-2
         List<AdditionalRentalItemSearchListDto> result = this.additionalRentalItemService.getByRentalId(rentalId).getData();
         int totalAmount=0;
         for(AdditionalRentalItemSearchListDto item : result){

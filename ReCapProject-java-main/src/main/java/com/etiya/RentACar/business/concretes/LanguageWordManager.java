@@ -3,6 +3,7 @@ package com.etiya.RentACar.business.concretes;
 import com.etiya.RentACar.business.abstracts.LanguageService;
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.abstracts.MessageKeyService;
+import com.etiya.RentACar.business.constants.Messages;
 import com.etiya.RentACar.business.dtos.LanguageWordSearchListDto;
 import com.etiya.RentACar.business.requests.LanguageWord.CreateLanguageWordRequest;
 import com.etiya.RentACar.business.requests.LanguageWord.DeleteLanguageWordRequest;
@@ -49,7 +50,7 @@ public class LanguageWordManager implements LanguageWordService {
         List<LanguageWord> result = this.languageWordDao.findAll();
         List<LanguageWordSearchListDto> response = result.stream().map(languageWord -> modelMapperService.forDto()
                 .map(languageWord, LanguageWordSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<LanguageWordSearchListDto>>(response, getValueByKey("languageword_list").getData());
+        return new SuccessDataResult<List<LanguageWordSearchListDto>>(response, getValueByKey(Messages.LANGUAGEWORDLIST).getData());
     }
 
 
@@ -62,7 +63,7 @@ public class LanguageWordManager implements LanguageWordService {
 
         LanguageWord languageWord = this.modelMapperService.forRequest().map(createLanguageWordRequest, LanguageWord.class);
         this.languageWordDao.save(languageWord);
-        return new SuccessResult(getValueByKey("languageword_add").getData());
+        return new SuccessResult(getValueByKey(Messages.LANGUAGEWORDADD).getData());
 
     }
 
@@ -76,7 +77,7 @@ public class LanguageWordManager implements LanguageWordService {
 
         LanguageWord languageWord = this.modelMapperService.forRequest().map(updateLanguageWordRequest, LanguageWord.class);
         this.languageWordDao.save(languageWord);
-        return new SuccessResult(getValueByKey("languageword_update").getData());
+        return new SuccessResult(getValueByKey(Messages.LANGUAGEWORDUPDATE).getData());
     }
 
     @Override
@@ -88,7 +89,7 @@ public class LanguageWordManager implements LanguageWordService {
 
         LanguageWord languageWord = this.modelMapperService.forRequest().map(deleteLanguageWordRequest, LanguageWord.class);
         this.languageWordDao.delete(languageWord);
-        return new SuccessResult(getValueByKey("languageword_delete").getData());
+        return new SuccessResult(getValueByKey(Messages.LANGUAGEWORDDELETE).getData());
     }
 
     @Override
@@ -101,21 +102,17 @@ public class LanguageWordManager implements LanguageWordService {
         String message = findByLanguageIdAndKeyId(this.messageKeyService.getByKey(key).getData().getId()).getData();
         return new SuccessDataResult<String>(message);
     }
-        /*1 key var artık
-        * 2 bu keyde su ankı dilde deger varmı value eger value yoksa git defaultlanguage=1 en, en bu key ait value varmı varsa bas
-        * 3 key ne tr ne de en  default_message value
-        *
-        * */
+
     private DataResult<String> findByLanguageIdAndKeyId(int keyId) {
         checkIfIsThereLanguage(this.languageId);
         if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(this.languageId, keyId)) {
-        return new SuccessDataResult<String>( checkIfDefaultLanguageAndValueExists(keyId).getData());
+            return new SuccessDataResult<String>(checkIfDefaultLanguageAndValueExists(keyId).getData());
         }
         String words = this.languageWordDao.getByLanguageIdAndMessageKeyId(this.languageId, keyId).getTranslation();
         return new SuccessDataResult<String>(words);
     }
 
-    private DataResult<String> checkIfDefaultLanguageAndValueExists(int keyId){
+    private DataResult<String> checkIfDefaultLanguageAndValueExists(int keyId) {
         int default_language_id = Integer.parseInt(this.environment.getProperty("message.languageId"));
         if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language_id, keyId)) {
             int default_key = this.messageKeyService.getByKey("default_key").getData().getId();
@@ -134,29 +131,17 @@ public class LanguageWordManager implements LanguageWordService {
         }
     }
 
-    /**
-     * önce default_language ye bakıyor varsa defult_language de message yazıyor yoksa
-     * default_message olan default mesage yazıyor
-     **/
-    private DataResult<Integer> checkLanguageWord(int default_language, int keyId) {//value varmı yoksa defaullanguage value varmı yoksa default messages
-        if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language, keyId)) {
-            int a = this.messageKeyService.getByKey("default_key").getData().getId();
-
-            return new SuccessDataResult<Integer>(a);
-        }
-        return new SuccessDataResult<Integer>(keyId);
-    }
 
     private Result checkIfLanguageWordNameExists(String languageWord) {
         if (this.languageWordDao.existsByTranslation(languageWord)) {
-            return new ErrorResult(getValueByKey("languageword_name_error").getData());
+            return new ErrorResult(getValueByKey(Messages.LANGUAGEWORDNAMEERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfLanguageWord(int messageKeyId) {
         if (!this.languageWordDao.existsById(messageKeyId)) {
-            return new ErrorResult(getValueByKey("languageword_not_found").getData());
+            return new ErrorResult(getValueByKey(Messages.LANGUAGEWORDNOTFOUND).getData());
         }
         return new SuccessResult();
 

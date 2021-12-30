@@ -43,7 +43,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         List<AdditionalRentalItem> additionalRentalItems=this.additionalRentalItemDao.findAll();
         List<AdditionalRentalItemSearchListDto> additionalRentalItemSearchListDtos=additionalRentalItems.stream()
                 .map(additional-> modelMapperService.forDto().map(additional,AdditionalRentalItemSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<>(additionalRentalItemSearchListDtos, this.languageWordService.getValueByKey("additional_rental_item_list").getData());
+        return new SuccessDataResult<>(additionalRentalItemSearchListDtos, this.languageWordService.getValueByKey(Messages.ADDITIONALRENTALITEMLIST).getData());
 
     }
 
@@ -56,7 +56,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         }
         AdditionalRentalItem additionalRentalItem=modelMapperService.forRequest().map(createAdditionalRentalItemRequest,AdditionalRentalItem.class);
         this.additionalRentalItemDao.save(additionalRentalItem);
-        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALRENTALITEMADD).getData());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         AdditionalRentalItem additionalRentalItem = modelMapperService.forRequest()
                 .map(deleteAdditionalRentalItemRequest, AdditionalRentalItem.class);
         this.additionalRentalItemDao.delete(additionalRentalItem);
-        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALRENTALITEMDELETE).getData());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
         AdditionalRentalItem additionalRentalItem = modelMapperService.forRequest()
                 .map(updateAdditionalRentalItemRequest, AdditionalRentalItem.class);
         this.additionalRentalItemDao.save(additionalRentalItem);
-        return new SuccessResult(this.languageWordService.getValueByKey("additional_rental_item_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.ADDITIONALRENTALITEMUPDATE).getData());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private Result isRentalExists(int rentalId){
 
         if (!this.rentalService.checkIfRentalExists(rentalId).isSuccess()){
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.RENTALNOTFOUND).getData());
         }
         return new SuccessResult();
     }
@@ -111,7 +111,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private Result isAdditionalServiceExists(int id){
 
         if (!this.rentalAdditionalService.checkIfAdditionalService(id).isSuccess()){
-            return new ErrorResult(this.languageWordService.getValueByKey("additionalservice_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.ADDITIONALSERVICENOTFOUND).getData());
         }
         return new SuccessResult();
     }
@@ -119,7 +119,7 @@ public class AdditionalRentalItemManager implements AdditionalRentalItemService 
     private Result isAdditionalRentalItemExists(int id){
 
         if (!this.additionalRentalItemDao.existsById(id)){
-            return new ErrorResult(this.languageWordService.getValueByKey("additional_rental_item_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.ADDITIONALRENTALITEMNOTFOUND).getData());
         }
         return new SuccessResult();
     }

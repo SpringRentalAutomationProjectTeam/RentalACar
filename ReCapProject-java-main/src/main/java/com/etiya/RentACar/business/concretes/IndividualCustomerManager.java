@@ -53,14 +53,14 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         List<IndividualCustomerSearchListDto> response = result.stream()
                 .map(customerIndividual -> modelMapperService.forDto()
                         .map(customerIndividual, IndividualCustomerSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response, this.languageWordService.getValueByKey("customer_list").getData());
+        return new SuccessDataResult<List<IndividualCustomerSearchListDto>>(response, this.languageWordService.getValueByKey(Messages.CUSTOMERLIST).getData());
     }
 
     @Override
     public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest) {
         IndividualCustomer result = modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
         this.individualCustomerDao.save(result);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERADD).getData());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class IndividualCustomerManager implements IndividualCustomerService {
         individualCustomerResult.setFindeksScore(this.userService.getById(updateIndividualCustomerRequest.getUserId()).getData().getFindeksScore());
 
         this.individualCustomerDao.save(individualCustomerResult);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERUPDATE).getData());
     }
 
     @Override
@@ -87,19 +87,19 @@ public class IndividualCustomerManager implements IndividualCustomerService {
 
         IndividualCustomer individualCustomerResult = modelMapperService.forRequest().map(deleteIndividualCustomerRequest, IndividualCustomer.class);
         this.individualCustomerDao.delete(individualCustomerResult);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERDELETE).getData());
     }
 
     private Result checkIfUserExists(int id) {
         if (!this.individualCustomerDao.existsById(id)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.USERNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfIsThereCreditCardOfThisUser(int userId){
         if (this.creditCardService.getByUserId(userId).isSuccess()){
-            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_delete_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CREDITCARDDELETEERROR).getData());
         }
         return new SuccessResult();
     }

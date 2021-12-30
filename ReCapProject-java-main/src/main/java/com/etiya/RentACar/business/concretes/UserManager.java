@@ -47,7 +47,7 @@ public class UserManager implements UserService {
     @Override
     public Result checkIfEmailExists(String email) {
         if (this.userDao.existsByEmail(email)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.USERNOTFOUND).getData());
         }
         return new SuccessResult();
     }
@@ -55,7 +55,7 @@ public class UserManager implements UserService {
     @Override
     public Result checkIfUserExists(int userId) {
         if (!this.userDao.existsById(userId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.USERNOTFOUND).getData());
         }
         return new SuccessResult();
     }

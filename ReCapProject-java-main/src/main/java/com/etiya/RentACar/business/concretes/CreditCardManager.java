@@ -49,7 +49,7 @@ public class CreditCardManager implements CreditCardService {
         List<CreditCard> result = this.creditCardDao.findAll();
         List<CreditCardDto> response = result.stream().map(creditCard -> modelMapperService.forDto()
                 .map(creditCard, CreditCardDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CreditCardDto>>(response, this.languageWordService.getValueByKey("creditcard_list").getData());
+        return new SuccessDataResult<List<CreditCardDto>>(response, this.languageWordService.getValueByKey(Messages.CREDITCARDLIST).getData());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CreditCardManager implements CreditCardService {
 
         CreditCard creditCard = modelMapperService.forRequest().map(createCreditCardRequest, CreditCard.class);
         this.creditCardDao.save(creditCard);
-        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CREDITCARDADD).getData());
     }
 
     @Override
@@ -78,7 +78,7 @@ public class CreditCardManager implements CreditCardService {
 
         CreditCard result = modelMapperService.forRequest().map(updateCreditCardRequest, CreditCard.class);
         this.creditCardDao.save(result);
-        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CREDITCARDUPDATE).getData());
     }
 
     @Override
@@ -89,7 +89,7 @@ public class CreditCardManager implements CreditCardService {
         }
 
         this.creditCardDao.deleteById(deleteCreditCardRequest.getCreditCardId());
-        return new SuccessResult(this.languageWordService.getValueByKey("creditcard_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CREDITCARDDELETE).getData());
     }
 
     @Override
@@ -109,28 +109,28 @@ public class CreditCardManager implements CreditCardService {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(cardNumber);
         if (!matcher.find()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_number_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CREDITCARDNUMBERERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkCardNumberByCardNumber(String cardNumber) {
         if (this.creditCardDao.existsByCardNumber(cardNumber)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_save").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CREDITCARDSAVE).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCreditCardExists(int creditCard) {
         if (!this.creditCardDao.existsById(creditCard)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("creditcard_not_save").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CREDITCARDNOTSAVE).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkUserExists(int userId) {
         if (!userService.checkIfUserExists(userId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.USERNOTFOUND).getData());
         }
         return new SuccessResult();
     }

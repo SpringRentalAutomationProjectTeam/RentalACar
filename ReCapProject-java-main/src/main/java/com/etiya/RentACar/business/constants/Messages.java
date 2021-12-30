@@ -11,157 +11,176 @@ import java.util.Map;
 
 public class Messages {
 
-    public static Map<String,String> keyAndValue=new HashMap<>();
+    //bende
+    public static final String BRANDADD= "brand_add";//1--Marka eklendi
+    public static final String BRANDUPDATE = "brand_update";//2-- Marka güncellendi
+    public static final String BRANDDELETE = "brand_delete";//3 -- Marka silindi
+    public static final String BRANDLIST = "brand_list";//4 -- Markalar listelendi
+    public static final String BRANDNAMEERROR = "brand_name_error";//5
+    public static final String BRANDFOUND = "brand_found";//6
+    public static final String BRANDNOTFOUND = "brand_not_found";//7
+    public static final String BRANDDELETEERROR = "brand_delete_error";//8
 
-    public static final String BRANDADD= "Brand added";//1--Marka eklendi
-    public static final String BRANDUPDATE = "Brand updated.";//2-- Marka güncellendi
-    public static final String BRANDDELETE = "Brand deleted.";//3 -- Marka silindi
-    public static final String BRANDLIST = "Brands listed.";//4 -- Markalar listelendi
-    public static final String BRANDNAMEERROR = "This brand exists.";//5
-    public static final String BRANDGET = "Brand found";//6
-    public static final String BRANDNOTFOUND = "BRAND NOT FOUND.";//7
-    public static final String BRANDDELETEERROR = "Car of this brand found";//8
+    public static final String CARADD = "car_add";//9
+    public static final String CARUPDATE = "car_update";//10
+    public static final String CARDELETE = "car_delete";//11
+    public static final String CARLIST = "car_list";//12
+    public static final String CARFOUND = "car_found";//13
+    public static final String CARNOTFOUND = "car_not_found";//14
+    public static final String CARBRANDANDCOLORLIST = "car_brand_and_color_list";//15
+    public static final String CARGETBRAND = "car_get_brand";//16
+    public static final String CARGETCOLOR = "car_get_color";//17
+    public static final String CARGETCITY = "car_get_city";//18
+    public static final String CARKMUPDATE = "car_km_update";//19
+    public static final String CARISONRENT = "car_is_on_rent";//20
+    public static final String CARAVAILABLE = "car_available";//21
 
-    public static final String CARADD = "Car added.";//9
-    public static final String CARUPDATE = "Car updated.";//10
-    public static final String CARDELETE = "Car deleted.";//11
-    public static final String CARLIST = "Cars listed.";//12
-    public static final String CARFOUND = "CAR FOUND.";//13
-    public static final String CARNOTFOUND = "CAR NOT FOUND.";//14
-    public static final String CARBRANDANDCOLORLIST = "Car Detail Listed by Brandname And Colorname.";//15
-    public static final String CARGETBRAND = "Car get by Brand Id.";//16
-    public static final String CARGETCOLOR = "Car get by Color Id.";//17
-    public static final String CARGETCITY = "Car get by City Id.";//18
-    public static final String CARKMUPDATE = "Car Km updated.";//19
-    public static final String CARISONRENT = "Car Do Not Return From Rental.";//20
-    public static final String CARAVAILABLE = "Car Available";//21
+    public static final String CITYADD = "city_add";//22 --Şehir eklendi
+    public static final String CITYUPDATE = "city_update";//23 // --Şehir güncellendi.
 
-    public static final String CITYADD = "City Added";//22 --Şehir eklendi
-    public static final String CITYUPDATE = "City Updated";//23 // --Şehir güncellendi.
+    public static final String CITYDELETE = "city_delete";//24
+    public static final String CITYLIST = "city_list";//25
+    public static final String CITYNOTFOUND = "city_not_found";//26
+    public static final String CITYFOUND = "city_found"; //27--yazıldı
+    public static final String CITYALREADYEXISTS = "city_already_exists";//28
 
-    public static final String CITYDELETE = "City Deleted";//24
-    public static final String CITYLIST = "Cities Listed";//25
-    public static final String CITYNOTFOUND = "CITY NOT FOUND.";//26
-    public static final String CITYFOUND = "City Found"; //27--yazıldı
-    public static final String CITYALREADYEXISTS = "City already exists.";//28
+    public static final String COLORADD = "color_add";//29
+    public static final String COLORUPDATE = "color_update";//30
+    public static final String COLORDELETE = "color_delete";//31
+    public static final String COLORLIST = "color_list";//32
+    public static final String COLORNAMEERROR = "color_name_error";//33
+    public static final String COLORFOUND = "color_found";//34
+    public static final String COLORNOTFOUND = "color_not_found";//35
+    public static final String COLORERROR = "color_error";//36
+    public static final String COLORDELETEERROR = "color_delete_error";//37
 
-    public static final String COLORADD = "Color added.";//29
-    public static final String COLORUPDATE = "Color updated.";//30
-    public static final String COLORDELETE = "Color deleted.";//31
-    public static final String COLORLIST = "Colors listed.";//32
-    public static final String COLORNAMEERROR = "This color exists.";//33
-    public static final String ColorFound = "Color found";//34
-    public static final String COLORNOTFOUND = "COLOR NOT FOUND.";//35
-    public static final String COLORERROR = "This color is available.";//36
-    public static final String COLORDELETEERROR = "Reference of this color found. Cannot be deleted. ";//37
+//berkay
 
-//erdi
-
-    public static final String CUSTOMERADD = "Customer added.";//38
-    public static final String CUSTOMERUPDATE = "Customer updated.";//39
-    public static final String CUSTOMERDELETE = "Customer deleted.";//40
-    public static final String CUSTOMERLIST = "Customers listed.";//41
-    public static final String CUSTOMERGET = "Customer found";//42
-    public static final String CUSTOMERNOTFOUND = "Customer not found.";//43
-    public static final String CUSTOMERISALREADYEXISTS = "Customer already exist !";//44
-    public static final String CUSTOMERTAXNUMBEREXISTS = "Customer tax number already exist !";//45
-
-
-    public static final String EMAILERROR = "This email is already in use.";//46
-    public static final String EMAILFORMATERROR = "This email format is wrong";//47
-
-    public static final String RENTALADD = "Rental added.";//48
-    public static final String RENTALUPDATE = "Rental updated.";//49
-    public static final String RENTALDELETE = "Rental deleted.";//50
-    public static final String RENTALLIST = "Rentals listed.";//51
-    public static final String RENTALDATEERROR = "Rental rent date must be before return date.";//52
-    public static final String RENTALDATESUCCESS = "Vehicle can be rented.";//53
-    public static final String RENTALFINDEXSCOREERROR = "Your findex score is not enough to rent this car..";//54
-    public static final String RENTALFINDEXSCORE = "Your findex score is enough to rent this car.";//55
-    public static final String RENTALMAINTENANCEERROR = "The car is currently under maintenance.";//56
-    public static final String RENTALMAINTENANCE = "The car is not currently under maintenance.";//57
-    public static final String RENTALGET = "Rental found";//(RENTALFOUD)//58
-    public static final String RENTALNOTFOUND = "Rental not found";//59
-    public static final String INSUFFICIENTBALANCE = "The balance is insufficient.";//60
-    public static final String SUFFICIENTBALANCE = "The balance is sufficient.";//61
-
-    public static final String CARIMAGEADD = "Car image added.";//62
-    public static final String CARIMAGEUPDATE = "Car image updated.";//63
-    public static final String CARIMAGEDELETE = "Car image deleted.";//64
-    public static final String CARIMAGELIST = "Car images listed.";//65
-    public static final String CARIMAGELIMITERROR = "A car can not have more than 5 pictures.";//66
-    public static final String CARIMAGEDEFAULT = "Showing default image";//67
-    public static final String CARIMAGEEMPTY = "No image selected.";//68
-    public static final String CARIMAGETYPEERROR = "The file you selected is not an image file.";//69
-    public static final String CARIMAGEGET = "Car Image found";//70
-    public static final String CARIMAGELIMIT = "Image can be added to the car.";//71
-    public static final String CARIMAGENOTFOUND = "CAR IMAGE NOT FOUND.";//72
-
-    public static final String LOGINEMAILERROR = "This email is not registered";//73
-    public static final String LOGINPASSWORDERROR = "Wrong password.";//74
-    public static final String LOGINSUCCESS = "Login successful.";//75
-
-//berkan
-    public static final String CREDITCARDADD = "Credit card added.";//76
-    public static final String CREDITCARDUPDATE = "Credit card updated.";//77
-    public static final String CREDITCARDELETE = "Credit card deleted.";//78
-    public static final String CREDITCARDLIST = "Credit cards listed.";//79
-    public static final String CREDITCARDNUMBERERROR = "Credit card number is invalid.";//80
-    public static final String CREDITCARDDATEERROR = "Credit card date is invalid.";//81
-    public static final String CREDITCARDCVCERROR = "Credit card CVC is invalid.";//82
-    public static final String CREDITCARDSAVE = "Credit card registered.";//83
-    public static final String CREDITCARDNOTSAVE = "Credit card not registered.";//84
-    public static final String CREDITCARDGET = "Credit card found";//85
-    // Reference of this color found. Cannot be deleted.
-    public static final String CREDİTCARTDELETEERROR =" Reference of this color found. Cannot be deleted.";
-
-    public static final String CARMAINTENANCEADD = "Car maintenance added.";//86
-    public static final String CARMAINTENANCEUPDATE = "Car maintenance updated.";//87
-    public static final String CARMAINTENANCEDELETE = "Car maintenance deleted.";//88
-    public static final String CARMAINTENANCELIST = "Cars on maintenance listed.";//89
-    public static final String CARMAINTENANCERENTALERROR = "The car is currently rented.";//90
-    public static final String CARMAINTENANCEERROR = "The car is already maintenance.";//91
-    public static final String CARMAINTENANCEFOUND = "Maintenance found";//92
-    public static final String CARMAINTENANCENOTFOUND = "CAR MAINTENANCE NOT FOUND.";//93
-
-    public static final String INVOICEADD = "Invoice added.";//94
-    public static final String INVOICEUSERERROR = "The customer does not have an invoice.";//95
-    public static final String INVOICEUPDATE = "Invoice updated.";//96
-    public static final String INVOICEDELETE = "Invoice deleted.";//97
-    public static final String INVOICENOTFOUND = "Invoice not found";//98
-    public static final String INVOICELIST = "Invoice listed.";//99
-    public static final String INVOICEBYCUSTOMERLIST = "Invoice listed regards to customer.";//100
-    public static final String INVOICEGET = "Invoice found";//101
-    public static final String INVOICENOTADD = "Already make out an invoice.";//102
+    public static final String CUSTOMERADD = "customer_add";//38
+    public static final String CUSTOMERUPDATE = "customer_update";//39
+    public static final String CUSTOMERDELETE = "customer_delete";//40
+    public static final String CUSTOMERLIST = "customer_list";//41
+    public static final String CUSTOMERFOUND = "customer_found";//42
+    public static final String CUSTOMERNOTFOUND = "customer_not_found";//43
+    public static final String CUSTOMERISALREADYEXISTS = "customer_is_already_exists";//44
+    public static final String CUSTOMERTAXNUMBEREXISTS = "customer_taxnumber_exists";//45
 
 
-    public static final String USERNOTFOUND = "USER NOT FOUND.";//103
-    public static final String USERFOUND = "USER FOUND";//104
-    public static final String USERLIST = "Users listed.";//105
+    public static final String EMAILERROR = "email_error";//46
+    public static final String EMAILFORMATERROR = "email_format_error";//47
 
-    public static final String DAMAGEADD = "Damage added.";//106
-    public static final String DAMAGEDELETE = "Damage deleted.";//107
-    public static final String DAMAGEUPDATE = "Damage updated";//108
-    public static final String DAMAGELIST = "Damages are listed";//109
-    public static final String DAMAGENOTFOUND = "Damage not found";//110
-    public static final String DAMAGEFOUND = "Damage found";//111
-    public static final String DAMAGEBELONGTOCAR = "There is not damage belong to car";//112
+    public static final String RENTALADD = "rental_add";//48
+    public static final String RENTALUPDATE = "rental_update";//49
+    public static final String RENTALDELETE = "rental_delete";//50
+    public static final String RENTALLIST = "rental_list";//51
+    public static final String RENTALDATEERROR = "rental_date_error";//52
+    public static final String RENTALDATESUCCESS = "rental_date_success";//53
+    public static final String RENTALFINDEXSCOREERROR = "rental_findex_score_error";//54
+    public static final String RENTALFINDEXSCORE = "rental_findex_score";//55
+    public static final String RENTALMAINTENANCEERROR = "rental_maintenance_error";//56
+    public static final String RENTALMAINTENANCE = "rental_maintenance";//57
+    public static final String RENTALFOUND = "rental_found";//(RENTALFOUD)//58
+    public static final String RENTALNOTFOUND = "rental_not_found";//59
+    public static final String INSUFFICIENTBALANCE = "rental_insufficient_balance";//60
+    public static final String SUFFICIENTBALANCE = "rental_sufficient_balance";//61
 
-    public static final String ADDITIONALSERVICEADD = "Additional service added.";//113
-    public static final String ADDITIONALSERVICEUPDATE = "Additional service updated.";//114
-    public static final String ADDITIONALSERVICEDELETE = "Additional service deleted.";//115
-    public static final String ADDITIONALSERVICELIST = "Additional services listed.";//116
-    public static final String ADDITIONALSERVICENOTFOUND = "Additional service not found";//117
-    public static final String ADDITIONALSERVICEFOUND = "Additional service found";//118
+    public static final String CARIMAGEADD = "carimage_add";//62
+    public static final String CARIMAGEUPDATE = "carimage_update";//63
+    public static final String CARIMAGEDELETE = "carimage_delete";//64
+    public static final String CARIMAGELIST = "carimage_list";//65
+    public static final String CARIMAGELIMITERROR = "carimage_limit_error";//66
+    public static final String CARIMAGEDEFAULT = "carimage_default";//67
+    public static final String CARIMAGEEMPTY = "carimage_empty";//68
+    public static final String CARIMAGETYPEERROR = "carimage_type_error";//69
+    public static final String CARIMAGEFOUND = "carimage_found";//70
+    public static final String CARIMAGELIMIT = "carimage_limit";//71
+    public static final String CARIMAGENOTFOUND = "carimage_not_found";//72
+    //berkan
+    public static final String LOGINEMAILERROR = "login_email_error";//73
+    public static final String LOGINPASSWORDERROR = "login_password_error";//74
+    public static final String LOGINSUCCESS = "login_success";//75
 
-    public static final String ADDITIONALRENTALITEMADD = "Additional rental item added.";//119
-    public static final String ADDITIONALRENTALITEMDELETE = "Additional rental item deleted.";//120
-    public static final String ADDITIONALRENTALITEMUPDATE = "Additional rental item updated.";//121
-    public static final String ADDITIONALRENTALITEMLIST = "Additional rental items are listed.";//122
-    public static final String ADDITIONALRENTALITEMNOTFOUND = "Additional rental item not found";//123
 
-    public static final String RECORDNOTFOUND = "Record is not found";//124
-    public static final String LOCALDATEERROR = "date must be in format yyyy-mm-dd";//125
-    public static final String VALIDATIONERROR = "Validation error";//126
+    public static final String CREDITCARDADD = "creditcard_add";//76
+    public static final String CREDITCARDUPDATE = "creditcard_update";//77
+    public static final String CREDITCARDDELETE = "creditcard_delete";//78
+    public static final String CREDITCARDLIST = "creditcard_list";//79
+    public static final String CREDITCARDNUMBERERROR = "creditcard_number_error";//80
+    public static final String CREDITCARDDATEERROR = "creditcard_date_error";//81
+    public static final String CREDITCARDCVCERROR = "creditcard_cvv_error";//82
+    public static final String CREDITCARDSAVE = "creditcard_save";//83
+    public static final String CREDITCARDNOTSAVE = "creditcard_not_save";//84
+    public static final String CREDITCARDFOUND = "creditcard_found";//85
+    public static final String CREDITCARDDELETEERROR ="creditcard_delete_error";
 
+    public static final String CARMAINTENANCEADD = "carmaintenance_add";//86
+    public static final String CARMAINTENANCEUPDATE = "carmaintenance_update";//87
+    public static final String CARMAINTENANCEDELETE = "carmaintenance_delete";//88
+    public static final String CARMAINTENANCELIST = "carmaintenance_list";//89
+    public static final String CARMAINTENANCERENTALERROR = "carmaintenance_rental_error";//90
+    public static final String CARMAINTENANCEERROR = "carmaintenance_error";//91
+    public static final String CARMAINTENANCEFOUND = "carmaintenance_found";//92
+    public static final String CARMAINTENANCENOTFOUND = "carmaintenance_not_found";//93
+
+    public static final String INVOICEADD = "invoice_add";//94
+    public static final String INVOICEUSERERROR = "invoice_user_error";//95
+    public static final String INVOICEUPDATE = "invoice_update";//96
+    public static final String INVOICEDELETE = "invoice_delete";//97
+    public static final String INVOICENOTFOUND = "invoice_not_found";//98
+    public static final String INVOICELIST = "invoice_list";//99
+    public static final String INVOICEBYCUSTOMERLIST = "invoice_by_customer_list";//100
+    public static final String INVOICEFOUND = "invoice_found";//101
+    public static final String INVOICENOTADD = "invoice_not_add";//102
+
+
+    public static final String USERNOTFOUND = "user_not_found";//103
+    public static final String USERFOUND = "user_found";//104
+    public static final String USERLIST = "user_list";//105
+    //caner
+    public static final String DAMAGEADD = "damage_add";//106
+    public static final String DAMAGEDELETE = "damage_delete";//107
+    public static final String DAMAGEUPDATE = "damage_update";//108
+    public static final String DAMAGELIST = "damage_list";//109
+    public static final String DAMAGENOTFOUND = "damage_not_found";//110
+    public static final String DAMAGEFOUND = "damage_found";//111
+    public static final String DAMAGEBELONGTOCAR = "damage_belong_to_car";//112
+
+    public static final String ADDITIONALSERVICEADD = "additionalservice_add";//113
+    public static final String ADDITIONALSERVICEUPDATE = "additionalservice_update";//114
+    public static final String ADDITIONALSERVICEDELETE = "additionalservice_delete";//115
+    public static final String ADDITIONALSERVICELIST = "additionalservice_list";//116
+    public static final String ADDITIONALSERVICENOTFOUND = "additionalservice_not_found";//117
+    public static final String ADDITIONALSERVICEFOUND = "additionalservice_found";//118
+
+    public static final String ADDITIONALRENTALITEMADD = "additional_rental_item_add";//119
+    public static final String ADDITIONALRENTALITEMDELETE = "additional_rental_item_delete";//120
+    public static final String ADDITIONALRENTALITEMUPDATE = "additional_rental_item_update";//121
+    public static final String ADDITIONALRENTALITEMLIST = "additional_rental_item_list";//122
+    public static final String ADDITIONALRENTALITEMNOTFOUND = "additional_rental_item_not_found";//123
+
+    public static final String RECORDNOTFOUND = "record_not_found";//124
+    public static final String LOCALDATEERROR = "local_date_error";//125
+    public static final String VALIDATIONERROR = "validation_error";//126
+
+    public static final String LANGUAGEADD = "language_add";//127
+    public static final String LANGUAGEUPDATE = "language_update";//128
+    public static final String LANGUAGEDELETE = "language_delete";//129
+    public static final String LANGUAGELIST = "language_list";//130
+    public static final String LANGUAGENAMEERROR = "language_name_error";//131
+    public static final String LANGUAGENOTFOUND = "language_not_found";//132
+    public static final String MESSAGEKEYADD = "messagekey_add";//133
+    public static final String MESSAGEKEYUPDATE = "messagekey_update";//134
+    public static final String MESSAGEKEYDELETE = "messagekey_delete";//135
+    public static final String MESSAGEKEYLIST = "messagekey_list";//136
+    public static final String MESSAGEKEYNAMEERROR = "messagekey_name_error";//137
+    public static final String MESSAGEKEYNOTFOUND = "messagekey_not_found";//138
+    public static final String LANGUAGEWORDADD = "languageword_add";//139
+    public static final String LANGUAGEWORDUPDATE = "languageword_update";//140
+    public static final String LANGUAGEWORDDELETE = "languageword_delete";//141
+    public static final String LANGUAGEWORDLIST = "languageword_list";//142
+    public static final String LANGUAGEWORDNAMEERROR = "languageword_name_error";//143
+    public static final String LANGUAGEWORDNOTFOUND = "languageword_not_found";//144
+
+    public static final String TESTKEY = "test_key";//147
+    public static final String DEFAULTKEY = "default_key";//127
 }

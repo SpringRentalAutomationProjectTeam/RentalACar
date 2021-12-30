@@ -52,7 +52,7 @@ public class AuthManager implements AuthService {
 
         result.setFindeksScore(customerFindexScoreService.getIndividualFindeksScore());
         this.individualCustomerService.add(result);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERADD).getData());
 
     }
 
@@ -69,7 +69,7 @@ public class AuthManager implements AuthService {
 
         result.setFindeksScore(customerFindexScoreService.getCorporateFindeksScore());
         this.corporateCustomerService.add(result);
-        return new SuccessResult(this.languageWordService.getValueByKey("customer_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CUSTOMERADD).getData());
     }
 
     @Override
@@ -81,13 +81,13 @@ public class AuthManager implements AuthService {
             return result;
         }
 
-        return new SuccessResult(this.languageWordService.getValueByKey("login_success").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.LOGINSUCCESS).getData());
     }
 
     private Result checkCustomerEmailByEmailIsMatched(LoginRequest loginRequest) {
 
         if (this.userService.checkIfEmailExists(loginRequest.getEmail()).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("email_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.EMAILERROR).getData());
         }
         return new SuccessResult();
     }
@@ -98,7 +98,7 @@ public class AuthManager implements AuthService {
 
             if (!this.userService.getByEmail(loginRequest.getEmail()).getData().getPassword()
                     .equals(loginRequest.getPassword())) {
-                return new ErrorResult(this.languageWordService.getValueByKey("login_password_error").getData());
+                return new ErrorResult(this.languageWordService.getValueByKey(Messages.LOGINPASSWORDERROR).getData());
             }
         }
         return new SuccessResult();
@@ -110,7 +110,7 @@ public class AuthManager implements AuthService {
         java.util.regex.Matcher m = p.matcher(email);
 
         if (!m.matches()){
-            return new ErrorResult(this.languageWordService.getValueByKey("email_format_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.EMAILFORMATERROR).getData());
         }
         return new SuccessResult();
     }

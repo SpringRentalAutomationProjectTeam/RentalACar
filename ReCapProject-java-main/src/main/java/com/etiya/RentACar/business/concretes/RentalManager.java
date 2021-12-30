@@ -64,7 +64,7 @@ public class RentalManager implements RentalService {
         List<RentalSearchListDto> response = result.stream()
                 .map(rental -> modelMapperService.forDto().map(rental, RentalSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<RentalSearchListDto>>(response,this.languageWordService.getValueByKey("rental_list").getData());
+        return new SuccessDataResult<List<RentalSearchListDto>>(response,this.languageWordService.getValueByKey("Messages.RENTALLIST").getData());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class RentalManager implements RentalService {
 
         Rental rental = this.rentalDao.getById(rentalId);
         RentalSearchListDto result = modelMapperService.forDto().map(rental, RentalSearchListDto.class);
-        return new SuccessDataResult<RentalSearchListDto>(result, this.languageWordService.getValueByKey("rental_found").getData());
+        return new SuccessDataResult<RentalSearchListDto>(result, this.languageWordService.getValueByKey("Messages.RENTALNOTFOUND").getData());
     }
 
     @Override
@@ -95,7 +95,7 @@ public class RentalManager implements RentalService {
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
 
         rentalDao.save(rental);
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.RENTALADD").getData());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class RentalManager implements RentalService {
         updateCarKm(response);
         updateCityNameIfReturnCityIsDifferent(response);
         this.rentalDao.save(response);
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.RENTALUPDATE").getData());
     }
 
     @Override
@@ -133,16 +133,16 @@ public class RentalManager implements RentalService {
 
         Rental rental = modelMapperService.forRequest().map(deleteRentalRequest, Rental.class);
         rentalDao.delete(rental);
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.RENTALDELETE").getData());
     }
 
     @Override
     public Result checkIfCarIsReturned(int carId) {
         RentalDetail rental = this.rentalDao.getByCarIdWhereReturnDateIsNull(carId);
         if (rental != null) {
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_date_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.RENTALDATEERROR").getData());
         }
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_date_success").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.RENTALDATESUCCESS").getData());
     }
 
     private int totalRentDays(LocalDate rentDate, LocalDate returnDate) {
@@ -175,16 +175,16 @@ public class RentalManager implements RentalService {
         posServiceRequest.setCreditCardNumber(creditCard.getCardNumber());
 
         if (!this.paymentByFakePosService.withdraw(posServiceRequest)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_insufficient_balance").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.INSUFFICIENTBALANCE").getData());
         }
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_sufficient_balance").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.SUFFICIENTBALANCE").getData());
     }
 
 
     private Result checkIfCarIsMaintenance(int carId) {
         MaintenanceDto maintenanceDto = this.rentalDao.getByCarIdWhereMaintenanceReturnDateIsNull(carId);
         if (maintenanceDto != null) {
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_maintenance_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.RENTALMAINTENANCEERROR").getData());
         }
         return new SuccessResult();
     }
@@ -193,28 +193,28 @@ public class RentalManager implements RentalService {
         DataResult<CarSearchListDto> car = this.carService.getById(carId);
         int user = this.userService.getById(userId).getData().getFindeksScore();
         if (car.getData().getMinFindeksScore() >= user) {
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_findex_score_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.RENTALFINDEXSCOREERROR").getData());
         }
-        return new SuccessResult(this.languageWordService.getValueByKey("rental_findex_score").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey("Messages.RENTALFINDEXSCORE").getData());
     }
 
     private Result checkIfUserExists(int userId) {
         if (!this.userService.checkIfUserExists(userId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("user_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.USERNOTFOUND").getData());
         }
         return new SuccessResult();
     }
 
     public Result checkIfRentalExists(int rentalId) {
         if (!this.rentalDao.existsById(rentalId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.RENTALNOTFOUND").getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("car_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey("Messages.CARNOTFOUND").getData());
         }
         return new SuccessResult();
     }
@@ -222,7 +222,7 @@ public class RentalManager implements RentalService {
 
     private Result checkIfCityExists(int cityId) {
         if (!this.cityService.checkIfCityExists(cityId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("city_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CITYNOTFOUND).getData());
         }
         return new SuccessResult();
     }
@@ -231,7 +231,7 @@ public class RentalManager implements RentalService {
         LocalDate rentDate = this.rentalDao.getById(rentalID).getRentDate();
         Period period = Period.between(rentDate, returnDate);
         if (period.getDays()<0){
-            return new ErrorResult(this.languageWordService.getValueByKey("rental_date_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.RENTALDATEERROR).getData());
         }
         return new SuccessResult();
     }

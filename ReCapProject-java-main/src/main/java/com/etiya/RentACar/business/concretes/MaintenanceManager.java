@@ -53,7 +53,7 @@ public class MaintenanceManager implements MaintenanceService {
         List<MaintenanceSearchListDto> response = result.stream()
                 .map(maintenance -> modelMapperService.forDto().map(maintenance, MaintenanceSearchListDto.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<MaintenanceSearchListDto>>(response, this.languageWordService.getValueByKey("carmaintenance_list").getData());
+        return new SuccessDataResult<List<MaintenanceSearchListDto>>(response, this.languageWordService.getValueByKey(Messages.CARMAINTENANCELIST).getData());
     }
 
     @Override
@@ -66,7 +66,7 @@ public class MaintenanceManager implements MaintenanceService {
 
         Maintenance maintenance = this.modelMapperService.forRequest().map(createMaintenanceRequest, Maintenance.class);
         this.maintenanceDao.save(maintenance);
-        return new SuccessResult(this.languageWordService.getValueByKey("carmaintenance_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCEADD).getData());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class MaintenanceManager implements MaintenanceService {
 
         Maintenance maintenance = this.modelMapperService.forRequest().map(updateMaintenanceRequest, Maintenance.class);
         this.maintenanceDao.save(maintenance);
-        return new SuccessResult(this.languageWordService.getValueByKey("carmaintenance_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCEUPDATE).getData());
     }
 
     @Override
@@ -91,7 +91,7 @@ public class MaintenanceManager implements MaintenanceService {
         }
 
         this.maintenanceDao.deleteById(deleteMaintenanceRequest.getMaintenanceId());
-        return new SuccessResult(this.languageWordService.getValueByKey("carmaintenance_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCEDELETE).getData());
     }
 
     @Override
@@ -105,35 +105,35 @@ public class MaintenanceManager implements MaintenanceService {
         Maintenance maintenance = this.maintenanceDao.findById(maintenanceId).get();
         MaintenanceSearchListDto response = this.modelMapperService.forDto().map(maintenance,
                 MaintenanceSearchListDto.class);
-        return new SuccessDataResult<MaintenanceSearchListDto>(response,this.languageWordService.getValueByKey("carmaintenance_list").getData());
+        return new SuccessDataResult<MaintenanceSearchListDto>(response,this.languageWordService.getValueByKey(Messages.CARMAINTENANCELIST).getData());
     }
 
     @Override
     public Result checkIfCarIsMaintenance(int carId) {
         MaintenanceDto maintenanceDto = this.maintenanceDao.getByCarIdWhereReturnDateIsNull(carId);
         if (maintenanceDto != null) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carmaintenance_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCEERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkByCarReturnFromRental(int carId) {
         if (!this.rentalService.checkIfCarIsReturned(carId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carmaintenance_rental_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCERENTALERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("car_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfMaintenanceExists(int maintenanceId) {
         if (!this.maintenanceDao.existsById(maintenanceId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("carmaintenance_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARMAINTENANCENOTFOUND).getData());
         }
         return new SuccessResult();
     }

@@ -43,7 +43,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public DataResult<List<Brand>> getAll() {
-        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), this.languageWordService.getValueByKey("brand_list").getData());
+        return new SuccessDataResult<List<Brand>>(this.brandDao.findAll(), this.languageWordService.getValueByKey(Messages.BRANDLIST).getData());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class BrandManager implements BrandService {
 
         Brand brand2 = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
         this.brandDao.save(brand2);
-        return new SuccessResult(this.languageWordService.getValueByKey("brand_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.BRANDADD).getData());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class BrandManager implements BrandService {
 
         Brand brand = this.modelMapperService.forRequest().map(updateBrandRequest, Brand.class);
         this.brandDao.save(brand);
-        return new SuccessResult(this.languageWordService.getValueByKey("brand_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.BRANDADD).getData());
     }
 
     @Override
@@ -81,27 +81,27 @@ public class BrandManager implements BrandService {
 
         Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
         this.brandDao.delete(brand);
-        return new SuccessResult(this.languageWordService.getValueByKey("brand_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.BRANDDELETE).getData());
     }
 
     @Override
     public Result checkIfBrandExists(int brandId) {
         if (!this.brandDao.existsById(brandId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("brand_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.BRANDNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfIsThereCarOfThisBrand(int brandId) {
         if (this.carService.checkIfExistsBrandInCar(brandId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("brand_delete_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.BRANDDELETEERROR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfBrandNameExists(String brandName) {
         if (this.brandDao.existsByBrandName(brandName)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("brand_name_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.BRANDNAMEERROR).getData());
         }
         return new SuccessResult();
     }

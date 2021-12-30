@@ -41,7 +41,7 @@ public class LanguageManager implements LanguageService {
         List<Language> languages  = this.languageDao.findAll();
         List<LanguageSearchListDto> response = languages.stream().map(language -> modelMapperService.forDto()
                 .map(language, LanguageSearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<LanguageSearchListDto>>(response,this.languageWordService.getValueByKey("language_list").getData());
+        return new SuccessDataResult<List<LanguageSearchListDto>>(response,this.languageWordService.getValueByKey(Messages.LANGUAGELIST).getData());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class LanguageManager implements LanguageService {
         }
         Language language = modelMapperService.forRequest().map(createLanguageRequest, Language.class);
         this.languageDao.save(language);
-        return new SuccessResult(this.languageWordService.getValueByKey("language_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.LANGUAGEADD).getData());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class LanguageManager implements LanguageService {
         }
         Language language = modelMapperService.forRequest().map(updateLanguageRequest, Language.class);
         this.languageDao.save(language);
-        return new SuccessResult(this.languageWordService.getValueByKey("language_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.LANGUAGEUPDATE).getData());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LanguageManager implements LanguageService {
             return result;
         }
         this.languageDao.deleteById(deleteLanguageRequest.getId());
-        return new SuccessResult(this.languageWordService.getValueByKey("language_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.LANGUAGEDELETE).getData());
     }
 
     @Override
@@ -88,14 +88,14 @@ public class LanguageManager implements LanguageService {
 
     private Result checkIfLanguageNameExists(String languageName){
         if (this.languageDao.existsByLanguageName(languageName)){
-            return new ErrorResult(this.languageWordService.getValueByKey("language_name_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.LANGUAGENAMEERROR).getData());
         }
         return new SuccessResult();
     }
     @Override
     public Result checkIfLanguageId(int languageId){
         if (!this.languageDao.existsById(languageId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("language_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.LANGUAGENOTFOUND).getData());
         }
         return new SuccessResult();
 

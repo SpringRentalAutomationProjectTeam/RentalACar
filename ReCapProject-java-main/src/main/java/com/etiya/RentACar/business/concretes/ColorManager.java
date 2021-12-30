@@ -43,7 +43,7 @@ public class ColorManager implements ColorService {
 
     @Override
     public DataResult<List<Color>> getAll() {
-        return new SuccessDataResult<List<Color>>(this.colorDao.findAll(),this.languageWordService.getValueByKey("color_list").getData());
+        return new SuccessDataResult<List<Color>>(this.colorDao.findAll(),this.languageWordService.getValueByKey(Messages.COLORLIST).getData());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
         this.colorDao.save(color);
-        return new SuccessResult(this.languageWordService.getValueByKey("color_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.COLORADD).getData());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(updateColorRequest, Color.class);
         this.colorDao.save(color);
-        return new SuccessResult(this.languageWordService.getValueByKey("color_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.COLORUPDATE).getData());
     }
 
     @Override
@@ -81,12 +81,12 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(deleteColorRequest, Color.class);
         this.colorDao.delete(color);
-        return new SuccessResult(this.languageWordService.getValueByKey("color_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.COLORDELETE).getData());
     }
 
     private Result checkIfExistsColorInCar(int colorId) {
         if (this.carService.checkIfExistsColorInCar(colorId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("color_delete_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.COLORDELETEERROR).getData());
         }
         return new SuccessResult();
     }
@@ -94,14 +94,14 @@ public class ColorManager implements ColorService {
     @Override
     public Result checkIfColorExists(int colorId) {
         if (!this.colorDao.existsById(colorId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("color_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.COLORNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfColorNameExists(String colorName) {
         if (this.colorDao.existsByColorName(colorName)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("color_name_error").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.COLORNAMEERROR).getData());
         }
         return new SuccessResult();
     }

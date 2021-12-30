@@ -44,7 +44,7 @@ public class CarDamageManager implements CarDamageService {
         List<CarDamageSearchListDto> response = list.stream().map(carDamage -> modelMapperService.forDto().
                 map(carDamage, CarDamageSearchListDto.class)).collect(Collectors.toList());
         return new SuccessDataResult<List<CarDamageSearchListDto>>(response,
-                this.languageWordService.getValueByKey("damage_list").getData());
+                this.languageWordService.getValueByKey(Messages.DAMAGELIST).getData());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(createCarDamageRequest, CarDamage.class);
         this.carDamageDao.save(carDamage);
-        return new SuccessResult(this.languageWordService.getValueByKey("damage_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.DAMAGEADD).getData());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(updateCarDamageRequest, CarDamage.class);
         this.carDamageDao.save(carDamage);
-        return new SuccessResult(this.languageWordService.getValueByKey("damage_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.DAMAGEUPDATE).getData());
     }
 
     @Override
@@ -94,26 +94,26 @@ public class CarDamageManager implements CarDamageService {
 
         CarDamage carDamage = modelMapperService.forRequest().map(deleteCarDamageRequest, CarDamage.class);
         this.carDamageDao.delete(carDamage);
-        return new SuccessResult(this.languageWordService.getValueByKey("damage_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.DAMAGEDELETE).getData());
     }
 
     private Result checkIfCarDamageExists(int carDamageId){
         if (!this.carDamageDao.existsById(carDamageId)){
-            return new ErrorResult(this.languageWordService.getValueByKey("damage_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.DAMAGENOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIsThereDamageInCar(int carId){
         if (this.carDamageDao.getByCar_CarId(carId).isEmpty()){
-            return new ErrorResult(this.languageWordService.getValueByKey("damage_belong_to_car").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.DAMAGEBELONGTOCAR).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCarExists(int carId) {
         if (!this.carService.checkIfCarExists(carId).isSuccess()) {
-            return new ErrorResult(this.languageWordService.getValueByKey("damage_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.DAMAGENOTFOUND).getData());
         }
         return new SuccessResult();
     }

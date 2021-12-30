@@ -38,7 +38,7 @@ public class CityManager implements CityService {
         List<City> cities = this.cityDao.findAll();
         List<CitySearchListDto> response = cities.stream().map(city -> modelMapperService.forDto()
                 .map(city, CitySearchListDto.class)).collect(Collectors.toList());
-        return new SuccessDataResult<List<CitySearchListDto>>(response, this.languageWordService.getValueByKey("city_list").getData());
+        return new SuccessDataResult<List<CitySearchListDto>>(response, this.languageWordService.getValueByKey(Messages.CITYLIST).getData());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class CityManager implements CityService {
 
         City city = modelMapperService.forRequest().map(createCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult(this.languageWordService.getValueByKey("city_add").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CITYADD).getData());
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CityManager implements CityService {
 
         City city = modelMapperService.forRequest().map(updateCityRequest, City.class);
         this.cityDao.save(city);
-        return new SuccessResult(this.languageWordService.getValueByKey("city_update").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CITYUPDATE).getData());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class CityManager implements CityService {
         }
 
         this.cityDao.deleteById(deleteCityRequest.getCityId());
-        return new SuccessResult(this.languageWordService.getValueByKey("city_delete").getData());
+        return new SuccessResult(this.languageWordService.getValueByKey(Messages.CITYDELETE).getData());
     }
 
     @Override
@@ -90,14 +90,14 @@ public class CityManager implements CityService {
     @Override
     public Result checkIfCityExists(int cityId) {
         if (!this.cityDao.existsById(cityId)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("city_not_found").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CITYNOTFOUND).getData());
         }
         return new SuccessResult();
     }
 
     private Result checkIfCityNameExists(String cityName) {
         if (this.cityDao.existsByCityName(cityName)) {
-            return new ErrorResult(this.languageWordService.getValueByKey("city_already_exists").getData());
+            return new ErrorResult(this.languageWordService.getValueByKey(Messages.CITYALREADYEXISTS).getData());
         }
         return new SuccessResult();
     }
