@@ -1,15 +1,22 @@
 package com.etiya.RentACar.business.constants;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 
+@Data
 public class FilePathConfiguration {
 
-	@Autowired
-	private Environment environment;
+	//C:\Users\emin.sahan\Documents\rentalCarMsGithub\RentalACar\ReCapProject-java-main\image
 
-//fauda
-	public static String mainPath = "C:\\Users\\erdi.tuna\\Documents\\GitHub\\RentalACar\\ReCapProject-java-main\\image\\";
-	public static String defaultImage = "default.jpg" ;
+
+	@Value("${main.path}")
+	private   String mainPath;
+
+	@Value("${default.name}")
+	private   String defaultImage;
+
+
 
 }

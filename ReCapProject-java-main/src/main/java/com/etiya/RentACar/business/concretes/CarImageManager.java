@@ -12,7 +12,9 @@ import antlr.debug.MessageAdapter;
 import com.etiya.RentACar.business.abstracts.LanguageWordService;
 import com.etiya.RentACar.business.constants.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,15 +46,19 @@ public class CarImageManager implements CarImageService {
     private CarService carService;
     private FileHelper fileHelper;
     private LanguageWordService languageWordService;
+    private Environment environment;
+
 
     @Autowired
     private CarImageManager(CarImageDao carImageDao, ModelMapperService modelMapperService,
-                            @Lazy CarService carService, FileHelper fileHelper, LanguageWordService languageWordService) {
+                            @Lazy CarService carService, FileHelper fileHelper
+            ,Environment environment, LanguageWordService languageWordService) {
         this.carImageDao = carImageDao;
         this.modelMapperService = modelMapperService;
         this.carService = carService;
         this.fileHelper = fileHelper;
         this.languageWordService = languageWordService;
+        this.environment=environment;
     }
 
     @Override
@@ -125,7 +131,8 @@ public class CarImageManager implements CarImageService {
 
     private File generateImage(MultipartFile file) throws IOException {
         String imagePathGuid = java.util.UUID.randomUUID().toString();
-        File imageFile = new File(FilePathConfiguration.mainPath + imagePathGuid + "."
+
+        File imageFile = new File(environment.getProperty("main.path")  + imagePathGuid + "."
                 + file.getContentType().substring(file.getContentType().indexOf("/") + 1));
 
         imageFile.createNewFile();
@@ -144,7 +151,7 @@ public class CarImageManager implements CarImageService {
         }
         List<CarImage> carImages = new ArrayList<CarImage>();
         CarImage carImage = new CarImage();
-        carImage.setImagePath(FilePathConfiguration.mainPath + FilePathConfiguration.defaultImage);
+        carImage.setImagePath(environment.getProperty("main.path") + environment.getProperty("default.name"));
         carImages.add(carImage);
         return new SuccessDataResult<List<CarImage>>(carImages, this.languageWordService.getValueByKey(Messages.CARIMAGELIST).getData());
     }

@@ -115,7 +115,7 @@ public class LanguageWordManager implements LanguageWordService {
     private DataResult<String> checkIfDefaultLanguageAndValueExists(int keyId) {
         int default_language_id = Integer.parseInt(this.environment.getProperty("message.languageId"));
         if (!this.languageWordDao.existsByLanguageIdAndMessageKeyId(default_language_id, keyId)) {
-            int default_key = this.messageKeyService.getByKey("default_key").getData().getId();
+            int default_key = this.messageKeyService.getByKey(Messages.DEFAULTKEY).getData().getId();
             String default_word = this.languageWordDao.getByLanguageIdAndMessageKeyId(default_language_id,
                     default_key).getTranslation();
             return new SuccessDataResult<String>(default_word);
