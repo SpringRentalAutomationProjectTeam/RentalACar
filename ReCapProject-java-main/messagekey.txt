@@ -146,5 +146,5 @@ INSERT INTO message_keys(key)
 ('languageword_name_error'),
 ('languageword_not_found'),
 ('test_key'),
-(creditcard_delete_error);
+('creditcard_delete_error');
 
