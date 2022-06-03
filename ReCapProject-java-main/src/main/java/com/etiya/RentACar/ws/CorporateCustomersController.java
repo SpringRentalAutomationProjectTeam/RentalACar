@@ -20,7 +20,7 @@ import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
 
 @RestController
-@RequestMapping("api/corporateCustomer")
+@RequestMapping("api/corporateCustomer/")
 public class CorporateCustomersController {
 
 	private CorporateCustomerService corporateCustomerService;

@@ -23,7 +23,7 @@ import com.etiya.RentACar.business.requests.Rental.UpdateRentalRequest;
 
 
 @RestController
-@RequestMapping("api/rentals")
+@RequestMapping("api/rentals/")
 public class RentalsController {
 	
 	private RentalService rentalService;

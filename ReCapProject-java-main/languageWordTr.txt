@@ -154,7 +154,8 @@ VALUES
 ('Mesaj silindi.',142,2),
 ('Mesajlar listelendi.',143,2),
 ('Mesaj zaten mevcut.',144,2),
-('Mesaj bulunamadı.',145,2);
+('Mesaj bulunamadı.',145,2),
+('User referansı var. Silinemez.',147,2);
 
 
 	

@@ -15,7 +15,7 @@ import com.etiya.RentACar.business.requests.corporateCustomers.RegisterCorporate
 import com.etiya.RentACar.core.utilities.results.Result;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/auth/")
 public class AuthController {
 
 	private AuthService authService;

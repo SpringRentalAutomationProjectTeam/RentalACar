@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/additionalservices")
+@RequestMapping("api/additionalservices/")
 public class AdditionalServicesController {
 
     private RentalAdditionalService rentalAdditionalService;

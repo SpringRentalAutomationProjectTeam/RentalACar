@@ -22,7 +22,7 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.core.utilities.results.SuccessDataResult;
 
 @RestController
-@RequestMapping("api/maintenance")
+@RequestMapping("api/maintenance/")
 public class MaintenanceController {
 
 	private MaintenanceService maintenanceService;

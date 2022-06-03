@@ -149,4 +149,6 @@ INSERT INTO public.language_words(
 ('Message deleted.',142,1),
 ('Message listed.',143,1),
 ('The message already exists.',144,1),
-('Message not found.',145,1);
+('Message not found.',145,1),
+('Test language word.',146,1),
+('Reference of this user found. Cannot be deleted.',147,1);

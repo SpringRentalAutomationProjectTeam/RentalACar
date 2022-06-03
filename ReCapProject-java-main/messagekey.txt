@@ -137,12 +137,14 @@ INSERT INTO message_keys(key)
 ('messagekey_update'),
 ('messagekey_delete'),
 ('messagekey_list'),
-('messagekey__name_error'),
+('messagekey_name_error'),
 ('messagekey_not_found'),
 ('languageword_add'),
 ('languageword_update'),
 ('languageword_delete'),
 ('languageword_list'),
 ('languageword_name_error'),
-('languageword_not_found');
+('languageword_not_found'),
+('test_key'),
+('creditcard_delete_error');
 

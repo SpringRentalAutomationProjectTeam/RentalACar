@@ -22,7 +22,7 @@ import com.etiya.RentACar.core.utilities.results.DataResult;
 import com.etiya.RentACar.core.utilities.results.Result;
 
 @RestController
-@RequestMapping("api/creditCard")
+@RequestMapping("api/creditCard/")
 public class CreditCardController {
 
 	private CreditCardService creditCardService;

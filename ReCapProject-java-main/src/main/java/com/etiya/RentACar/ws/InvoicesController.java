@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/invoces")
+@RequestMapping("api/invoces/")
 public class InvoicesController {
 
     private InvoiceService invoiceService;

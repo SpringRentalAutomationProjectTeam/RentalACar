@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/cardamages")
+@RequestMapping("api/cardamages/")
 public class CarDamagesController {
 
     private CarDamageService carDamageService;

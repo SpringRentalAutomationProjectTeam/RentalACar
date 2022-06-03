@@ -25,7 +25,7 @@ import com.etiya.RentACar.entites.Car;
 import com.etiya.RentACar.entites.ComplexTypes.CarDetail;
 
 @RestController
-@RequestMapping("api/cars")
+@RequestMapping("api/cars/")
 public class CarsController {
 
 	private CarService carService;

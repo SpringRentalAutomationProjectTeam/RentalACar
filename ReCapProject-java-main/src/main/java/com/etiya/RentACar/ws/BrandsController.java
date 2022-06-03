@@ -20,7 +20,7 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.entites.Brand;
 
 @RestController
-@RequestMapping("api/brands")
+@RequestMapping("api/brands/")
 public class BrandsController {
 	private BrandService brandService;
 

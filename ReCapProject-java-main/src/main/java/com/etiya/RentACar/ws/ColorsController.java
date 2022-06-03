@@ -20,7 +20,7 @@ import com.etiya.RentACar.core.utilities.results.Result;
 import com.etiya.RentACar.entites.Color;
 
 @RestController
-@RequestMapping("api/colors")
+@RequestMapping("api/colors/")
 public class ColorsController {
 
 	private ColorService colorService;
