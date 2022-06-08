@@ -213,6 +213,13 @@ public class CarManager implements CarService {
     }
 
     @Override
+    public void carStatu(int carId) {
+        Car car = this.carDao.getById(carId);
+        car.setStatus(true);
+        this.carDao.save(car);
+    }
+
+    @Override
     public Result checkIfCarExists(int carId) {
         if (!this.carDao.existsById(carId)) {
             return new ErrorResult(this.languageWordService.getValueByKey(Messages.CARNOTFOUND).getData());
