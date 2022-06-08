@@ -27,6 +27,7 @@ import com.etiya.RentACar.core.utilities.business.BusinessRules;
 import com.etiya.RentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.RentACar.dataAccess.abstracts.RentalDao;
 import com.etiya.RentACar.entites.ComplexTypes.RentalDetail;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RentalManager implements RentalService {
@@ -93,8 +94,9 @@ public class RentalManager implements RentalService {
         }
 
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-
         rentalDao.save(rental);
+        carService.carStatu(createRentalRequest.getCarId());
+
         return new SuccessResult(this.languageWordService.getValueByKey(Messages.RENTALADD).getData());
     }
 

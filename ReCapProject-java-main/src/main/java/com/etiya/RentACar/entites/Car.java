@@ -59,4 +59,7 @@ public class Car {
 
 	@OneToMany(mappedBy = "car")
 	private  List<CarDamage> carDamages;
+
+	@Column(name = "status")
+	private boolean status;
 }
